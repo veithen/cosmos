@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/1/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>test</groupId>
+    <artifactId>test</artifactId>
+    <version>TEST</version>
+    <dependencies>
+        <dependency>
+            <groupId>dummy</groupId>
+            <artifactId>dummy</artifactId>
+            <version>1234</version>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>p2</id>
+            <name>P2</name>
+            <url>p2:http://example.org/update!</url>
+        </repository>
+    </repositories>
+    <build>
+        <extensions>
+            <extension>
+                <groupId>com.github.veithen.cosmos</groupId>
+                <artifactId>wagon-p2</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </extension>
+        </extensions>
+    </build>
+</project>
