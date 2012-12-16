@@ -1,9 +1,14 @@
 
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.jar.Attributes;
+import java.util.jar.JarInputStream;
 
 import javax.xml.parsers.SAXParserFactory;
 
@@ -22,15 +27,14 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.osgi.internal.signedcontent.SignedBundleHook;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.osgi.signedcontent.SignedContentFactory;
+import org.junit.Assert;
+import org.junit.Test;
 
 import com.github.veithen.cosmos.solstice.Runtime;
 
-public class Cosmos {
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) throws Exception {
+public class P2ITCase {
+    @Test
+    public void test() throws Exception {
         Runtime runtime = Runtime.getInstance();
         runtime.setProperty("eclipse.p2.data.area", new File("target/p2-data").getAbsolutePath());
         runtime.registerService(null, new String[] { SAXParserFactory.class.getName() }, SAXParserFactory.newInstance(), null);
@@ -63,14 +67,21 @@ public class Cosmos {
         IArtifactRepositoryManager repoman = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
 //        IProvisioningAgent agent = new ProvisioningAgent();
 //        IArtifactRepositoryManager repoman = new ArtifactRepositoryManager(agent);
-        IArtifactRepository repository = repoman.loadRepository(new URI("http://download.eclipse.org/releases/juno"), null);
-        IArtifactKey key = repository.createArtifactKey("osgi.bundle", "org.eclipse.core.net", Version.create("1.2.200.v20120522-1148"));
+        IArtifactRepository repository = repoman.loadRepository(new URI(System.getProperty("p2.repo.url")), null);
+        IArtifactKey key = repository.createArtifactKey("osgi.bundle", "org.example.dummy", Version.create("1.0.0"));
         System.out.println(key);
         IArtifactDescriptor[] descriptors = repository.getArtifactDescriptors(key);
         System.out.println(descriptors.length);
         System.out.println(Arrays.asList(descriptors));
-        repository.getArtifact(descriptors[0], new FileOutputStream("target/out.jar"), new NullProgressMonitor());
-        
-        System.exit(0);
+        File tmpFile = new File("target/out.jar");
+        repository.getArtifact(descriptors[0], new FileOutputStream(tmpFile), new NullProgressMonitor());
+        JarInputStream in = new JarInputStream(new FileInputStream(tmpFile));
+        try {
+            Attributes attrs = in.getManifest().getMainAttributes();
+            assertEquals("org.example.dummy", attrs.getValue("Bundle-SymbolicName"));
+            assertEquals("1.0.0", attrs.getValue("Bundle-Version"));
+        } finally {
+            in.close();
+        }
     }
 }
