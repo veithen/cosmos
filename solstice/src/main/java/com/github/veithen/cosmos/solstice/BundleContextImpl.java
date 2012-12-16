@@ -1,4 +1,4 @@
-package cosmos;
+package com.github.veithen.cosmos.solstice;
 
 import java.io.File;
 import java.io.InputStream;

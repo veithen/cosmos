@@ -1,4 +1,4 @@
-package cosmos;
+package com.github.veithen.cosmos.solstice;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 
-public class BundleImpl implements Bundle {
+final class BundleImpl implements Bundle {
     private final Runtime runtime;
     private final long id;
     private final String symbolicName;
@@ -43,7 +43,7 @@ public class BundleImpl implements Bundle {
         state = Bundle.RESOLVED;
     }
 
-    public Runtime getRuntime() {
+    Runtime getRuntime() {
         return runtime;
     }
 

@@ -23,6 +23,8 @@ import org.eclipse.osgi.internal.signedcontent.SignedBundleHook;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.osgi.signedcontent.SignedContentFactory;
 
+import com.github.veithen.cosmos.solstice.Runtime;
+
 public class Cosmos {
 
     /**
@@ -56,7 +58,7 @@ public class Cosmos {
         System.out.println(ProxySetupHelper.getProxy("http://www.google.com"));
         new org.apache.commons.httpclient.URI("/test", true, "UTF-8");
         
-        IProvisioningAgent agent = (IProvisioningAgent)((Service)runtime.getServiceReference(IProvisioningAgent.class.getName(), null)).getService(null);
+        IProvisioningAgent agent = runtime.getService(IProvisioningAgent.class);
         IArtifactRepositoryManager repoman = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
 //        IProvisioningAgent agent = new ProvisioningAgent();
 //        IArtifactRepositoryManager repoman = new ArtifactRepositoryManager(agent);

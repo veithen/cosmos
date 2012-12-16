@@ -1,4 +1,4 @@
-package cosmos;
+package com.github.veithen.cosmos.solstice;
 
 public class CosmosException extends Exception {
     private static final long serialVersionUID = 4579377646107356694L;

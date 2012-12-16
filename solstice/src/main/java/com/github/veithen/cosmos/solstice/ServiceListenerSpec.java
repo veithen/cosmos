@@ -1,4 +1,4 @@
-package cosmos;
+package com.github.veithen.cosmos.solstice;
 
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceListener;

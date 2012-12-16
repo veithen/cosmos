@@ -1,4 +1,4 @@
-package cosmos;
+package com.github.veithen.cosmos.solstice;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 
-public class Runtime {
+public final class Runtime {
     private static Runtime instance;
 
     private final Properties properties = new Properties();
@@ -95,7 +95,7 @@ public class Runtime {
         return instance;
     }
     
-    public Bundle[] getBundles() {
+    Bundle[] getBundles() {
         Collection<BundleImpl> c = bundlesBySymbolicName.values();
         return c.toArray(new Bundle[c.size()]);
     }
@@ -108,7 +108,7 @@ public class Runtime {
         return bundlesById.get(id);
     }
     
-    public String getProperty(String key) {
+    String getProperty(String key) {
         String value = properties.getProperty(key);
         if (value == null) {
             System.getProperty(key);
@@ -123,15 +123,15 @@ public class Runtime {
         properties.setProperty(key, value);
     }
     
-    public void addBundleListener(BundleListener listener) {
+    void addBundleListener(BundleListener listener) {
         bundleListeners.add(listener);
     }
 
-    public void addServiceListener(ServiceListener listener, Filter filter) {
+    void addServiceListener(ServiceListener listener, Filter filter) {
         serviceListeners.add(new ServiceListenerSpec(listener, filter));
     }
 
-    public void removeServiceListener(ServiceListener listener) {
+    void removeServiceListener(ServiceListener listener) {
         for (Iterator<ServiceListenerSpec> it = serviceListeners.iterator(); it.hasNext(); ) {
             if (it.next().getListener() == listener) {
                 it.remove();
@@ -158,7 +158,7 @@ public class Runtime {
         }
     }
 
-    public ServiceReference<?>[] getServiceReferences(String clazz, Filter filter) {
+    ServiceReference<?>[] getServiceReferences(String clazz, Filter filter) {
         List<ServiceReference<?>> references = new ArrayList<ServiceReference<?>>();
         for (Service service : services) {
             if (service.matches(clazz, filter)) {
@@ -168,7 +168,7 @@ public class Runtime {
         return references.toArray(new ServiceReference<?>[references.size()]);
     }
 
-    public ServiceReference<?> getServiceReference(String clazz, Filter filter) {
+    ServiceReference<?> getServiceReference(String clazz, Filter filter) {
         List<ServiceReference<?>> references = new ArrayList<ServiceReference<?>>();
         for (Service service : services) {
             if (service.matches(clazz, filter)) {
@@ -178,6 +178,12 @@ public class Runtime {
         return null;
     }
 
+    public <T> T getService(Class<T> clazz) {
+        ServiceReference<?> ref = getServiceReference(clazz.getName(), null);
+        // TODO: need a system/framework bundle here
+        return ref == null ? null : clazz.cast(((Service)ref).getService(null));
+    }
+    
     void fireBundleEvent(BundleImpl bundleImpl, int type) {
         BundleEvent event = new BundleEvent(type, bundleImpl);
         for (BundleListener listener : bundleListeners) {

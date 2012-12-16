@@ -1,4 +1,4 @@
-package cosmos;
+package com.github.veithen.cosmos.solstice;
 
 import org.osgi.framework.ServiceFactory;
 
