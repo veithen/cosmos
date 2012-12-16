@@ -139,7 +139,7 @@ public final class Runtime {
         }
     }
 
-    public <T> void registerService(BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
+    public <T> Service registerService(BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
         System.out.println("registerService: " + Arrays.asList(classes));
         Hashtable<String,Object> actualProperties = new Hashtable<String,Object>();
         if (properties != null) {
@@ -156,6 +156,7 @@ public final class Runtime {
                 listener.getListener().serviceChanged(new ServiceEvent(ServiceEvent.REGISTERED, service));
             }
         }
+        return service;
     }
 
     ServiceReference<?>[] getServiceReferences(String clazz, Filter filter) {

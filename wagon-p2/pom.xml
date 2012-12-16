@@ -1,15 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/1/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.veithen.cosmos</groupId>
+    <parent>
+        <groupId>com.github.veithen.cosmos</groupId>
+        <artifactId>cosmos</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
     <artifactId>wagon-p2</artifactId>
     <name>P2 Wagon Provider</name>
-    <version>1.0-SNAPSHOT</version>
     <dependencies>
         <dependency>
             <groupId>org.apache.maven.wagon</groupId>
             <artifactId>wagon-provider-api</artifactId>
             <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>solstice</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.core.jobs</artifactId>
+            <version>3.5.300.v20120622-204750</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.core.net</artifactId>
+            <version>1.2.200.v20120522-1148</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.ecf</artifactId>
+            <version>3.1.300.v20120610-1946</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.ecf.filetransfer</artifactId>
+            <version>5.0.0.v20120610-1946</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.ecf.identity</artifactId>
+            <version>3.1.200.v20120610-1946</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.ecf.provider.filetransfer</artifactId>
+            <version>3.2.0.v20120610-1946</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.ecf.provider.filetransfer.httpclient</artifactId>
+            <version>4.0.200.v20120610-1946</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.equinox.common</artifactId>
+            <version>3.6.100.v20120522-1841</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.equinox.p2.artifact.repository</artifactId>
+            <version>1.1.200.v20120430-1959</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.equinox.p2.core</artifactId>
+            <version>2.2.0.v20120430-0525</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.equinox.p2.jarprocessor</artifactId>
+            <version>1.0.200.v20110808-1657</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.equinox.p2.metadata</artifactId>
+            <version>2.1.0.v20120430-2001</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.equinox.p2.publisher</artifactId>
+            <version>1.2.0.v20120428-0117</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.equinox.p2.repository</artifactId>
+            <version>2.2.0.v20120524-1945</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.equinox.p2.transport.ecf</artifactId>
+            <version>1.0.100.v20120305-0333</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.equinox.p2.updatesite</artifactId>
+            <version>1.0.400.v20120412-1615</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.equinox.preferences</artifactId>
+            <version>3.5.0.v20120522-1841</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.equinox.registry</artifactId>
+            <version>3.5.200.v20120522-1841</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.equinox.security</artifactId>
+            <version>1.1.100.v20120522-1841</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.osgi</artifactId>
+            <version>3.8.1.v20120830-144521</version>
         </dependency>
     </dependencies>
     <build>

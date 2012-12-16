@@ -6,8 +6,10 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 
-final class Service implements CosmosServiceReference<Object> {
+final class Service implements CosmosServiceReference<Object>, ServiceRegistration<Object> {
     private final BundleImpl bundle;
     private final String[] classes;
     private final Object serviceObject;
@@ -71,6 +73,18 @@ final class Service implements CosmosServiceReference<Object> {
     }
 
     public int compareTo(Object reference) {
+        throw new UnsupportedOperationException();
+    }
+
+    public ServiceReference<Object> getReference() {
+        return this;
+    }
+
+    public void setProperties(Dictionary<String,?> properties) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void unregister() {
         throw new UnsupportedOperationException();
     }
 }

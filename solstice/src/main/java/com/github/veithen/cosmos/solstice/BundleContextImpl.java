@@ -78,18 +78,15 @@ public class BundleContextImpl implements BundleContext {
     }
 
     public ServiceRegistration<?> registerService(String[] clazzes, Object service, Dictionary<String,?> properties) {
-        bundle.getRuntime().registerService(bundle, clazzes, service, properties);
-        return new ServiceRegistrationImpl<Object>();
+        return bundle.getRuntime().registerService(bundle, clazzes, service, properties);
     }
 
     public ServiceRegistration<?> registerService(String clazz, Object service, Dictionary<String,?> properties) {
-        bundle.getRuntime().registerService(bundle, new String[] { clazz }, service, properties);
-        return new ServiceRegistrationImpl<Object>();
+        return bundle.getRuntime().registerService(bundle, new String[] { clazz }, service, properties);
     }
 
     public <S> ServiceRegistration<S> registerService(Class<S> clazz, S service, Dictionary<String,?> properties) {
-        bundle.getRuntime().registerService(bundle, new String[] { clazz.getName() }, service, properties);
-        return new ServiceRegistrationImpl<S>();
+        return (ServiceRegistration<S>)bundle.getRuntime().registerService(bundle, new String[] { clazz.getName() }, service, properties);
     }
 
     public ServiceReference<?> getServiceReference(String clazz) {

@@ -18,7 +18,7 @@ final class ServiceContext {
         if (serviceObject == null) {
             serviceObject = service.getServiceObject();
             if (serviceObject instanceof ServiceFactory) {
-                serviceObject = ((ServiceFactory<Object>)serviceObject).getService(bundle, new ServiceRegistrationImpl<Object>());
+                serviceObject = ((ServiceFactory<Object>)serviceObject).getService(bundle, service);
             }
             this.serviceObject = serviceObject;
         }
