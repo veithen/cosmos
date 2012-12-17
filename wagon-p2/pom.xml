@@ -191,7 +191,7 @@
                     <webAppConfig>
                         <contextPath>/repo</contextPath>
                         <resourceBases>
-                            <resourceBase>src/test/repo</resourceBase>
+                            <resourceBase>${basedir}/src/test/repo</resourceBase>
                         </resourceBases>
                         <descriptor>src/test/conf/web.xml</descriptor>
                     </webAppConfig>
