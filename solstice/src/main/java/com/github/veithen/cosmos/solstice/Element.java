@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.osgi.framework.BundleException;
+
 final class Element {
     private String[] values;
     private Map<String,String> attributes;
@@ -79,5 +81,29 @@ final class Element {
             buffer.append(directive.getValue());
         }
         return buffer.toString();
+    }
+
+    String getValue() throws BundleException {
+        if (values.length == 1) {
+            return values[0];
+        } else {
+            throw new BundleException("Expected only a single header value");
+        }
+    }
+    
+    boolean hasAttributes() {
+        return !attributes.isEmpty();
+    }
+    
+    boolean hasDirectives() {
+        return !directives.isEmpty();
+    }
+
+    String getAttribute(String name) {
+        return attributes.get(name);
+    }
+
+    String getDirective(String name) {
+        return directives.get(name);
     }
 }
