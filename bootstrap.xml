@@ -29,6 +29,7 @@
         <install name="org.eclipse.equinox.p2.repository" version="2.2.0.v20120524-1945"/>
         <install name="org.eclipse.equinox.p2.transport.ecf" version="1.0.100.v20120305-0333"/>
         <install name="org.eclipse.equinox.p2.updatesite" version="1.0.400.v20120412-1615"/>
+        <install name="org.eclipse.equinox.preferences" version="3.5.0.v20120522-1841"/>
         <install name="org.eclipse.equinox.security" version="1.1.100.v20120522-1841"/>
     </target>
 </project>
