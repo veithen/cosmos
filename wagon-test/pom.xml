@@ -6,16 +6,16 @@
     <version>TEST</version>
     <dependencies>
         <dependency>
-            <groupId>dummy</groupId>
-            <artifactId>dummy</artifactId>
-            <version>1234</version>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.wst.xsl.core</artifactId>
+            <version>1.1.100.v201102270516</version>
         </dependency>
     </dependencies>
     <repositories>
         <repository>
             <id>p2</id>
             <name>P2</name>
-            <url>p2:http://example.org/update!</url>
+            <url>p2:http://download.eclipse.org/releases/juno</url>
         </repository>
     </repositories>
     <build>
