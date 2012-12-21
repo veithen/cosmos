@@ -29,7 +29,6 @@ import com.github.veithen.cosmos.solstice.Runtime;
 public class DefaultRepositoryManager implements RepositoryManager, Initializable, Disposable {
     private IArtifactRepositoryManager repoman;
     
-    @Override
     public void initialize() throws InitializationException {
         try {
             Runtime runtime = Runtime.getInstance();
@@ -64,12 +63,10 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
         }
     }
 
-    @Override
     public IArtifactRepository loadRepository(URI uri) throws ProvisionException {
         return repoman.loadRepository(uri, null);
     }
 
-    @Override
     public void dispose() {
         
     }

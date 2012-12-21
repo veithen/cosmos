@@ -49,25 +49,21 @@ public class P2Wagon extends AbstractWagon {
         }
     }
 
-    @Override
     public void get(String resourceName, File destination) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
         getIfNewer(resourceName, destination, 0);
     }
 
-    @Override
     public boolean getIfNewer(String resourceName, File destination, long timestamp) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
         System.out.println(resourceName);
         // TODO Auto-generated method stub
         return false;
     }
 
-    @Override
     public void put(File source, String destination) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
         // TODO Auto-generated method stub
         
     }
 
-    @Override
     protected void closeConnection() throws ConnectionException {
         // TODO Auto-generated method stub
         
