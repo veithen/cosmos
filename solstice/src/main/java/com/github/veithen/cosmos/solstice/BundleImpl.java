@@ -241,6 +241,7 @@ final class BundleImpl implements Bundle {
     }
 
     public Class<?> loadClass(String name) throws ClassNotFoundException {
+        // TODO: this should also trigger lazy activation!
         return Class.forName(name);
     }
 
