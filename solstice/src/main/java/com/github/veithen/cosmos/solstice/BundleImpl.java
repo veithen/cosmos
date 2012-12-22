@@ -30,17 +30,39 @@ final class BundleImpl implements Bundle {
     private final Attributes attrs;
     private final URL rootUrl;
     private final File data;
-    private int state;
+    private BundleState state;
     private BundleContextImpl context;
 
-    public BundleImpl(Runtime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl, File data) {
+    public BundleImpl(Runtime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl, File data) throws BundleException {
         this.runtime = runtime;
         this.id = id;
         this.symbolicName = symbolicName;
         this.attrs = attrs;
         this.rootUrl = rootUrl;
         this.data = data;
-        state = Bundle.RESOLVED;
+        state = "lazy".equals(getHeaderValue(attrs, "Bundle-ActivationPolicy"))
+                || "true".equals(getHeaderValue(attrs, "Eclipse-LazyStart"))
+                || "true".equals(getHeaderValue(attrs, "Eclipse-AutoStart")) ? BundleState.LAZY_ACTIVATE : BundleState.LOADED;
+        System.out.println(symbolicName + " [" + state + "]");
+    }
+    
+    private static String getHeaderValue(Attributes attrs, String name) throws BundleException {
+        String value = attrs.getValue(name);
+        if (value == null) {
+            return null;
+        } else {
+            Element[] elements;
+            try {
+                elements = Element.parseHeaderValue(value);
+            } catch (ParseException ex) {
+                throw new BundleException("Unable to parse " + name + " header", BundleException.MANIFEST_ERROR, ex);
+            }
+            if (elements.length != 1) {
+                throw new BundleException("Expected only a single value for header " + name, BundleException.MANIFEST_ERROR);
+            } else {
+                return elements[0].getValue();
+            }
+        }
     }
 
     Runtime getRuntime() {
@@ -56,7 +78,7 @@ final class BundleImpl implements Bundle {
     }
 
     public int getState() {
-        return state;
+        return state.getOsgiState();
     }
 
     public Dictionary<String,String> getHeaders() {
@@ -76,7 +98,57 @@ final class BundleImpl implements Bundle {
         throw new UnsupportedOperationException();
     }
 
+    private void makeDependenciesReady() throws BundleException {
+        String requireBundle = attrs.getValue("Require-Bundle");
+        if (requireBundle != null) {
+            Element[] elements;
+            try {
+                elements = Element.parseHeaderValue(requireBundle);
+            } catch (ParseException ex) {
+                throw new BundleException("Unable to parse Require-Bundle header", BundleException.MANIFEST_ERROR, ex);
+            }
+            for (Element element : elements) {
+                BundleImpl bundle = (BundleImpl)runtime.getBundle(element.getValue());
+                if (bundle != null) {
+                    bundle.makeReady();
+                }
+            }
+        }
+        String importPackage = attrs.getValue("Import-Package");
+        if (importPackage != null) {
+            Element[] elements;
+            try {
+                elements = Element.parseHeaderValue(importPackage);
+            } catch (ParseException ex) {
+                throw new BundleException("Unable to parse Import-Package header", BundleException.MANIFEST_ERROR, ex);
+            }
+            for (Element element : elements) {
+                BundleImpl bundle = runtime.getBundleByPackage(element.getValue());
+                // Note that a bundle can import a package from itself
+                if (bundle != null && bundle != this) {
+                    System.out.println(getSymbolicName() + " -> " + bundle.getSymbolicName());
+                    bundle.makeReady();
+                }
+            }
+        }
+    }
+    
+    private void makeReady() throws BundleException {
+        switch (state) {
+            case LOADED:
+                makeDependenciesReady();
+                break;
+            case LAZY_ACTIVATE:
+                start();
+                break;
+            default:
+        }
+    }
+    
     public void start() throws BundleException {
+        if (state == BundleState.LOADED || state == BundleState.LAZY_ACTIVATE) {
+            makeDependenciesReady();
+        }
         System.out.println("Starting bundle " + symbolicName + " ...");
         runtime.fireBundleEvent(this, BundleEvent.STARTING);
         String activatorClassName = attrs.getValue("Bundle-Activator");
@@ -94,7 +166,7 @@ final class BundleImpl implements Bundle {
                 throw new BundleException("Failed to start bundle " + symbolicName, ex);
             }
         }
-        state = Bundle.ACTIVE;
+        state = BundleState.ACTIVE;
         runtime.fireBundleEvent(this, BundleEvent.STARTED);
     }
 

@@ -22,6 +22,7 @@ import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -40,8 +41,13 @@ public final class Runtime {
     private final List<Service> services = new LinkedList<Service>();
     private long serviceId = 1;
     private final File dataRoot;
+    
+    /**
+     * Maps exported packages to their corresponding bundles.
+     */
+    private final Map<String,BundleImpl> packageMap = new HashMap<String,BundleImpl>();
 
-    private Runtime() throws CosmosException {
+    private Runtime() throws CosmosException, BundleException {
         // TODO: make this configurable
         dataRoot = new File("target/osgi");
         Enumeration<URL> e;
@@ -85,10 +91,23 @@ public final class Runtime {
             BundleImpl bundle = new BundleImpl(this, id, symbolicName, attrs, rootUrl, new File(dataRoot, symbolicName));
             bundlesBySymbolicName.put(symbolicName, bundle);
             bundlesById.put(id, bundle);
+            String exportPackage = attrs.getValue("Export-Package");
+            if (exportPackage != null) {
+                Element[] elements;
+                try {
+                    elements = Element.parseHeaderValue(exportPackage);
+                } catch (ParseException ex) {
+                    throw new BundleException("Unable to parse Export-Package header", BundleException.MANIFEST_ERROR, ex);
+                }
+                for (Element element : elements) {
+                    // TODO: what if the same package is exported by multiple bundles??
+                    packageMap.put(element.getValue(), bundle);
+                }
+            }
         }
     }
     
-    public static synchronized Runtime getInstance() throws CosmosException {
+    public static synchronized Runtime getInstance() throws CosmosException, BundleException {
         if (instance == null) {
             instance = new Runtime();
         }
@@ -102,6 +121,10 @@ public final class Runtime {
     
     public Bundle getBundle(String symbolicName) {
         return bundlesBySymbolicName.get(symbolicName);
+    }
+    
+    BundleImpl getBundleByPackage(String pkg) {
+        return packageMap.get(pkg);
     }
     
     Bundle getBundle(long id) {
