@@ -44,23 +44,10 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
             runtime.registerService(null, new String[] { SAXParserFactory.class.getName() }, SAXParserFactory.newInstance(), null);
             runtime.registerService(null, new String[] { Location.class.getName() }, new BasicLocation("dummy", null, false, null), null);
             runtime.registerService(null, new String[] { SignedContentFactory.class.getName() }, new SignedBundleHook(), null);
-            runtime.getBundle("org.eclipse.equinox.common").start();
-            runtime.getBundle("org.eclipse.equinox.registry").start();
-            runtime.getBundle("org.eclipse.equinox.security").start();
-            runtime.getBundle("org.eclipse.equinox.p2.core").start();
-    //        runtime.getBundle("org.eclipse.equinox.ds").start();
             runtime.getBundle("org.apache.felix.scr").start();
-            runtime.getBundle("org.eclipse.equinox.p2.repository").start();
-            runtime.getBundle("org.eclipse.equinox.p2.artifact.repository").start();
+            runtime.getBundle("org.eclipse.equinox.p2.core").start();
             runtime.getBundle("org.eclipse.equinox.p2.updatesite").start();
-            runtime.getBundle("org.eclipse.ecf").start();
-            runtime.getBundle("org.eclipse.ecf.filetransfer").start();
-            runtime.getBundle("org.eclipse.ecf.identity").start();
-            runtime.getBundle("org.eclipse.ecf.provider.filetransfer").start();
-            runtime.getBundle("org.eclipse.ecf.provider.filetransfer.httpclient").start();
             runtime.getBundle("org.eclipse.equinox.p2.transport.ecf").start();
-            runtime.getBundle("org.eclipse.equinox.preferences").start();
-            runtime.getBundle("org.eclipse.core.net").start();
             
             // TODO: wagonManager is only null in unit tests; find a way to inject a mock instance
             if (wagonManager != null) {
