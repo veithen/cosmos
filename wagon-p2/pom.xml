@@ -48,7 +48,7 @@
         <dependency>
             <groupId>osgi.bundle</groupId>
             <artifactId>org.eclipse.core.net</artifactId>
-            <version>1.2.200.v20120522-1148</version>
+            <version>1.2.200.v20120914-093638</version>
         </dependency>
         <dependency>
             <groupId>osgi.bundle</groupId>
@@ -103,7 +103,7 @@
         <dependency>
             <groupId>osgi.bundle</groupId>
             <artifactId>org.eclipse.equinox.p2.publisher</artifactId>
-            <version>1.2.0.v20120428-0117</version>
+            <version>1.2.0.v20121002-080415</version>
         </dependency>
         <dependency>
             <groupId>osgi.bundle</groupId>
@@ -113,7 +113,7 @@
         <dependency>
             <groupId>osgi.bundle</groupId>
             <artifactId>org.eclipse.equinox.p2.transport.ecf</artifactId>
-            <version>1.0.100.v20120305-0333</version>
+            <version>1.0.100.v20120913-155635</version>
         </dependency>
         <dependency>
             <groupId>osgi.bundle</groupId>
@@ -123,7 +123,7 @@
         <dependency>
             <groupId>osgi.bundle</groupId>
             <artifactId>org.eclipse.equinox.preferences</artifactId>
-            <version>3.5.0.v20120522-1841</version>
+            <version>3.5.1.v20121031-182809</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.equinox</groupId>
