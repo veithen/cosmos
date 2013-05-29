@@ -136,6 +136,7 @@ final class BundleImpl implements Bundle {
                 }
             }
         }
+        state = BundleState.READY;
     }
     
     private void makeReady(BundleImpl dependingBundle) throws BundleException {
