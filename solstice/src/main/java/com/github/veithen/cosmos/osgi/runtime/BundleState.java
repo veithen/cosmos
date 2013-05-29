@@ -1,4 +1,4 @@
-package com.github.veithen.cosmos.solstice;
+package com.github.veithen.cosmos.osgi.runtime;
 
 import org.osgi.framework.Bundle;
 

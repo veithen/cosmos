@@ -1,4 +1,4 @@
-package com.github.veithen.cosmos.solstice;
+package com.github.veithen.cosmos.osgi.runtime;
 
 final class Tokenizer {
     private static final String whitespace = " \t\n\r";

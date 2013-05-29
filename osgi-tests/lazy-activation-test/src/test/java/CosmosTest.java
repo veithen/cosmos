@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import bundle2.MyService;
 
-import com.github.veithen.cosmos.solstice.Runtime;
+import com.github.veithen.cosmos.osgi.runtime.Runtime;
 
 public class CosmosTest {
     @Test

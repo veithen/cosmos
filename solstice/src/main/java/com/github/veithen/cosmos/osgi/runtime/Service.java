@@ -1,4 +1,4 @@
-package com.github.veithen.cosmos.solstice;
+package com.github.veithen.cosmos.osgi.runtime;
 
 import java.util.Dictionary;
 import java.util.HashMap;

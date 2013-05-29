@@ -1,4 +1,4 @@
-package com.github.veithen.cosmos.solstice;
+package com.github.veithen.cosmos.osgi.runtime;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -13,6 +13,8 @@ import java.util.jar.Manifest;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.github.veithen.cosmos.osgi.runtime.Element;
 
 public class ElementTest {
     @Test

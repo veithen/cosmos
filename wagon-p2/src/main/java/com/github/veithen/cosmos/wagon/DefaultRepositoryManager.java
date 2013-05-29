@@ -24,7 +24,7 @@ import org.eclipse.osgi.internal.signedcontent.SignedBundleHook;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.osgi.signedcontent.SignedContentFactory;
 
-import com.github.veithen.cosmos.solstice.Runtime;
+import com.github.veithen.cosmos.osgi.runtime.Runtime;
 
 /**
  * @plexus.component role="com.github.veithen.cosmos.wagon.RepositoryManager"
