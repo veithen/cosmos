@@ -23,8 +23,11 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 
+import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
+
 final class BundleImpl implements Bundle {
     private final Runtime runtime;
+    private final Logger logger;
     private final long id;
     private final String symbolicName;
     private final Attributes attrs;
@@ -35,6 +38,7 @@ final class BundleImpl implements Bundle {
 
     public BundleImpl(Runtime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl, File data) throws BundleException {
         this.runtime = runtime;
+        logger = runtime.getConfig().getLogger();
         this.id = id;
         this.symbolicName = symbolicName;
         this.attrs = attrs;
@@ -43,7 +47,9 @@ final class BundleImpl implements Bundle {
         state = "lazy".equals(getHeaderValue(attrs, "Bundle-ActivationPolicy"))
                 || "true".equals(getHeaderValue(attrs, "Eclipse-LazyStart"))
                 || "true".equals(getHeaderValue(attrs, "Eclipse-AutoStart")) ? BundleState.LAZY_ACTIVATE : BundleState.LOADED;
-        System.out.println(symbolicName + " [" + state + "]");
+        if (logger.isDebugEnabled()) {
+            logger.debug("Loaded bundle " + symbolicName + " with initial state " + state);
+        }
     }
     
     private static String getHeaderValue(Attributes attrs, String name) throws BundleException {
@@ -110,7 +116,7 @@ final class BundleImpl implements Bundle {
             for (Element element : elements) {
                 BundleImpl bundle = (BundleImpl)runtime.getBundle(element.getValue());
                 if (bundle != null) {
-                    bundle.makeReady();
+                    bundle.makeReady(this);
                 }
             }
         }
@@ -126,19 +132,24 @@ final class BundleImpl implements Bundle {
                 BundleImpl bundle = runtime.getBundleByPackage(element.getValue());
                 // Note that a bundle can import a package from itself
                 if (bundle != null && bundle != this) {
-                    System.out.println(getSymbolicName() + " -> " + bundle.getSymbolicName());
-                    bundle.makeReady();
+                    bundle.makeReady(this);
                 }
             }
         }
     }
     
-    private void makeReady() throws BundleException {
+    private void makeReady(BundleImpl dependingBundle) throws BundleException {
         switch (state) {
             case LOADED:
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Need to make bundle " + symbolicName + " ready because it is used by bundle " + dependingBundle.symbolicName);
+                }
                 makeDependenciesReady();
                 break;
             case LAZY_ACTIVATE:
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Need to start bundle " + symbolicName + " because it is used by bundle " + dependingBundle.symbolicName);
+                }
                 start();
                 break;
             default:
@@ -146,10 +157,12 @@ final class BundleImpl implements Bundle {
     }
     
     public void start() throws BundleException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Starting bundle " + symbolicName + " ...");
+        }
         if (state == BundleState.LOADED || state == BundleState.LAZY_ACTIVATE) {
             makeDependenciesReady();
         }
-        System.out.println("Starting bundle " + symbolicName + " ...");
         runtime.fireBundleEvent(this, BundleEvent.STARTING);
         String activatorClassName = attrs.getValue("Bundle-Activator");
         if (activatorClassName != null) {
@@ -167,6 +180,9 @@ final class BundleImpl implements Bundle {
             }
         }
         state = BundleState.ACTIVE;
+        if (logger.isDebugEnabled()) {
+            logger.debug("Bundle " + symbolicName + " started");
+        }
         runtime.fireBundleEvent(this, BundleEvent.STARTED);
     }
 

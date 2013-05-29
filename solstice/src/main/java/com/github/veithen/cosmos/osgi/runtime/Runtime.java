@@ -30,9 +30,13 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 
+import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
+
 public final class Runtime {
     private static Runtime instance;
 
+    private final Configuration config;
+    private final Logger logger;
     private final Properties properties = new Properties();
     private final Map<String,BundleImpl> bundlesBySymbolicName = new HashMap<String,BundleImpl>();
     private final Map<Long,BundleImpl> bundlesById = new HashMap<Long,BundleImpl>();
@@ -47,7 +51,9 @@ public final class Runtime {
      */
     private final Map<String,BundleImpl> packageMap = new HashMap<String,BundleImpl>();
 
-    private Runtime() throws CosmosException, BundleException {
+    private Runtime(Configuration config) throws CosmosException, BundleException {
+        this.config = config;
+        logger = config.getLogger();
         // TODO: make this configurable
         dataRoot = new File("target/osgi");
         Enumeration<URL> e;
@@ -107,13 +113,19 @@ public final class Runtime {
         }
     }
     
-    public static synchronized Runtime getInstance() throws CosmosException, BundleException {
+    public static synchronized Runtime getInstance(Configuration config) throws CosmosException, BundleException {
         if (instance == null) {
-            instance = new Runtime();
+            instance = new Runtime(config);
+        } else if (instance.config != config) {
+            throw new IllegalStateException("Runtime already initialized with different configuration");
         }
         return instance;
     }
     
+    Configuration getConfig() {
+        return config;
+    }
+
     Bundle[] getBundles() {
         Collection<BundleImpl> c = bundlesBySymbolicName.values();
         return c.toArray(new Bundle[c.size()]);
@@ -136,8 +148,8 @@ public final class Runtime {
         if (value == null) {
             System.getProperty(key);
         }
-        if (value == null) {
-            System.out.println("No value for property " + key);
+        if (value == null && logger.isDebugEnabled()) {
+            logger.debug("No value for property " + key);
         }
         return value;
     }
@@ -163,7 +175,9 @@ public final class Runtime {
     }
 
     public <T> Service registerService(BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
-        System.out.println("registerService: " + Arrays.asList(classes));
+        if (logger.isDebugEnabled()) {
+            logger.debug("Registering service " + serviceObject.getClass().getName() + " with interfaces " + Arrays.asList(classes) + " and properties " + properties);
+        }
         Hashtable<String,Object> actualProperties = new Hashtable<String,Object>();
         if (properties != null) {
             for (Enumeration<String> keys = properties.keys(); keys.hasMoreElements(); ) {

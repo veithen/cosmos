@@ -9,6 +9,8 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.maven.artifact.manager.WagonManager;
 import org.apache.maven.wagon.proxy.ProxyInfo;
+import org.codehaus.plexus.logging.LogEnabled;
+import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Disposable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
@@ -24,12 +26,15 @@ import org.eclipse.osgi.internal.signedcontent.SignedBundleHook;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.osgi.signedcontent.SignedContentFactory;
 
+import com.github.veithen.cosmos.osgi.runtime.Configuration;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
+import com.github.veithen.cosmos.osgi.runtime.logging.jdk14.Jdk14Logger;
+import com.github.veithen.cosmos.osgi.runtime.logging.plexus.PlexusLogger;
 
 /**
  * @plexus.component role="com.github.veithen.cosmos.wagon.RepositoryManager"
  */
-public class DefaultRepositoryManager implements RepositoryManager, Initializable, Disposable {
+public class DefaultRepositoryManager implements RepositoryManager, Initializable, Disposable, LogEnabled {
     private IArtifactRepositoryManager repoman;
     
     /**
@@ -37,9 +42,17 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
      */
     private WagonManager wagonManager;
     
+    private Logger logger;
+    
+    @Override
+    public void enableLogging(Logger logger) {
+        this.logger = logger;
+    }
+
     public void initialize() throws InitializationException {
         try {
-            Runtime runtime = Runtime.getInstance();
+            // TODO: we need a hack here because the test case instantiates DefaultRepositoryManager directly; instead we should create a Plexus container and look up the component
+            Runtime runtime = Runtime.getInstance(Configuration.newDefault().logger(logger == null ? null : new PlexusLogger(logger)).build());
             runtime.setProperty("eclipse.p2.data.area", new File("target/p2-data").getAbsolutePath());
             runtime.registerService(null, new String[] { SAXParserFactory.class.getName() }, SAXParserFactory.newInstance(), null);
             runtime.registerService(null, new String[] { Location.class.getName() }, new BasicLocation("dummy", null, false, null), null);

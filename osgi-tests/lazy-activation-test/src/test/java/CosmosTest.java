@@ -4,12 +4,13 @@ import org.junit.Test;
 
 import bundle2.MyService;
 
+import com.github.veithen.cosmos.osgi.runtime.Configuration;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
 
 public class CosmosTest {
     @Test
     public void test() throws Exception {
-        Runtime runtime = Runtime.getInstance();
+        Runtime runtime = Runtime.getInstance(Configuration.newDefault().build());
         runtime.setProperty("foo", "bar");
         runtime.getBundle("bundle2").start();
         MyService myService = runtime.getService(MyService.class);
