@@ -86,7 +86,8 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
     }
 
     public IArtifactRepository loadRepository(URI uri) throws ProvisionException {
-        return repoman.loadRepository(uri, null);
+        System.out.println("Loading repository " + uri);
+        return repoman.loadRepository(uri, new SystemOutProgressMonitor());
     }
 
     public void dispose() {

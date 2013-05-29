@@ -12,7 +12,8 @@ import org.apache.maven.wagon.ResourceDoesNotExistException;
 import org.apache.maven.wagon.TransferFailedException;
 import org.apache.maven.wagon.authentication.AuthenticationException;
 import org.apache.maven.wagon.authorization.AuthorizationException;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.codehaus.plexus.logging.LogEnabled;
+import org.codehaus.plexus.logging.Logger;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.Version;
@@ -24,13 +25,19 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
  *                   instantiation-strategy="per-lookup"
  */
 // TODO: implement StreamingWagon
-public class P2Wagon extends AbstractWagon {
+public class P2Wagon extends AbstractWagon implements LogEnabled {
     /**
      * @plexus.requirement
      */
     private RepositoryManager repoman;
     
+    private Logger logger;
+    
     private IArtifactRepository artifactRepository;
+
+    public void enableLogging(Logger logger) {
+        this.logger = logger;
+    }
 
     @Override
     protected void openConnectionInternal() throws ConnectionException, AuthenticationException {
@@ -57,7 +64,9 @@ public class P2Wagon extends AbstractWagon {
     }
 
     public boolean getIfNewer(String resourceName, File destination, long timestamp) throws TransferFailedException, ResourceDoesNotExistException, AuthorizationException {
-        System.out.println(resourceName);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Got download request for " + resourceName);
+        }
         
         // Translate the resource name back into Maven coordinates and file type
         int fileSlash = resourceName.lastIndexOf('/');
@@ -80,10 +89,9 @@ public class P2Wagon extends AbstractWagon {
             throw new ResourceDoesNotExistException(resourceName + " not found");
         }
         String type = file.substring(artifactId.length() + version.length() + 2);
-        System.out.println("groupId=" + groupId);
-        System.out.println("artifactId=" + artifactId);
-        System.out.println("version=" + version);
-        System.out.println("type=" + type);
+        if (logger.isDebugEnabled()) {
+            logger.debug("groupId=" + groupId + "; artifactId=" + artifactId + "; version=" + version + "; type=" + type);
+        }
         
         // Now download the artifact
         if (type.equals("jar")) {
@@ -95,7 +103,7 @@ public class P2Wagon extends AbstractWagon {
                 FileOutputStream out = new FileOutputStream(destination);
                 try {
                     // TODO: process status
-                    artifactRepository.getArtifact(descriptor, out, new NullProgressMonitor());
+                    artifactRepository.getArtifact(descriptor, out, new SystemOutProgressMonitor());
                 } finally {
                     out.close();
                 }
