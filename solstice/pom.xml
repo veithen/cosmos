@@ -7,8 +7,8 @@
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>solstice</artifactId>
-    <name>Solstice OSGi Runtime</name>
+    <artifactId>cosmos-osgi-runtime</artifactId>
+    <name>Cosmos OSGi Runtime</name>
     <dependencies>
         <dependency>
             <groupId>org.osgi</groupId>
