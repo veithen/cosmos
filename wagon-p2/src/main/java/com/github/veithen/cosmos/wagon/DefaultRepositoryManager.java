@@ -15,6 +15,7 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationExce
 import org.eclipse.core.internal.net.ProxyData;
 import org.eclipse.core.internal.net.ProxyManager;
 import org.eclipse.core.net.proxy.IProxyData;
+import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
@@ -56,12 +57,14 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
                     ProxyInfo proxyInfo = wagonManager.getProxy(protocol);
                     if (proxyInfo != null) {
                         // TODO: we are using an internal class here
-                        ProxyData proxyData = new ProxyData(protocol, proxyInfo.getHost(), proxyInfo.getPort(), proxyInfo.getUserName() != null, null);
+                        ProxyData proxyData = new ProxyData(protocol.toUpperCase(), proxyInfo.getHost(), proxyInfo.getPort(), proxyInfo.getUserName() != null, null);
                         // TODO: add authentication data
                         proxyDataList.add(proxyData);
                     }
                 }
-                ProxyManager.getProxyManager().setProxyData(proxyDataList.toArray(new IProxyData[proxyDataList.size()]));
+                IProxyService proxyManager = ProxyManager.getProxyManager();
+                proxyManager.setProxyData(proxyDataList.toArray(new IProxyData[proxyDataList.size()]));
+                proxyManager.setSystemProxiesEnabled(false);
             }
             
             IProvisioningAgent agent = runtime.getService(IProvisioningAgent.class);
