@@ -44,7 +44,7 @@ public class PaxTest {
         MyService myService = (MyService)bundleContext.getService(bundleContext.getServiceReference(MyService.class.getName()));
         assertEquals("bar", myService.getProperty("foo"));
         
-        // bundle1 shoul now have been activated automatically
+        // bundle1 should now have been activated automatically
         assertEquals(Bundle.ACTIVE, bundle1.getState());
     }
     
