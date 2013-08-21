@@ -17,7 +17,7 @@ import org.osgi.framework.BundleContext;
 import bundle2.MyService;
 
 @RunWith(JUnit4TestRunner.class)
-public class PaxTest {
+public class PaxActivationByClassLoadingTest {
     @Inject
     private BundleContext bundleContext;
     
@@ -32,8 +32,8 @@ public class PaxTest {
     
     @Test
     public void test() throws Exception {
-        Bundle bundle1 = getBundle(bundleContext, "bundle1");
-        Bundle bundle2 = getBundle(bundleContext, "bundle2");
+        Bundle bundle1 = OSGiUtil.getBundle(bundleContext, "bundle1");
+        Bundle bundle2 = OSGiUtil.getBundle(bundleContext, "bundle2");
         
         // Bundles with lazy activation policy are in state STARTING if they have
         // not yet been activated.
@@ -46,14 +46,5 @@ public class PaxTest {
         
         // bundle1 should now have been activated automatically
         assertEquals(Bundle.ACTIVE, bundle1.getState());
-    }
-    
-    private static Bundle getBundle(BundleContext bundleContext, String symbolicName) {
-        for (Bundle bundle : bundleContext.getBundles()) {
-            if (bundle.getSymbolicName().equals(symbolicName)) {
-                return bundle;
-            }
-        }
-        throw new IllegalArgumentException("Bundle " + symbolicName + " not found");
     }
 }

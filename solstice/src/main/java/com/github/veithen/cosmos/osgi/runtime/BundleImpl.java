@@ -44,9 +44,14 @@ final class BundleImpl implements Bundle {
         this.attrs = attrs;
         this.rootUrl = rootUrl;
         this.data = data;
-        state = "lazy".equals(getHeaderValue(attrs, "Bundle-ActivationPolicy"))
+        if ("lazy".equals(getHeaderValue(attrs, "Bundle-ActivationPolicy"))
                 || "true".equals(getHeaderValue(attrs, "Eclipse-LazyStart"))
-                || "true".equals(getHeaderValue(attrs, "Eclipse-AutoStart")) ? BundleState.LAZY_ACTIVATE : BundleState.LOADED;
+                || "true".equals(getHeaderValue(attrs, "Eclipse-AutoStart"))) {
+            state = BundleState.LAZY_ACTIVATE;
+            context = new BundleContextImpl(this);
+        } else {
+            state = BundleState.LOADED;
+        }
         if (logger.isDebugEnabled()) {
             logger.debug("Loaded bundle " + symbolicName + " with initial state " + state);
         }
@@ -173,7 +178,10 @@ final class BundleImpl implements Bundle {
             } catch (Exception ex) {
                 throw new BundleException("Failed to instantiate bundle activator " + activatorClassName, ex);
             }
-            context = new BundleContextImpl(this);
+            // For bundles with lazy activation, the BundleContext has already been created
+            if (context == null) {
+                context = new BundleContextImpl(this);
+            }
             try {
                 activator.start(context);
             } catch (Exception ex) {

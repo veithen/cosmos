@@ -7,7 +7,7 @@ import bundle2.MyService;
 import com.github.veithen.cosmos.osgi.runtime.Configuration;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
 
-public class CosmosTest {
+public class CosmosActivationByClassLoadingTest {
     @Test
     public void test() throws Exception {
         Runtime runtime = Runtime.getInstance(Configuration.newDefault().build());
