@@ -111,6 +111,10 @@ public final class Runtime {
                 }
             }
         }
+        RuntimeInitializer initializer = config.getInitializer();
+        if (initializer != null) {
+            initializer.initializeRuntime(this);
+        }
     }
     
     public static synchronized Runtime getInstance(Configuration config) throws CosmosException, BundleException {

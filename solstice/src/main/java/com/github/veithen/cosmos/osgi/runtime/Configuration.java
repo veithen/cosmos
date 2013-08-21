@@ -6,9 +6,15 @@ import com.github.veithen.cosmos.osgi.runtime.logging.simple.SimpleLogger;
 public final class Configuration {
     public static final class Builder {
         private Logger logger;
+        private RuntimeInitializer initializer;
 
         public Builder logger(Logger logger) {
             this.logger = logger;
+            return this;
+        }
+        
+        public Builder initializer(RuntimeInitializer initializer) {
+            this.initializer = initializer;
             return this;
         }
         
@@ -16,14 +22,16 @@ public final class Configuration {
             if (logger == null) {
                 logger = SimpleLogger.INSTANCE;
             }
-            return new Configuration(logger);
+            return new Configuration(logger, initializer);
         }
     }
     
     private final Logger logger;
+    private final RuntimeInitializer initializer;
     
-    Configuration(Logger logger) {
+    Configuration(Logger logger, RuntimeInitializer initializer) {
         this.logger = logger;
+        this.initializer = initializer;
     }
 
     public static Builder newDefault() {
@@ -32,5 +40,9 @@ public final class Configuration {
     
     public Logger getLogger() {
         return logger;
+    }
+
+    public RuntimeInitializer getInitializer() {
+        return initializer;
     }
 }

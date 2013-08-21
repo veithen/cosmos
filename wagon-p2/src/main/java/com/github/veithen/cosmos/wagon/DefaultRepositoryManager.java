@@ -5,8 +5,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.SAXParserFactory;
-
 import org.apache.maven.artifact.manager.WagonManager;
 import org.apache.maven.wagon.proxy.ProxyInfo;
 import org.codehaus.plexus.logging.LogEnabled;
@@ -17,19 +15,15 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationExce
 import org.eclipse.core.internal.net.ProxyData;
 import org.eclipse.core.internal.net.ProxyManager;
 import org.eclipse.core.net.proxy.IProxyData;
-import org.eclipse.core.runtime.internal.adaptor.BasicLocation;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
-import org.eclipse.osgi.internal.signedcontent.SignedBundleHook;
-import org.eclipse.osgi.service.datalocation.Location;
-import org.eclipse.osgi.signedcontent.SignedContentFactory;
 
 import com.github.veithen.cosmos.osgi.runtime.Configuration;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
-import com.github.veithen.cosmos.osgi.runtime.logging.jdk14.Jdk14Logger;
 import com.github.veithen.cosmos.osgi.runtime.logging.plexus.PlexusLogger;
+import com.github.veithen.cosmos.p2.P2Initializer;
 
 /**
  * @plexus.component role="com.github.veithen.cosmos.wagon.RepositoryManager"
@@ -52,15 +46,7 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
     public void initialize() throws InitializationException {
         try {
             // TODO: we need a hack here because the test case instantiates DefaultRepositoryManager directly; instead we should create a Plexus container and look up the component
-            Runtime runtime = Runtime.getInstance(Configuration.newDefault().logger(logger == null ? null : new PlexusLogger(logger)).build());
-            runtime.setProperty("eclipse.p2.data.area", new File("target/p2-data").getAbsolutePath());
-            runtime.registerService(null, new String[] { SAXParserFactory.class.getName() }, SAXParserFactory.newInstance(), null);
-            runtime.registerService(null, new String[] { Location.class.getName() }, new BasicLocation("dummy", null, false, null), null);
-            runtime.registerService(null, new String[] { SignedContentFactory.class.getName() }, new SignedBundleHook(), null);
-            runtime.getBundle("org.apache.felix.scr").start();
-            runtime.getBundle("org.eclipse.equinox.p2.core").start();
-            runtime.getBundle("org.eclipse.equinox.p2.updatesite").start();
-            runtime.getBundle("org.eclipse.equinox.p2.transport.ecf").start();
+            Runtime runtime = Runtime.getInstance(Configuration.newDefault().logger(logger == null ? null : new PlexusLogger(logger)).initializer(new P2Initializer(new File("target/p2-data"))).build());
             
             // TODO: wagonManager is only null in unit tests; find a way to inject a mock instance
             if (wagonManager != null) {

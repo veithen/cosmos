@@ -9,6 +9,7 @@
     <modules>
     	<module>solstice</module>
         <module>osgi-tests</module>
+        <module>cosmos-p2</module>
     	<module>wagon-p2</module>
     </modules>
     <dependencyManagement>
