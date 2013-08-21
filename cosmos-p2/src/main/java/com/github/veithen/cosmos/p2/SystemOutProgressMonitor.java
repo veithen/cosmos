@@ -1,4 +1,4 @@
-package com.github.veithen.cosmos.wagon;
+package com.github.veithen.cosmos.p2;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 

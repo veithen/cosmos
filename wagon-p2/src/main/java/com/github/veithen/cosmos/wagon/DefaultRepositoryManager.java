@@ -25,6 +25,7 @@ import com.github.veithen.cosmos.osgi.runtime.Configuration;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
 import com.github.veithen.cosmos.osgi.runtime.logging.plexus.PlexusLogger;
 import com.github.veithen.cosmos.p2.P2Initializer;
+import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 
 /**
  * @plexus.component role="com.github.veithen.cosmos.wagon.RepositoryManager"

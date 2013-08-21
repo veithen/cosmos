@@ -20,6 +20,8 @@ import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
+import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
+
 /**
  * @plexus.component role="org.apache.maven.wagon.Wagon" role-hint="p2"
  *                   instantiation-strategy="per-lookup"
