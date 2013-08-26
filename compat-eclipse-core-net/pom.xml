@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/1/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.github.veithen.cosmos</groupId>
+        <artifactId>cosmos</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>compat-eclipse-core-net</artifactId>
+    <name>org.eclipse.core.net Compatibility Bundle</name>
+    <description>
+        Replacement bundle for org.eclipse.core.net. It doesn't use the preference service and instead
+        registers an IProxyService that uses the standard Java system properties to select proxies.
+        The bundle provides a copy of the classes in the org.eclipse.core.net.proxy package.
+    </description>
+    <packaging>bundle</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>org.eclipse.equinox.common</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>com.github.veithen.cosmos.compat.eclipse.core.net</Bundle-SymbolicName>
+                        <_nouses>true</_nouses>
+                        <Export-Package>org.eclipse.core.net.proxy;version="0.0.0"</Export-Package>
+                        <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+                        <Bundle-Activator>com.github.veithen.cosmos.compat.eclipse.core.net.Activator</Bundle-Activator>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

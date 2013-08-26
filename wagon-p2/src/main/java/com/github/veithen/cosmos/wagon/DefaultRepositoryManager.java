@@ -2,24 +2,20 @@ package com.github.veithen.cosmos.wagon;
 
 import java.io.File;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Hashtable;
 
 import org.apache.maven.artifact.manager.WagonManager;
-import org.apache.maven.wagon.proxy.ProxyInfo;
 import org.codehaus.plexus.logging.LogEnabled;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Disposable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
-import org.eclipse.core.internal.net.ProxyData;
-import org.eclipse.core.internal.net.ProxyManager;
-import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+import org.osgi.framework.Constants;
 
 import com.github.veithen.cosmos.osgi.runtime.Configuration;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
@@ -53,19 +49,9 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
             // TODO: wagonManager is only null in unit tests; find a way to inject a mock instance
             if (wagonManager != null) {
                 System.out.println("Setting up proxy configuration");
-                List<IProxyData> proxyDataList = new ArrayList<IProxyData>();
-                for (String protocol : new String[] { "http", "https" }) {
-                    ProxyInfo proxyInfo = wagonManager.getProxy(protocol);
-                    if (proxyInfo != null) {
-                        // TODO: we are using an internal class here
-                        ProxyData proxyData = new ProxyData(protocol.toUpperCase(), proxyInfo.getHost(), proxyInfo.getPort(), proxyInfo.getUserName() != null, null);
-                        // TODO: add authentication data
-                        proxyDataList.add(proxyData);
-                    }
-                }
-                IProxyService proxyManager = ProxyManager.getProxyManager();
-                proxyManager.setProxyData(proxyDataList.toArray(new IProxyData[proxyDataList.size()]));
-                proxyManager.setSystemProxiesEnabled(false);
+                Hashtable<String,Object> properties = new Hashtable<String,Object>();
+                properties.put(Constants.SERVICE_RANKING, Integer.valueOf(1));
+                runtime.registerService(null, new String[] { IProxyService.class.getName() }, new ProxyServiceAdapter(wagonManager), properties);
             }
             
             IProvisioningAgent agent = runtime.getService(IProvisioningAgent.class);
