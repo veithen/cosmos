@@ -3,11 +3,13 @@ import static org.ops4j.pax.exam.CoreOptions.frameworkProperty;
 import static org.ops4j.pax.exam.CoreOptions.junitBundles;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.MavenUtils.asInProject;
 
 import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.ops4j.pax.exam.MavenUtils;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
@@ -24,8 +26,8 @@ public class PaxActivationByClassLoadingTest {
     @Configuration
     public static Option[] configuration() {
         return options(
-                mavenBundle("com.github.veithen.cosmos", "bundle1").start(false),
-                mavenBundle("com.github.veithen.cosmos", "bundle2").start(false),
+                mavenBundle().groupId("com.github.veithen.cosmos").artifactId("bundle1").version(asInProject()).start(false),
+                mavenBundle().groupId("com.github.veithen.cosmos").artifactId("bundle2").version(asInProject()).start(false),
                 junitBundles(),
                 frameworkProperty("foo").value("bar"));
     }

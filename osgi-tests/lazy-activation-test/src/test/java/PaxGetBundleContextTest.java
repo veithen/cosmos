@@ -3,6 +3,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.ops4j.pax.exam.CoreOptions.junitBundles;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.MavenUtils.asInProject;
 
 import javax.inject.Inject;
 
@@ -22,7 +23,7 @@ public class PaxGetBundleContextTest {
     @Configuration
     public static Option[] configuration() {
         return options(
-                mavenBundle("com.github.veithen.cosmos", "bundle1").start(false),
+                mavenBundle().groupId("com.github.veithen.cosmos").artifactId("bundle1").version(asInProject()).start(false),
                 junitBundles());
     }
     
