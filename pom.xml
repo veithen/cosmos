@@ -12,6 +12,7 @@
         <module>compat-eclipse-core-net</module>
         <module>cosmos-p2</module>
     	<module>wagon-p2</module>
+    	<module>bootstrap</module>
     </modules>
     <dependencyManagement>
         <dependencies>
