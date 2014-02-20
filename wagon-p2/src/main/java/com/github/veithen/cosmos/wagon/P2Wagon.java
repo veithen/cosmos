@@ -184,6 +184,9 @@ public class P2Wagon extends AbstractWagon implements LogEnabled {
         if (type.equals("jar")) {
             IArtifactKey key = artifactRepository.createArtifactKey(groupId, artifactId, Version.create(version));
             IArtifactDescriptor[] descriptors = artifactRepository.getArtifactDescriptors(key);
+            if (descriptors.length == 0) {
+                throw new ResourceDoesNotExistException(resourceName + " not found: no matching artifact found");
+            }
             IArtifactDescriptor descriptor = descriptors[0];
             System.out.println(descriptor.getProperties());
             FileOutputStream out = new FileOutputStream(destination);
@@ -194,7 +197,7 @@ public class P2Wagon extends AbstractWagon implements LogEnabled {
                 out.close();
             }
         } else {
-            throw new ResourceDoesNotExistException(resourceName + " not found");
+            throw new ResourceDoesNotExistException(resourceName + " not found: artifact type " + type + " not supported");
         }
     }
 
