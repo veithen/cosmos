@@ -38,7 +38,8 @@
             <extension>
                 <groupId>com.github.veithen.cosmos</groupId>
                 <artifactId>wagon-p2</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <!-- Note: we bootstrap the build using a previous Cosmos version -->
+                <version>20140220</version>
             </extension>
         </extensions>
         <plugins>
