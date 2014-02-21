@@ -68,7 +68,7 @@ public class Test {
 		
 		Monitor monitor = new BasicMonitor.Printing(System.out);
 		
-		EcorePlugin.getPlatformResourceMap().put("out", URI.createFileURI(new File("target").getAbsolutePath()));
+		EcorePlugin.getPlatformResourceMap().put("out", URI.createFileURI(new File("target").getAbsolutePath() + "/"));
 		
 		Generator gen = new Generator();
 //		gen.getOptions().resourceSet = set;
