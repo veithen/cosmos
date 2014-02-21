@@ -1,8 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Test
-Bundle-SymbolicName: test
+Bundle-Name: %pluginName
+Bundle-SymbolicName: test;singleton:=true
 Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: .
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
 Bundle-Activator: test.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -32,3 +35,20 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.xtext.xbase.ui;bundle-version="2.3.1"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: test,
+ test.impl,
+ test.util
+Import-Package: org.eclipse.core.resources,
+ org.eclipse.emf.codegen.ecore.generator,
+ org.eclipse.emf.codegen.ecore.genmodel,
+ org.eclipse.emf.codegen.ecore.genmodel.generator,
+ org.eclipse.emf.codegen.jet,
+ org.eclipse.emf.common.util,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.plugin,
+ org.eclipse.emf.ecore.resource,
+ org.eclipse.emf.ecore.resource.impl,
+ org.eclipse.emf.ecore.xmi,
+ org.eclipse.emf.ecore.xmi.impl,
+ org.eclipse.jdt.core.dom,
+ org.eclipse.text.edits
