@@ -22,12 +22,18 @@ import com.github.veithen.cosmos.osgi.runtime.Runtime;
 import com.github.veithen.cosmos.osgi.runtime.logging.plexus.PlexusLogger;
 import com.github.veithen.cosmos.p2.P2Initializer;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
+import com.github.veithen.ulog.PlexusLoggerInjector;
 
 /**
  * @plexus.component role="com.github.veithen.cosmos.wagon.RepositoryManager"
  */
 public class DefaultRepositoryManager implements RepositoryManager, Initializable, Disposable, LogEnabled {
     private IArtifactRepositoryManager repoman;
+    
+    /**
+     * @plexus.requirement
+     */
+    private PlexusLoggerInjector injector;
     
     /**
      * @plexus.requirement
