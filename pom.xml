@@ -45,6 +45,16 @@
     </dependencyManagement>
     <repositories>
         <repository>
+            <id>cloudbees-release</id>
+            <url>http://repository-veithen.forge.cloudbees.com/release/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>cloudbees-snapshot</id>
             <url>http://repository-veithen.forge.cloudbees.com/snapshot/</url>
             <releases>
@@ -55,6 +65,28 @@
             </snapshots>
         </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>cloudbees-release</id>
+            <url>http://repository-veithen.forge.cloudbees.com/release/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>cloudbees-snapshot</id>
+            <url>http://repository-veithen.forge.cloudbees.com/snapshot/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
     <build>
         <pluginManagement>
             <plugins>
