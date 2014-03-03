@@ -18,7 +18,16 @@ public abstract class ArtifactHandler implements ResourceHandler {
     }
 
     public Resource get(IArtifactRepository artifactRepository, Logger logger) {
-        IArtifactKey key = artifactRepository.createArtifactKey(groupId, artifactId, Version.create(version));
+        Version parsedVersion;
+        try {
+            parsedVersion = Version.create(version);
+        } catch (IllegalArgumentException ex) {
+            if (logger.isDebugEnabled()) {
+                logger.debug(version + " doesn't appear to be a valid bundle version", ex);
+            }
+            return null;
+        }
+        IArtifactKey key = artifactRepository.createArtifactKey(groupId, artifactId, parsedVersion);
         IArtifactDescriptor[] descriptors = artifactRepository.getArtifactDescriptors(key);
         if (descriptors.length == 0) {
             return null;
