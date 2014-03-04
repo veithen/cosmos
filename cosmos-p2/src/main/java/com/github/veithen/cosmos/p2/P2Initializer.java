@@ -30,7 +30,5 @@ public class P2Initializer implements RuntimeInitializer {
         runtime.registerService(null, new String[] { SignedContentFactory.class.getName() }, new SignedBundleHook(), null);
         runtime.getBundle("org.apache.felix.scr").start();
         runtime.getBundle("org.eclipse.equinox.p2.core").start();
-        runtime.getBundle("org.eclipse.equinox.p2.updatesite").start();
-        runtime.getBundle("org.eclipse.equinox.p2.transport.ecf").start();
     }
 }
