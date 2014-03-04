@@ -44,7 +44,7 @@ public final class Runtime {
     private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
     private final List<ServiceListenerSpec> serviceListeners = new LinkedList<ServiceListenerSpec>();
     private final List<Service> services = new LinkedList<Service>();
-    private long serviceId = 1;
+    private long nextServiceId = 1;
     private final File dataRoot;
     
     /**
@@ -184,8 +184,9 @@ public final class Runtime {
     }
 
     public <T> Service registerService(BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
+        long serviceId = nextServiceId++;
         if (logger.isDebugEnabled()) {
-            logger.debug("Registering service " + serviceObject.getClass().getName() + " with interfaces " + Arrays.asList(classes) + " and properties " + properties);
+            logger.debug("Registering service " + serviceObject.getClass().getName() + " with interfaces " + Arrays.asList(classes) + " and properties " + properties + "; id is " + serviceId);
         }
         Hashtable<String,Object> actualProperties = new Hashtable<String,Object>();
         if (properties != null) {
@@ -194,8 +195,8 @@ public final class Runtime {
                 actualProperties.put(key, properties.get(key));
             }
         }
-        actualProperties.put(Constants.SERVICE_ID, serviceId++);
-        Service service = new Service(bundle, classes, serviceObject, actualProperties);
+        actualProperties.put(Constants.SERVICE_ID, serviceId);
+        Service service = new Service(logger, bundle, classes, serviceObject, actualProperties);
         services.add(service);
         for (ServiceListenerSpec listener : serviceListeners) {
             if (service.matches(null, listener.getFilter())) {

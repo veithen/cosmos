@@ -9,14 +9,18 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
+import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
+
 final class Service implements CosmosServiceReference<Object>, ServiceRegistration<Object> {
+    private final Logger logger;
     private final BundleImpl bundle;
     private final String[] classes;
     private final Object serviceObject;
     private final Dictionary<String,?> properties;
     private final Map<BundleImpl,ServiceContext> contexts = new HashMap<BundleImpl,ServiceContext>();
     
-    Service(BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
+    Service(Logger logger, BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
+        this.logger = logger;
         this.bundle = bundle;
         this.classes = classes;
         this.serviceObject = serviceObject;
@@ -46,7 +50,7 @@ final class Service implements CosmosServiceReference<Object>, ServiceRegistrati
     public Object getService(BundleImpl bundle) {
         ServiceContext context = contexts.get(bundle);
         if (context == null) {
-            context = new ServiceContext(this, bundle);
+            context = new ServiceContext(logger, this, bundle);
             contexts.put(bundle, context);
         }
         return context.getService();
