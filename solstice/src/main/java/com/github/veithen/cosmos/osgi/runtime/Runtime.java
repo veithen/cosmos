@@ -20,6 +20,9 @@ import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
@@ -31,6 +34,7 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
+import org.osgi.util.xml.XMLParserActivator;
 
 import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
 
@@ -113,11 +117,27 @@ public final class Runtime {
                 }
             }
         }
+        registerSAXParserFactory();
+        registerDocumentBuilderFactory();
         registerService(null, new String[] { LogService.class.getName() }, new LogServiceAdapter(logger), null);
         RuntimeInitializer initializer = config.getInitializer();
         if (initializer != null) {
             initializer.initializeRuntime(this);
         }
+    }
+
+    private void registerSAXParserFactory() {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        Hashtable<String,Object> props = new Hashtable<String,Object>();
+        new XMLParserActivator().setSAXProperties(factory, props);
+        registerService(null, new String[] { SAXParserFactory.class.getName() }, factory, props);
+    }
+    
+    private void registerDocumentBuilderFactory() {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        Hashtable<String,Object> props = new Hashtable<String,Object>();
+        new XMLParserActivator().setDOMProperties(factory, props);
+        registerService(null, new String[] { DocumentBuilderFactory.class.getName() }, factory, props);
     }
     
     public static synchronized Runtime getInstance(Configuration config) throws CosmosException, BundleException {
