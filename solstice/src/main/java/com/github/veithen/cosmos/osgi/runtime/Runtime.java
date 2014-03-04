@@ -29,6 +29,7 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 
 import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
@@ -128,6 +129,10 @@ public final class Runtime {
         return instance;
     }
     
+    public Logger getLogger() {
+        return logger;
+    }
+    
     Configuration getConfig() {
         return config;
     }
@@ -183,7 +188,15 @@ public final class Runtime {
         }
     }
 
-    public <T> Service registerService(BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
+    public <T> ServiceRegistration<T> registerService(String[] classes, T serviceObject, Dictionary<String,?> properties) {
+        return registerService((Bundle)null, classes, serviceObject, properties);
+    }
+    
+    public <T> ServiceRegistration<T> registerService(Bundle bundle, String[] classes, T serviceObject, Dictionary<String,?> properties) {
+        return (ServiceRegistration<T>)registerService((BundleImpl)bundle, classes, serviceObject, properties);
+    }
+    
+    Service registerService(BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
         long serviceId = nextServiceId++;
         if (logger.isDebugEnabled()) {
             logger.debug("Registering service " + serviceObject.getClass().getName() + " with interfaces " + Arrays.asList(classes) + " and properties " + properties + "; id is " + serviceId);
