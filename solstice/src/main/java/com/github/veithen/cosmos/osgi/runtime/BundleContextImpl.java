@@ -50,11 +50,11 @@ public class BundleContextImpl implements BundleContext {
     }
 
     public void addServiceListener(ServiceListener listener, String filter) throws InvalidSyntaxException {
-        bundle.getRuntime().addServiceListener(listener, FrameworkUtil.createFilter(filter));
+        bundle.getRuntime().addServiceListener(bundle, listener, FrameworkUtil.createFilter(filter));
     }
 
     public void addServiceListener(ServiceListener listener) {
-        bundle.getRuntime().addServiceListener(listener, null);
+        bundle.getRuntime().addServiceListener(bundle, listener, null);
     }
 
     public void removeServiceListener(ServiceListener listener) {

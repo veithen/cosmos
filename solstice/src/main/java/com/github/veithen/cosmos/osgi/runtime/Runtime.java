@@ -166,7 +166,10 @@ public final class Runtime {
         bundleListeners.add(listener);
     }
 
-    void addServiceListener(ServiceListener listener, Filter filter) {
+    void addServiceListener(BundleImpl bundle, ServiceListener listener, Filter filter) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Bundle " + bundle.getSymbolicName() + " starts listening for services with filter " + filter);
+        }
         serviceListeners.add(new ServiceListenerSpec(listener, filter));
     }
 
