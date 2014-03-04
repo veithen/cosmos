@@ -9,22 +9,20 @@ import org.apache.maven.wagon.AbstractWagon;
 import org.apache.maven.wagon.ConnectionException;
 import org.apache.maven.wagon.ResourceDoesNotExistException;
 import org.apache.maven.wagon.TransferFailedException;
+import org.apache.maven.wagon.Wagon;
 import org.apache.maven.wagon.authentication.AuthenticationException;
 import org.apache.maven.wagon.authorization.AuthorizationException;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.LogEnabled;
 import org.codehaus.plexus.logging.Logger;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
-/**
- * @plexus.component role="org.apache.maven.wagon.Wagon" role-hint="p2"
- *                   instantiation-strategy="per-lookup"
- */
+@Component(role=Wagon.class, hint="p2", instantiationStrategy="per-lookup")
 // TODO: implement StreamingWagon
 public class P2Wagon extends AbstractWagon implements LogEnabled {
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private RepositoryManager repoman;
     
     private Logger logger;
