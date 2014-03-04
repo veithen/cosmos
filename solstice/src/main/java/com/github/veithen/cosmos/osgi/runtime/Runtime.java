@@ -29,6 +29,7 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
 
 import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
 
@@ -111,6 +112,7 @@ public final class Runtime {
                 }
             }
         }
+        registerService(null, new String[] { LogService.class.getName() }, new LogServiceAdapter(logger), null);
         RuntimeInitializer initializer = config.getInitializer();
         if (initializer != null) {
             initializer.initializeRuntime(this);
