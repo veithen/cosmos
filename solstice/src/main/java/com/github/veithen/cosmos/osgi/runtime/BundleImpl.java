@@ -26,6 +26,24 @@ import org.osgi.framework.Version;
 import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
 
 final class BundleImpl implements Bundle {
+    static abstract class Reason<T> {
+        abstract String format(T context);
+    }
+    
+    private static final Reason<BundleImpl> USED_BY_BUNDLE = new Reason<BundleImpl>() {
+        @Override
+        String format(BundleImpl context) {
+            return "it is used by bundle " + context.symbolicName;
+        }
+    };
+    
+    private static final Reason<String> CLASS_LOADING_REQUEST = new Reason<String> () {
+        @Override
+        String format(String context) {
+            return "request to load class " + context;
+        }
+    };
+    
     private final Runtime runtime;
     private final Logger logger;
     private final long id;
@@ -121,7 +139,7 @@ final class BundleImpl implements Bundle {
             for (Element element : elements) {
                 BundleImpl bundle = (BundleImpl)runtime.getBundle(element.getValue());
                 if (bundle != null) {
-                    bundle.makeReady(this);
+                    bundle.makeReady(USED_BY_BUNDLE, this);
                 }
             }
         }
@@ -137,24 +155,24 @@ final class BundleImpl implements Bundle {
                 BundleImpl bundle = runtime.getBundleByPackage(element.getValue());
                 // Note that a bundle can import a package from itself
                 if (bundle != null && bundle != this) {
-                    bundle.makeReady(this);
+                    bundle.makeReady(USED_BY_BUNDLE, this);
                 }
             }
         }
         state = BundleState.READY;
     }
     
-    private void makeReady(BundleImpl dependingBundle) throws BundleException {
+    private <T> void makeReady(Reason<T> reason, T context) throws BundleException {
         switch (state) {
             case LOADED:
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Need to make bundle " + symbolicName + " ready because it is used by bundle " + dependingBundle.symbolicName);
+                    logger.debug("Need to make bundle " + symbolicName + " ready; reason: " + reason.format(context));
                 }
                 makeDependenciesReady();
                 break;
             case LAZY_ACTIVATE:
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Need to start bundle " + symbolicName + " because it is used by bundle " + dependingBundle.symbolicName);
+                    logger.debug("Need to start bundle " + symbolicName + "; reason: " + reason.format(context));
                 }
                 start();
                 break;
@@ -266,7 +284,11 @@ final class BundleImpl implements Bundle {
     }
 
     public Class<?> loadClass(String name) throws ClassNotFoundException {
-        // TODO: this should also trigger lazy activation!
+        try {
+            makeReady(CLASS_LOADING_REQUEST, name);
+        } catch (BundleException ex) {
+            throw new ClassNotFoundException(name, ex);
+        }
         return Class.forName(name);
     }
 
