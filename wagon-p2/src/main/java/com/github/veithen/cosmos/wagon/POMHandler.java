@@ -16,8 +16,15 @@ import org.w3c.dom.ls.LSSerializer;
 public class POMHandler extends ArtifactHandler {
     private static final String POM_NS = "http://maven.apache.org/POM/4.0.0";
     
+    private final String groupId;
+    private final String artifactId;
+    private final String version;
+    
     public POMHandler(String groupId, String artifactId, String version) {
         super(groupId, artifactId, version);
+        this.groupId = groupId;
+        this.artifactId = artifactId;
+        this.version = version;
     }
 
     private static void addPOMElement(Element parent, String name, String content) {

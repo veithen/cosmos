@@ -7,13 +7,13 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
 public abstract class ArtifactHandler implements ResourceHandler {
-    protected final String groupId;
-    protected final String artifactId;
-    protected final String version;
+    private final String classifier;
+    private final String id;
+    private final String version;
     
-    public ArtifactHandler(String groupId, String artifactId, String version) {
-        this.groupId = groupId;
-        this.artifactId = artifactId;
+    public ArtifactHandler(String classifier, String id, String version) {
+        this.classifier = classifier;
+        this.id = id;
         this.version = version;
     }
 
@@ -27,7 +27,7 @@ public abstract class ArtifactHandler implements ResourceHandler {
             }
             return null;
         }
-        IArtifactKey key = artifactRepository.createArtifactKey(groupId, artifactId, parsedVersion);
+        IArtifactKey key = artifactRepository.createArtifactKey(classifier, id, parsedVersion);
         IArtifactDescriptor[] descriptors = artifactRepository.getArtifactDescriptors(key);
         if (descriptors.length == 0) {
             return null;

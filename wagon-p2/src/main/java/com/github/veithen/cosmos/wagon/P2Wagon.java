@@ -119,17 +119,41 @@ public class P2Wagon extends AbstractWagon implements LogEnabled {
             String artifactId = resourceName.substring(artifactSlash+1, versionSlash);
             String version = resourceName.substring(versionSlash+1, fileSlash);
             String file = resourceName.substring(fileSlash+1);
-            if (!file.startsWith(artifactId + "-" + version + ".")) {
+            if (!file.startsWith(artifactId + "-" + version)) {
                 return null;
             }
-            String type = file.substring(artifactId.length() + version.length() + 2);
+            String remainder = file.substring(artifactId.length() + version.length() + 1); // Either ".<type>" or "-<classifier>.<type>"
+            if (remainder.length() == 0) {
+                return null;
+            }
+            String classifier;
+            String type;
+            if (remainder.charAt(0) == '-') {
+                int dot = remainder.indexOf('.');
+                if (dot == -1) {
+                    return null;
+                }
+                classifier = remainder.substring(1, dot);
+                type = remainder.substring(dot+1);
+            } else if (remainder.charAt(0) == '.') {
+                classifier = null;
+                type = remainder.substring(1);
+            } else {
+                return null;
+            }
             if (logger.isDebugEnabled()) {
-                logger.debug("groupId=" + groupId + "; artifactId=" + artifactId + "; version=" + version + "; type=" + type);
+                logger.debug("groupId=" + groupId + "; artifactId=" + artifactId + "; version=" + version + "; classifier=" + (classifier == null ? "<none>" : classifier) + "; type=" + type);
             }
             if (type.equals("pom")) {
                 return new POMHandler(groupId, artifactId, version);
             } else if (type.equals("jar")) {
-                return new JARHandler(groupId, artifactId, version);
+                if (classifier == null) {
+                    return new JARHandler(groupId, artifactId, version);
+                } else if (classifier.equals("sources")) {
+                    return new JARHandler(groupId, artifactId + ".source", version);
+                } else {
+                    return null;
+                }
             } else {
                 return null;
             }

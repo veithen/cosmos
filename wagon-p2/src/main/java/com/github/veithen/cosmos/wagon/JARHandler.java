@@ -13,8 +13,8 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 
 public class JARHandler extends ArtifactHandler {
-    public JARHandler(String groupId, String artifactId, String version) {
-        super(groupId, artifactId, version);
+    public JARHandler(String classifier, String id, String version) {
+        super(classifier, id, version);
     }
 
     @Override
