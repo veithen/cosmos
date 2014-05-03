@@ -12,7 +12,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cosmos-osgi-runtime</artifactId>
+            <artifactId>cosmos-osgi-runtime-equinox</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
