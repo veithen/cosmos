@@ -39,7 +39,7 @@
                 <groupId>com.github.veithen.cosmos</groupId>
                 <artifactId>wagon-p2</artifactId>
                 <!-- Note: we bootstrap the build using a previous Cosmos version -->
-                <version>20140303</version>
+                <version>20150901</version>
             </extension>
         </extensions>
         <plugins>

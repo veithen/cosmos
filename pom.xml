@@ -51,8 +51,8 @@
     </dependencyManagement>
     <repositories>
         <repository>
-            <id>cloudbees-release</id>
-            <url>http://repository-veithen.forge.cloudbees.com/release/</url>
+            <id>github-veithen-releases</id>
+            <url>https://raw.githubusercontent.com/veithen/mvn-repo/master/releases/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -61,8 +61,8 @@
             </snapshots>
         </repository>
         <repository>
-            <id>cloudbees-snapshot</id>
-            <url>http://repository-veithen.forge.cloudbees.com/snapshot/</url>
+            <id>github-veithen-snapshots</id>
+            <url>https://raw.githubusercontent.com/veithen/mvn-repo/master/snapshots/</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -73,8 +73,8 @@
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>cloudbees-release</id>
-            <url>http://repository-veithen.forge.cloudbees.com/release/</url>
+            <id>github-veithen-releases</id>
+            <url>https://raw.githubusercontent.com/veithen/mvn-repo/master/releases/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -83,8 +83,8 @@
             </snapshots>
         </pluginRepository>
         <pluginRepository>
-            <id>cloudbees-snapshot</id>
-            <url>http://repository-veithen.forge.cloudbees.com/snapshot/</url>
+            <id>github-veithen-snapshots</id>
+            <url>https://raw.githubusercontent.com/veithen/mvn-repo/master/snapshots/</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
