@@ -7,13 +7,13 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-    	<module>cosmos-osgi-runtime</module>
+        <module>cosmos-osgi-runtime</module>
         <module>osgi-tests</module>
         <module>compat-eclipse-core-net</module>
         <module>cosmos-p2</module>
-    	<module>wagon-p2</module>
-    	<module>bootstrap</module>
-    	<module>cosmos-osgi-runtime-equinox</module>
+        <module>wagon-p2</module>
+        <module>bootstrap</module>
+        <module>cosmos-osgi-runtime-equinox</module>
     </modules>
     <dependencyManagement>
         <dependencies>
