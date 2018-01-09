@@ -80,32 +80,27 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.mortbay.jetty</groupId>
+                <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>7.5.4.v20111024</version>
+                <version>9.3.10.v20160621</version>
                 <configuration>
                     <stopKey>foo</stopKey>
                     <stopPort>${jetty.stopPort}</stopPort>
-                    <connectors>
-                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                            <port>${jetty.httpPort}</port>
-                        </connector>
-                    </connectors>
-                    <webAppConfig>
+                    <httpConnector>
+                        <port>${jetty.httpPort}</port>
+                    </httpConnector>
+                    <webAppSourceDirectory>${project.basedir}/src/test/repo</webAppSourceDirectory>
+                    <webApp>
                         <contextPath>/repo</contextPath>
-                        <resourceBases>
-                            <resourceBase>${basedir}/src/test/repo</resourceBase>
-                        </resourceBases>
                         <descriptor>src/test/conf/web.xml</descriptor>
-                    </webAppConfig>
-                    <daemon>true</daemon>
+                    </webApp>
                 </configuration>
                 <executions>
                     <execution>
                         <id>start-jetty</id>
                         <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>start</goal>
                         </goals>
                     </execution>
                     <execution>
