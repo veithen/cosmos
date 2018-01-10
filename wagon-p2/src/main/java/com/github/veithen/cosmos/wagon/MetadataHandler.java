@@ -1,7 +1,7 @@
 package com.github.veithen.cosmos.wagon;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -37,7 +37,7 @@ public class MetadataHandler implements ResourceHandler {
         } else {
             return new Resource() {
                 @Override
-                public void fetchTo(File destination) throws TransferFailedException, IOException {
+                public void fetchTo(OutputStream out) throws TransferFailedException, IOException {
                     Document document = DOMUtil.createDocument();
                     Element metadataElement = document.createElement("metadata");
                     document.appendChild(metadataElement);
@@ -65,7 +65,7 @@ public class MetadataHandler implements ResourceHandler {
                         throw new Error(ex);
                     }
                     try {
-                        transformer.transform(new DOMSource(document), new StreamResult(destination));
+                        transformer.transform(new DOMSource(document), new StreamResult(out));
                     } catch (TransformerException ex) {
                         Throwable cause = ex.getCause();
                         if (cause instanceof IOException) {

@@ -1,6 +1,7 @@
 package com.github.veithen.cosmos.wagon;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -73,7 +74,12 @@ public class P2Wagon extends AbstractWagon implements LogEnabled {
                 throw new ResourceDoesNotExistException(resourceName + " not found");
             } else {
                 try {
-                    resource.fetchTo(destination);
+                    FileOutputStream out = new FileOutputStream(destination);
+                    try {
+                        resource.fetchTo(out);
+                    } finally {
+                        out.close();
+                    }
                 } catch (IOException ex) {
                     throw new TransferFailedException("Failed to write to " + destination, ex);
                 }

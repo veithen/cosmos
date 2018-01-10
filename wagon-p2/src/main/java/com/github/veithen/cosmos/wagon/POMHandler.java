@@ -1,7 +1,7 @@
 package com.github.veithen.cosmos.wagon;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.apache.maven.wagon.TransferFailedException;
 import org.codehaus.plexus.logging.Logger;
@@ -32,7 +32,7 @@ public class POMHandler extends ArtifactHandler {
         final IArtifactKey artifactKey = descriptor.getArtifactKey();
         return new Resource() {
             @Override
-            public void fetchTo(File destination) throws TransferFailedException, IOException {
+            public void fetchTo(OutputStream out) throws TransferFailedException, IOException {
                 // Generate a POM on the fly
                 Document document = DOMUtil.createDocument();
                 Element projectElement = document.createElementNS(POM_NS, "project");
@@ -46,7 +46,7 @@ public class POMHandler extends ArtifactHandler {
                 DOMImplementationLS ls = (DOMImplementationLS)document.getImplementation();
                 LSSerializer serializer = ls.createLSSerializer();
                 LSOutput output = ls.createLSOutput();
-                output.setSystemId(destination.toURI().toString());
+                output.setByteStream(out);
                 serializer.write(document, output);
             }
         };
