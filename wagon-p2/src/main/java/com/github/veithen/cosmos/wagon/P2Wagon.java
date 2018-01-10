@@ -152,11 +152,21 @@ public class P2Wagon extends AbstractWagon implements LogEnabled {
             }
             if (type.equals("pom")) {
                 return new POMHandler(groupId, artifactId, version);
+            } else if (type.equals("pom.md5")) {
+                return new DigestHandler(new POMHandler(groupId, artifactId, version), "MD5");
             } else if (type.equals("jar")) {
                 if (classifier == null) {
                     return new JARHandler(groupId, artifactId, version);
                 } else if (classifier.equals("sources")) {
                     return new JARHandler(groupId, artifactId + ".source", version);
+                } else {
+                    return null;
+                }
+            } else if (type.equals("jar.md5")) {
+                if (classifier == null) {
+                    return new JARMD5Handler(groupId, artifactId, version);
+                } else if (classifier.equals("sources")) {
+                    return new JARMD5Handler(groupId, artifactId + ".source", version);
                 } else {
                     return null;
                 }
