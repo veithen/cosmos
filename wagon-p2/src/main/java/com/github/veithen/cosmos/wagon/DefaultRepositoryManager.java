@@ -24,14 +24,10 @@ import com.github.veithen.cosmos.osgi.runtime.Runtime;
 import com.github.veithen.cosmos.osgi.runtime.logging.plexus.PlexusLogger;
 import com.github.veithen.cosmos.p2.P2Initializer;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
-import com.github.veithen.ulog.PlexusLoggerInjector;
 
 @Component(role=RepositoryManager.class)
 public class DefaultRepositoryManager implements RepositoryManager, Initializable, Disposable, LogEnabled {
     private IArtifactRepositoryManager repoman;
-    
-    @Requirement
-    private PlexusLoggerInjector injector;
     
     @Requirement
     private WagonManager wagonManager;
