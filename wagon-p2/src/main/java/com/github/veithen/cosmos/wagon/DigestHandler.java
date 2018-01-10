@@ -3,16 +3,13 @@ package com.github.veithen.cosmos.wagon;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.security.DigestOutputStream;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.maven.wagon.TransferFailedException;
 import org.codehaus.plexus.logging.Logger;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
-
-import com.google.common.io.BaseEncoding;
-import com.google.common.io.ByteStreams;
 
 public final class DigestHandler implements ResourceHandler {
     private final ResourceHandler parent;
@@ -29,16 +26,15 @@ public final class DigestHandler implements ResourceHandler {
         return new Resource() {
             @Override
             public void fetchTo(OutputStream out) throws TransferFailedException, IOException {
-                MessageDigest digest;
+                DigestOutputStream digester;
                 try {
-                    digest = MessageDigest.getInstance(algorithm);
+                    digester = new DigestOutputStream(algorithm);
                 } catch (NoSuchAlgorithmException ex) {
                     throw new Error(ex);
                 }
-                DigestOutputStream digester = new DigestOutputStream(ByteStreams.nullOutputStream(), digest);
                 resource.fetchTo(digester);
                 OutputStreamWriter writer = new OutputStreamWriter(out, "ascii");
-                writer.write(BaseEncoding.base16().encode(digest.digest()));
+                writer.write(DatatypeConverter.printHexBinary(digester.digest()));
                 writer.flush();
             }
         };
