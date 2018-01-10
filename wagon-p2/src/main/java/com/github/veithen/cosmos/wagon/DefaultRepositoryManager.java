@@ -41,16 +41,12 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
 
     public void initialize() throws InitializationException {
         try {
-            // TODO: we need a hack here because the test case instantiates DefaultRepositoryManager directly; instead we should create a Plexus container and look up the component
-            Runtime runtime = Runtime.getInstance(Configuration.newDefault().logger(logger == null ? null : new PlexusLogger(logger)).initializer(new P2Initializer(new File("target/p2-data"), logger == null || logger.isDebugEnabled())).build());
+            Runtime runtime = Runtime.getInstance(Configuration.newDefault().logger(new PlexusLogger(logger)).initializer(new P2Initializer(new File("target/p2-data"), logger == null || logger.isDebugEnabled())).build());
             
-            // TODO: wagonManager is only null in unit tests; find a way to inject a mock instance
-            if (wagonManager != null) {
-                System.out.println("Setting up proxy configuration");
-                Hashtable<String,Object> properties = new Hashtable<String,Object>();
-                properties.put(Constants.SERVICE_RANKING, Integer.valueOf(1));
-                runtime.registerService(new String[] { IProxyService.class.getName() }, new ProxyServiceAdapter(wagonManager), properties);
-            }
+            System.out.println("Setting up proxy configuration");
+            Hashtable<String,Object> properties = new Hashtable<String,Object>();
+            properties.put(Constants.SERVICE_RANKING, Integer.valueOf(1));
+            runtime.registerService(new String[] { IProxyService.class.getName() }, new ProxyServiceAdapter(wagonManager), properties);
             
             // Don't let P2 use mirrors. There are two reasons for this:
             // 1) Mirrors may occasionally be unreachable. Using them would make the build less stable and predictable.
