@@ -87,34 +87,26 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.3.10.v20160621</version>
-                <configuration>
-                    <stopKey>foo</stopKey>
-                    <stopPort>${jetty.stopPort}</stopPort>
-                    <httpConnector>
-                        <port>${jetty.httpPort}</port>
-                    </httpConnector>
-                    <webAppSourceDirectory>${project.basedir}/src/test/repo</webAppSourceDirectory>
-                    <webApp>
-                        <contextPath>/</contextPath>
-                        <descriptor>src/test/conf/web.xml</descriptor>
-                    </webApp>
-                </configuration>
+                <groupId>com.github.veithen.daemon</groupId>
+                <artifactId>daemon-maven-plugin</artifactId>
+                <version>0.1-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <id>start-jetty</id>
-                        <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>start</goal>
+                            <goal>start-webapp</goal>
                         </goals>
+                        <configuration>
+                            <port>${jetty.httpPort}</port>
+                            <resourceBases>
+                                <resourceBase>${project.basedir}/src/test/repo</resourceBase>
+                            </resourceBases>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>stop-jetty</id>
-                        <phase>post-integration-test</phase>
                         <goals>
-                            <goal>stop</goal>
+                            <goal>stop-all</goal>
                         </goals>
                     </execution>
                 </executions>
