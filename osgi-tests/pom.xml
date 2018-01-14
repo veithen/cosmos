@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/1/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.github.veithen.cosmos</groupId>
         <artifactId>cosmos</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <artifactId>osgi-tests</artifactId>
-    <name>OSGi tests</name>
     <packaging>pom</packaging>
+
+    <name>OSGi tests</name>
+
     <modules>
         <module>bundle1</module>
         <module>bundle2</module>
         <module>lazy-activation-test</module>
     </modules>
+
+    <properties>
+        <skipDeploy>true</skipDeploy>
+    </properties>
+
     <build>
         <pluginManagement>
             <plugins>
