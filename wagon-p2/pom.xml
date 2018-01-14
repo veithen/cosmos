@@ -93,7 +93,6 @@
                         <configuration>
                             <portNames>
                                 <portName>jetty.httpPort</portName>
-                                <portName>jetty.stopPort</portName>
                             </portNames>
                         </configuration>
                     </execution>
