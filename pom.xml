@@ -24,6 +24,7 @@
         <module>wagon-p2</module>
         <module>bootstrap</module>
         <module>cosmos-osgi-runtime-equinox</module>
+        <module>code-coverage</module>
     </modules>
 
     <scm>
