@@ -27,7 +27,7 @@
         <version>@project.version@</version>
     </parent>
 
-    <artifactId>test</artifactId>
+    <artifactId>proxy-test</artifactId>
 
     <properties>
         <skipDeploy>true</skipDeploy>
@@ -37,8 +37,8 @@
     <dependencies>
         <dependency>
             <groupId>osgi.bundle</groupId>
-            <artifactId>stax2-api</artifactId>
-            <version>4.0.0</version>
+            <artifactId>com.fasterxml.woodstox.woodstox-core</artifactId>
+            <version>5.0.3</version>
         </dependency>
     </dependencies>
 
