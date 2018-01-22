@@ -64,6 +64,7 @@
 
     <properties>
         <github.repository>cosmos</github.repository>
+        <javaVersion>1.6</javaVersion>
     </properties>
 
     <repositories>
@@ -149,14 +150,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.1</version>
-                    <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
-                    </configuration>
-                </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.16</version>
