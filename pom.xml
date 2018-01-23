@@ -64,7 +64,7 @@
 
     <properties>
         <github.repository>cosmos</github.repository>
-        <javaVersion>1.6</javaVersion>
+        <javaVersion>1.7</javaVersion>
     </properties>
 
     <repositories>
