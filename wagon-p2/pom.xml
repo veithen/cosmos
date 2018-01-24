@@ -118,6 +118,35 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>p2-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>create-repository</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <outputDirectory>${project.build.directory}/repo</outputDirectory>
+                            <artifacts>
+                                <artifact>
+                                    <groupId>org.codehaus.woodstox</groupId>
+                                    <artifactId>stax2-api</artifactId>
+                                    <version>4.0.0</version>
+                                </artifact>
+                                <artifact>
+                                    <groupId>com.fasterxml.woodstox</groupId>
+                                    <artifactId>woodstox-core</artifactId>
+                                    <version>5.0.3</version>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>com.github.veithen.daemon</groupId>
                 <artifactId>daemon-maven-plugin</artifactId>
                 <version>0.1-SNAPSHOT</version>
@@ -130,7 +159,7 @@
                         <configuration>
                             <port>${jetty.httpPort}</port>
                             <resourceBases>
-                                <resourceBase>${project.basedir}/src/test/repo</resourceBase>
+                                <resourceBase>${project.build.directory}/repo</resourceBase>
                             </resourceBases>
                         </configuration>
                     </execution>

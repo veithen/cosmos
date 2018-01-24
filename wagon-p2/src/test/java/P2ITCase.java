@@ -46,7 +46,7 @@ public class P2ITCase extends PlexusJUnit4TestCase {
         getContainer().addComponent(new DefaultRepositorySystem(), RepositorySystem.class, "default");
         RepositoryManager repoman = lookup(RepositoryManager.class);
         IArtifactRepository repository = repoman.loadRepository(new URI(System.getProperty("p2.repo.url")));
-        IArtifactKey key = repository.createArtifactKey("osgi.bundle", "org.example.dummy", Version.create("1.0.0"));
+        IArtifactKey key = repository.createArtifactKey("osgi.bundle", "stax2-api", Version.create("4.0.0"));
         System.out.println(key);
         IArtifactDescriptor[] descriptors = repository.getArtifactDescriptors(key);
         System.out.println(descriptors.length);
@@ -56,8 +56,8 @@ public class P2ITCase extends PlexusJUnit4TestCase {
         JarInputStream in = new JarInputStream(new FileInputStream(tmpFile));
         try {
             Attributes attrs = in.getManifest().getMainAttributes();
-            assertEquals("org.example.dummy", attrs.getValue("Bundle-SymbolicName"));
-            assertEquals("1.0.0", attrs.getValue("Bundle-Version"));
+            assertEquals("stax2-api", attrs.getValue("Bundle-SymbolicName"));
+            assertEquals("4.0.0", attrs.getValue("Bundle-Version"));
         } finally {
             in.close();
         }

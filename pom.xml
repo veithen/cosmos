@@ -53,6 +53,7 @@
         <module>bootstrap</module>
         <module>cosmos-osgi-runtime-equinox</module>
         <module>code-coverage</module>
+        <module>p2-maven-plugin</module>
     </modules>
 
     <scm>

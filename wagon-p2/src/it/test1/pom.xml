@@ -27,8 +27,8 @@
     <dependencies>
         <dependency>
             <groupId>osgi.bundle</groupId>
-            <artifactId>org.example.dummy</artifactId>
-            <version>1.0.0</version>
+            <artifactId>stax2-api</artifactId>
+            <version>4.0.0</version>
         </dependency>
     </dependencies>
     <repositories>
