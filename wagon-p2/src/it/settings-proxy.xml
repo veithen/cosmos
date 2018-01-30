@@ -28,24 +28,28 @@
             <repositories>
                 <repository>
                     <id>local.central</id>
-                    <url>@localRepositoryUrl@</url>
+                    <url>http://localhost:@resolverProxyPort@</url>
                     <releases>
                         <enabled>true</enabled>
+                        <checksumPolicy>ignore</checksumPolicy>
                     </releases>
                     <snapshots>
                         <enabled>true</enabled>
+                        <checksumPolicy>ignore</checksumPolicy>
                     </snapshots>
                 </repository>
             </repositories>
             <pluginRepositories>
                 <pluginRepository>
                     <id>local.central</id>
-                    <url>@localRepositoryUrl@</url>
+                    <url>http://localhost:@resolverProxyPort@</url>
                     <releases>
                         <enabled>true</enabled>
+                        <checksumPolicy>ignore</checksumPolicy>
                     </releases>
                     <snapshots>
                         <enabled>true</enabled>
+                        <checksumPolicy>ignore</checksumPolicy>
                     </snapshots>
                 </pluginRepository>
             </pluginRepositories>
