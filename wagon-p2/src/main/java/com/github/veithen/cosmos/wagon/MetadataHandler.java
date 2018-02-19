@@ -43,14 +43,16 @@ import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 public class MetadataHandler implements ResourceHandler {
     private final String groupId;
     private final String artifactId;
+    private final ArtifactKeyQuery artifactKeyQuery;
 
-    public MetadataHandler(String groupId, String artifactId) {
+    public MetadataHandler(String groupId, String artifactId, ArtifactKeyQuery artifactKeyQuery) {
         this.groupId = groupId;
         this.artifactId = artifactId;
+        this.artifactKeyQuery = artifactKeyQuery;
     }
 
     public Resource get(IArtifactRepository artifactRepository, Logger logger) {
-        final IQueryResult<IArtifactKey> queryResult = artifactRepository.query(new ArtifactKeyQuery(groupId, artifactId, null), new SystemOutProgressMonitor());
+        final IQueryResult<IArtifactKey> queryResult = artifactRepository.query(artifactKeyQuery, new SystemOutProgressMonitor());
         if (queryResult.isEmpty()) {
             return null;
         } else {

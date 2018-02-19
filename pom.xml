@@ -54,6 +54,7 @@
         <module>cosmos-osgi-runtime-equinox</module>
         <module>code-coverage</module>
         <module>p2-maven-plugin</module>
+        <module>maven-p2</module>
     </modules>
 
     <scm>
@@ -164,6 +165,11 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-component-metadata</artifactId>
+                    <version>1.5.5</version>
                 </plugin>
             </plugins>
         </pluginManagement>

@@ -25,12 +25,13 @@ import java.io.OutputStreamWriter;
 
 import org.apache.maven.wagon.TransferFailedException;
 import org.codehaus.plexus.logging.Logger;
+import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
 public class JARMD5Handler extends ArtifactHandler {
-    public JARMD5Handler(String classifier, String id, String version) {
-        super(classifier, id, version);
+    public JARMD5Handler(IArtifactKey key) {
+        super(key);
     }
 
     @Override

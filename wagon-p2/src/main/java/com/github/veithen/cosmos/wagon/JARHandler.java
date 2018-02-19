@@ -25,14 +25,15 @@ import java.io.OutputStream;
 import org.apache.maven.wagon.TransferFailedException;
 import org.codehaus.plexus.logging.Logger;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 
 public class JARHandler extends ArtifactHandler {
-    public JARHandler(String classifier, String id, String version) {
-        super(classifier, id, version);
+    public JARHandler(IArtifactKey key) {
+        super(key);
     }
 
     @Override

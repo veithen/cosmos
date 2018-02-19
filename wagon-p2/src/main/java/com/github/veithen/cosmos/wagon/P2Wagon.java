@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.maven.shared.artifact.DefaultArtifactCoordinate;
 import org.apache.maven.wagon.AbstractWagon;
 import org.apache.maven.wagon.ConnectionException;
 import org.apache.maven.wagon.ResourceDoesNotExistException;
@@ -37,13 +38,19 @@ import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.LogEnabled;
 import org.codehaus.plexus.logging.Logger;
 import org.eclipse.equinox.p2.core.ProvisionException;
+import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
+
+import com.github.veithen.cosmos.p2.maven.ArtifactCoordinateMapper;
 
 @Component(role=Wagon.class, hint="p2", instantiationStrategy="per-lookup")
 // TODO: implement StreamingWagon
 public class P2Wagon extends AbstractWagon implements LogEnabled {
     @Requirement
     private RepositoryManager repoman;
+    
+    @Requirement
+    private ArtifactCoordinateMapper artifactCoordinateMapper;
     
     private Logger logger;
     
@@ -125,7 +132,7 @@ public class P2Wagon extends AbstractWagon implements LogEnabled {
             if (logger.isDebugEnabled()) {
                 logger.debug("groupId=" + groupId + "; artifactId=" + artifactId);
             }
-            return new MetadataHandler(groupId, artifactId);
+            return new MetadataHandler(groupId, artifactId, artifactCoordinateMapper.createArtifactKeyQuery(groupId, artifactId));
         } else {
             // Translate the resource name back into Maven coordinates and file type
             int fileSlash = resourceName.lastIndexOf('/');
@@ -169,26 +176,23 @@ public class P2Wagon extends AbstractWagon implements LogEnabled {
             if (logger.isDebugEnabled()) {
                 logger.debug("groupId=" + groupId + "; artifactId=" + artifactId + "; version=" + version + "; classifier=" + (classifier == null ? "<none>" : classifier) + "; type=" + type);
             }
+            DefaultArtifactCoordinate artifact = new DefaultArtifactCoordinate();
+            artifact.setGroupId(groupId);
+            artifact.setArtifactId(artifactId);
+            artifact.setClassifier(classifier);
+            artifact.setVersion(version);
+            IArtifactKey key = artifactCoordinateMapper.createIArtifactKey(artifactRepository, artifact);
+            if (key == null) {
+                return null;
+            }
             if (type.equals("pom")) {
-                return new POMHandler(groupId, artifactId, version);
+                return new POMHandler(groupId, artifactId, version, key);
             } else if (type.equals("pom.md5")) {
-                return new DigestHandler(new POMHandler(groupId, artifactId, version), "MD5");
+                return new DigestHandler(new POMHandler(groupId, artifactId, version, key), "MD5");
             } else if (type.equals("jar")) {
-                if (classifier == null) {
-                    return new JARHandler(groupId, artifactId, version);
-                } else if (classifier.equals("sources")) {
-                    return new JARHandler(groupId, artifactId + ".source", version);
-                } else {
-                    return null;
-                }
+                return new JARHandler(key);
             } else if (type.equals("jar.md5")) {
-                if (classifier == null) {
-                    return new JARMD5Handler(groupId, artifactId, version);
-                } else if (classifier.equals("sources")) {
-                    return new JARMD5Handler(groupId, artifactId + ".source", version);
-                } else {
-                    return null;
-                }
+                return new JARMD5Handler(key);
             } else {
                 return null;
             }
