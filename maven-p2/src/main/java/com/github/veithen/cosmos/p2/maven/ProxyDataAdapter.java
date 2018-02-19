@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.wagon;
+package com.github.veithen.cosmos.p2.maven;
 
 import org.apache.maven.wagon.proxy.ProxyInfo;
 import org.eclipse.core.net.proxy.IProxyData;

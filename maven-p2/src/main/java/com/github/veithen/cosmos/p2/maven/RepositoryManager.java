@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.wagon;
+package com.github.veithen.cosmos.p2.maven;
 
 import java.net.URI;
 

@@ -42,6 +42,7 @@ import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
 import com.github.veithen.cosmos.p2.maven.ArtifactCoordinateMapper;
+import com.github.veithen.cosmos.p2.maven.RepositoryManager;
 
 @Component(role=Wagon.class, hint="p2", instantiationStrategy="per-lookup")
 // TODO: implement StreamingWagon

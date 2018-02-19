@@ -40,7 +40,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.github.veithen.cosmos.wagon.RepositoryManager;
+import com.github.veithen.cosmos.p2.maven.RepositoryManager;
 
 public class P2ITCase {
     private PlexusContainer container;
