@@ -27,7 +27,8 @@ import java.util.Arrays;
 import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 
-import org.codehaus.plexus.PlexusJUnit4TestCase;
+import org.codehaus.plexus.DefaultPlexusContainer;
+import org.codehaus.plexus.PlexusContainer;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.internal.impl.DefaultRepositorySystem;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -35,16 +36,30 @@ import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.github.veithen.cosmos.wagon.RepositoryManager;
 
-public class P2ITCase extends PlexusJUnit4TestCase {
+public class P2ITCase {
+    private PlexusContainer container;
+
+    @Before
+    public void createContainer() throws Exception {
+        container = new DefaultPlexusContainer();
+    }
+
+    @After
+    public void disposeContainer() {
+        container.dispose();
+    }
+
     @Test
     public void test() throws Exception {
         // TODO: should no longer be necessary when we get rid of the WagonManager dependency
-        getContainer().addComponent(new DefaultRepositorySystem(), RepositorySystem.class, "default");
-        RepositoryManager repoman = lookup(RepositoryManager.class);
+        container.addComponent(new DefaultRepositorySystem(), RepositorySystem.class, "default");
+        RepositoryManager repoman = container.lookup(RepositoryManager.class);
         IArtifactRepository repository = repoman.loadRepository(new URI(System.getProperty("p2.repo.url")));
         IArtifactKey key = repository.createArtifactKey("osgi.bundle", "stax2-api", Version.create("4.0.0"));
         System.out.println(key);

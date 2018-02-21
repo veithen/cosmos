@@ -53,15 +53,8 @@
             <version>3.5.2</version>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-container-default</artifactId>
-            <exclusions>
-                <exclusion>
-                    <!-- https://github.com/codehaus-plexus/plexus-containers/pull/9 -->
-                    <groupId>com.google.collections</groupId>
-                    <artifactId>google-collections</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.eclipse.sisu</groupId>
+            <artifactId>org.eclipse.sisu.plexus</artifactId>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
