@@ -198,7 +198,7 @@
             <plugin>
                 <groupId>com.github.veithen.invoker</groupId>
                 <artifactId>resolver-proxy-maven-plugin</artifactId>
-                <version>0.1-SNAPSHOT</version>
+                <version>0.2-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <goals>
