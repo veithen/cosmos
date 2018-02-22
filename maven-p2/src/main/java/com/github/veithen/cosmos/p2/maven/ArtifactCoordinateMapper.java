@@ -19,13 +19,13 @@
  */
 package com.github.veithen.cosmos.p2.maven;
 
-import org.apache.maven.shared.artifact.ArtifactCoordinate;
+import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.repository.artifact.ArtifactKeyQuery;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
 public interface ArtifactCoordinateMapper {
-    ArtifactCoordinate createArtifactCoordinate(IArtifactKey artifactKey);
-    IArtifactKey createIArtifactKey(IArtifactRepository artifactRepository, ArtifactCoordinate artifactCoordinate);
+    Artifact createArtifact(IArtifactKey artifactKey);
+    IArtifactKey createIArtifactKey(IArtifactRepository artifactRepository, Artifact artifact);
     ArtifactKeyQuery createArtifactKeyQuery(String groupId, String artifactId);
 }

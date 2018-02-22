@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.apache.maven.shared.artifact.DefaultArtifactCoordinate;
 import org.apache.maven.wagon.AbstractWagon;
 import org.apache.maven.wagon.ConnectionException;
 import org.apache.maven.wagon.ResourceDoesNotExistException;
@@ -37,6 +36,7 @@ import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.LogEnabled;
 import org.codehaus.plexus.logging.Logger;
+import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
@@ -177,12 +177,7 @@ public class P2Wagon extends AbstractWagon implements LogEnabled {
             if (logger.isDebugEnabled()) {
                 logger.debug("groupId=" + groupId + "; artifactId=" + artifactId + "; version=" + version + "; classifier=" + (classifier == null ? "<none>" : classifier) + "; type=" + type);
             }
-            DefaultArtifactCoordinate artifact = new DefaultArtifactCoordinate();
-            artifact.setGroupId(groupId);
-            artifact.setArtifactId(artifactId);
-            artifact.setClassifier(classifier);
-            artifact.setVersion(version);
-            IArtifactKey key = artifactCoordinateMapper.createIArtifactKey(artifactRepository, artifact);
+            IArtifactKey key = artifactCoordinateMapper.createIArtifactKey(artifactRepository, new DefaultArtifact(groupId, artifactId, classifier, "jar", version));
             if (key == null) {
                 return null;
             }

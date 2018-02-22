@@ -19,9 +19,9 @@
  */
 package com.github.veithen.cosmos.p2.maven;
 
-import org.apache.maven.shared.artifact.ArtifactCoordinate;
-import org.apache.maven.shared.artifact.DefaultArtifactCoordinate;
 import org.codehaus.plexus.component.annotations.Component;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.repository.artifact.ArtifactKeyQuery;
@@ -30,35 +30,34 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 @Component(role=ArtifactCoordinateMapper.class)
 public class DefaultArtifactCoordinateMapper implements ArtifactCoordinateMapper {
     @Override
-    public ArtifactCoordinate createArtifactCoordinate(IArtifactKey artifactKey) {
-        DefaultArtifactCoordinate coordinate = new DefaultArtifactCoordinate();
-        coordinate.setGroupId(artifactKey.getClassifier());
+    public Artifact createArtifact(IArtifactKey artifactKey) {
         String id = artifactKey.getId();
+        String artifactId;
+        String classifier;
         if (id.endsWith(".source")) {
-            coordinate.setArtifactId(id.substring(0, id.length()-7));
-            coordinate.setClassifier("sources");
+            artifactId = id.substring(0, id.length()-7);
+            classifier = "sources";
         } else {
-            coordinate.setArtifactId(id);
+            artifactId = id;
+            classifier = null;
         }
-        coordinate.setVersion(artifactKey.getVersion().toString());
-        coordinate.setExtension("jar");
-        return coordinate;
+        return new DefaultArtifact(artifactKey.getClassifier(), artifactId, classifier, "jar",
+                artifactKey.getVersion().toString());
     }
 
     @Override
-    public IArtifactKey createIArtifactKey(IArtifactRepository artifactRepository,
-            ArtifactCoordinate artifactCoordinate) {
+    public IArtifactKey createIArtifactKey(IArtifactRepository artifactRepository, Artifact artifact) {
         String id;
-        String classifier = artifactCoordinate.getClassifier();
-        if (classifier == null) {
-            id = artifactCoordinate.getArtifactId();
+        String classifier = artifact.getClassifier();
+        if (classifier.isEmpty()) {
+            id = artifact.getArtifactId();
         } else if (classifier.equals("sources")) {
-            id = artifactCoordinate.getArtifactId() + ".source";
+            id = artifact.getArtifactId() + ".source";
         } else {
             return null;
         }
         return artifactRepository.createArtifactKey(
-                artifactCoordinate.getGroupId(), id, Version.create(artifactCoordinate.getVersion()));
+                artifact.getGroupId(), id, Version.create(artifact.getVersion()));
     }
 
     @Override
