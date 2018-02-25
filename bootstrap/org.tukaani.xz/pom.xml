@@ -27,7 +27,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>org.eclipse.equinox.registry</artifactId>
+    <artifactId>org.tukaani.xz</artifactId>
 
     <url>https://github.com/veithen/cosmos</url>
 
@@ -39,6 +39,6 @@
     </scm>
 
     <properties>
-        <bundleVersion>3.6.100.v20160223-2218</bundleVersion>
+        <bundleVersion>1.3.0.v201308270617</bundleVersion>
     </properties>
 </project>

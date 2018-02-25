@@ -27,7 +27,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>org.eclipse.equinox.registry</artifactId>
+    <artifactId>org.eclipse.osgi.compatibility.state</artifactId>
 
     <url>https://github.com/veithen/cosmos</url>
 
@@ -39,6 +39,6 @@
     </scm>
 
     <properties>
-        <bundleVersion>3.6.100.v20160223-2218</bundleVersion>
+        <bundleVersion>1.0.200.v20160504-1419</bundleVersion>
     </properties>
 </project>

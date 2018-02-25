@@ -40,6 +40,6 @@
     </scm>
 
     <properties>
-        <bundleVersion>3.2.0.v20130604-1622</bundleVersion>
+        <bundleVersion>3.2.200.v20160823-2221</bundleVersion>
     </properties>
 </project>

@@ -39,6 +39,6 @@
     </scm>
 
     <properties>
-        <bundleVersion>3.5.300.v20130429-1813</bundleVersion>
+        <bundleVersion>3.8.0.v20160509-0411</bundleVersion>
     </properties>
 </project>

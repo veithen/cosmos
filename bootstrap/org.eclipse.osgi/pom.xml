@@ -39,7 +39,7 @@
     </scm>
 
     <properties>
-        <bundleVersion>3.9.1.v20140110-1610</bundleVersion>
+        <bundleVersion>3.11.3.v20170209-1843</bundleVersion>
     </properties>
 
     <build>

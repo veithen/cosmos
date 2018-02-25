@@ -19,8 +19,8 @@
  */
 package com.github.veithen.cosmos.osgi.runtime.equinox;
 
-import org.eclipse.core.runtime.internal.adaptor.BasicLocation;
 import org.eclipse.osgi.framework.log.FrameworkLog;
+import org.eclipse.osgi.internal.location.BasicLocation;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.osgi.service.debug.DebugOptions;
 import org.eclipse.osgi.signedcontent.SignedContentFactory;
@@ -60,7 +60,7 @@ public final class EquinoxInitializer implements RuntimeInitializer {
     @Override
     public void initializeRuntime(Runtime runtime) throws CosmosException, BundleException {
         Bundle bundle = runtime.getBundle("org.eclipse.osgi");
-        runtime.registerService(bundle, new String[] { Location.class.getName() }, new BasicLocation("dummy", null, false, null), null);
+        runtime.registerService(bundle, new String[] { Location.class.getName() }, new BasicLocation("dummy", null, false, null, null, null, null), null);
         if (registerDummySignedContentFactory) {
             runtime.registerService(bundle, new String[] { SignedContentFactory.class.getName() }, new DummySignedContentFactory(), null);
         }

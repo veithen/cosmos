@@ -55,8 +55,10 @@
         <module>org.eclipse.equinox.registry</module>
         <module>org.eclipse.equinox.security</module>
         <module>org.eclipse.osgi</module>
+        <module>org.eclipse.osgi.compatibility.state</module>
         <module>org.eclipse.osgi.services</module>
         <module>org.eclipse.osgi.util</module>
+        <module>org.tukaani.xz</module>
     </modules>
 
     <scm>
@@ -68,9 +70,9 @@
 
     <repositories>
         <repository>
-            <id>p2-kepler</id>
-            <name>Kepler release repository</name>
-            <url>p2:http://download.eclipse.org/releases/kepler</url>
+            <id>p2-neon</id>
+            <name>Neon release repository</name>
+            <url>p2:http://download.eclipse.org/releases/neon</url>
         </repository>
     </repositories>
 
