@@ -33,7 +33,9 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
@@ -108,6 +110,11 @@ public class BundleContextImpl implements BundleContext {
         return (ServiceRegistration<S>)bundle.getRuntime().registerService(bundle, new String[] { clazz.getName() }, service, properties);
     }
 
+    @Override
+    public <S> ServiceRegistration<S> registerService(Class<S> clazz, ServiceFactory<S> factory, Dictionary<String,?> properties) {
+        return (ServiceRegistration<S>)bundle.getRuntime().registerService(bundle, new String[] { clazz.getName() }, factory, properties);
+    }
+
     public ServiceReference<?> getServiceReference(String clazz) {
         return bundle.getRuntime().getServiceReference(clazz, null);
     }
@@ -131,6 +138,11 @@ public class BundleContextImpl implements BundleContext {
 
     public <S> S getService(ServiceReference<S> reference) {
         return ((CosmosServiceReference<S>)reference).getService(bundle);
+    }
+
+    @Override
+    public <S> ServiceObjects<S> getServiceObjects(ServiceReference<S> reference) {
+        throw new UnsupportedOperationException();
     }
 
     public boolean ungetService(ServiceReference<?> reference) {
