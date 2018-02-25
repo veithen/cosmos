@@ -42,6 +42,7 @@ import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
 import com.github.veithen.cosmos.p2.maven.ArtifactCoordinateMapper;
+import com.github.veithen.cosmos.p2.maven.P2Coordinate;
 import com.github.veithen.cosmos.p2.maven.RepositoryManager;
 
 @Component(role=Wagon.class, hint="p2", instantiationStrategy="per-lookup")
@@ -177,10 +178,11 @@ public class P2Wagon extends AbstractWagon implements LogEnabled {
             if (logger.isDebugEnabled()) {
                 logger.debug("groupId=" + groupId + "; artifactId=" + artifactId + "; version=" + version + "; classifier=" + (classifier == null ? "<none>" : classifier) + "; type=" + type);
             }
-            IArtifactKey key = artifactCoordinateMapper.createIArtifactKey(artifactRepository, new DefaultArtifact(groupId, artifactId, classifier, "jar", version));
-            if (key == null) {
+            P2Coordinate p2Coordinate = artifactCoordinateMapper.createP2Coordinate(new DefaultArtifact(groupId, artifactId, classifier, "jar", version));
+            if (p2Coordinate == null) {
                 return null;
             }
+            IArtifactKey key = p2Coordinate.createIArtifactKey(artifactRepository);
             if (type.equals("pom")) {
                 return new POMHandler(groupId, artifactId, version, key);
             } else if (type.equals("pom.md5")) {

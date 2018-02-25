@@ -22,7 +22,6 @@ package com.github.veithen.cosmos.p2.maven;
 import static com.google.common.truth.Truth.assertThat;
 
 import org.eclipse.aether.artifact.DefaultArtifact;
-import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,10 +36,9 @@ public class DefaultArtifactCoordinateMapperTest {
 
     @Test
     public void testCreateIArtifactKey() {
-        IArtifactKey artifactKey = mapper.createIArtifactKey(DummyArtifactRepository.INSTANCE,
-                new DefaultArtifact("osgi.bundle", "mybundle", "jar", "2.1.0"));
-        assertThat(artifactKey.getClassifier()).isEqualTo("osgi.bundle");
-        assertThat(artifactKey.getId()).isEqualTo("mybundle");
-        assertThat(artifactKey.getVersion()).isEqualTo(Version.createOSGi(2, 1, 0));
+        P2Coordinate p2Coordinate = mapper.createP2Coordinate(new DefaultArtifact("osgi.bundle", "mybundle", "jar", "2.1.0"));
+        assertThat(p2Coordinate.getClassifier()).isEqualTo("osgi.bundle");
+        assertThat(p2Coordinate.getId()).isEqualTo("mybundle");
+        assertThat(p2Coordinate.getVersion()).isEqualTo(Version.createOSGi(2, 1, 0));
     }
 }
