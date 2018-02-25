@@ -54,7 +54,7 @@ import com.github.veithen.cosmos.p2.maven.ArtifactCoordinateMapper;
 import com.github.veithen.cosmos.p2.maven.P2Coordinate;
 import com.github.veithen.cosmos.p2.maven.RepositoryManager;
 
-@Mojo(name="unpack-sources", defaultPhase=LifecyclePhase.GENERATE_SOURCES)
+@Mojo(name="unpack-sources")
 public class UnpackSourcesMojo extends AbstractMojo {
     @Component
     private RepositoryManager repositoryManager;
