@@ -57,15 +57,15 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.eclipse</groupId>
-            <artifactId>osgi</artifactId>
-            <version>3.9.1-v20140110-1610</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.osgi</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <!-- Need this for org.osgi.util.xml.XMLParserActivator -->
-            <groupId>org.eclipse.osgi</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>org.eclipse.osgi.util</artifactId>
-            <version>3.2.100.v20100503</version>
+            <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>

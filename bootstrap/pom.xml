@@ -51,6 +51,8 @@
         <module>org.eclipse.equinox.p2.updatesite</module>
         <module>org.eclipse.equinox.preferences</module>
         <module>org.eclipse.equinox.security</module>
+        <module>org.eclipse.osgi</module>
+        <module>org.eclipse.osgi.util</module>
     </modules>
 
     <scm>
