@@ -52,7 +52,11 @@
                 </exclusion>
                 <exclusion>
                     <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.compendium</artifactId>
+                    <artifactId>org.osgi.service.log</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.osgi</groupId>
+                    <artifactId>org.osgi.util.xml</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
