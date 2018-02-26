@@ -35,11 +35,13 @@
     <url>https://github.com/veithen/cosmos</url>
 
     <modules>
+        <module>org.eclipse.core.jobs</module>
         <module>org.eclipse.ecf</module>
         <module>org.eclipse.ecf.filetransfer</module>
         <module>org.eclipse.ecf.identity</module>
         <module>org.eclipse.ecf.provider.filetransfer</module>
         <module>org.eclipse.ecf.provider.filetransfer.httpclient4</module>
+        <module>org.eclipse.equinox.common</module>
         <module>org.eclipse.equinox.p2.artifact.repository</module>
         <module>org.eclipse.equinox.p2.core</module>
         <module>org.eclipse.equinox.p2.jarprocessor</module>
@@ -50,8 +52,10 @@
         <module>org.eclipse.equinox.p2.transport.ecf</module>
         <module>org.eclipse.equinox.p2.updatesite</module>
         <module>org.eclipse.equinox.preferences</module>
+        <module>org.eclipse.equinox.registry</module>
         <module>org.eclipse.equinox.security</module>
         <module>org.eclipse.osgi</module>
+        <module>org.eclipse.osgi.services</module>
         <module>org.eclipse.osgi.util</module>
     </modules>
 

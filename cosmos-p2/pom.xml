@@ -58,9 +58,9 @@
             <version>1.6.2</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.core</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>org.eclipse.core.jobs</artifactId>
-            <version>3.5.0.v20100515</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -93,8 +93,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.equinox</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>org.eclipse.equinox.common</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -142,9 +143,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.equinox</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>org.eclipse.equinox.registry</artifactId>
-            <version>3.5.0.v20100503</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -152,19 +153,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.osgi</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>org.eclipse.osgi.services</artifactId>
-            <version>3.2.100.v20100503</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>org.osgi.foundation</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
