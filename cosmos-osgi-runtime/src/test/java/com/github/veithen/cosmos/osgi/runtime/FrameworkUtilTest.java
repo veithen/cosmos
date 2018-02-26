@@ -24,6 +24,7 @@ import static com.google.common.truth.Truth.assertThat;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.Version;
 
 public class FrameworkUtilTest {
     @Test
@@ -32,5 +33,7 @@ public class FrameworkUtilTest {
         Bundle bundle = FrameworkUtil.getBundle(Bundle.class);
         assertThat(bundle).isNotNull();
         assertThat(bundle.getSymbolicName()).isEqualTo("osgi.core");
+        Version version = bundle.getVersion();
+        assertThat(version.getMajor()).isEqualTo(6);
     }
 }

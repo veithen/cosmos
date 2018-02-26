@@ -125,6 +125,10 @@ final class BundleImpl implements Bundle {
         return symbolicName;
     }
 
+    public Version getVersion() {
+        return Version.parseVersion(attrs.getValue("Bundle-Version"));
+    }
+
     public int getState() {
         return state.getOsgiState();
     }
@@ -325,10 +329,6 @@ final class BundleImpl implements Bundle {
     }
 
     public Map<X509Certificate,List<X509Certificate>> getSignerCertificates(int signersType) {
-        throw new UnsupportedOperationException();
-    }
-
-    public Version getVersion() {
         throw new UnsupportedOperationException();
     }
 
