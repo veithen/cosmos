@@ -23,14 +23,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.jar.Attributes.Name;
 import java.util.jar.Manifest;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.github.veithen.cosmos.osgi.runtime.Element;
