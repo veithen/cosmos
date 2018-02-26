@@ -65,6 +65,7 @@ public final class Runtime {
     private final Properties properties = new Properties();
     private final Map<String,BundleImpl> bundlesBySymbolicName = new HashMap<String,BundleImpl>();
     private final Map<Long,BundleImpl> bundlesById = new HashMap<Long,BundleImpl>();
+    private final Map<URL,BundleImpl> bundlesByUrl = new HashMap<URL,BundleImpl>();
     private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
     private final List<ServiceListenerSpec> serviceListeners = new LinkedList<ServiceListenerSpec>();
     private final List<Service> services = new LinkedList<Service>();
@@ -122,6 +123,7 @@ public final class Runtime {
             BundleImpl bundle = new BundleImpl(this, id, symbolicName, attrs, rootUrl, new File(dataRoot, symbolicName));
             bundlesBySymbolicName.put(symbolicName, bundle);
             bundlesById.put(id, bundle);
+            bundlesByUrl.put(getBundleUrl(rootUrl), bundle);
             String exportPackage = attrs.getValue("Export-Package");
             if (exportPackage != null) {
                 Element[] elements;
@@ -145,6 +147,19 @@ public final class Runtime {
         }
     }
 
+    private static URL getBundleUrl(URL rootUrl) throws CosmosException {
+        if (rootUrl.getProtocol().equals("jar")) {
+            String path = rootUrl.getPath();
+            try {
+                return new URL(path.substring(0, path.lastIndexOf('!')));
+            } catch (MalformedURLException ex) {
+                throw new CosmosException("Failed to extract bundle URL", ex);
+            }
+        } else {
+            return rootUrl;
+        }
+    }
+
     private void registerSAXParserFactory() {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         Hashtable<String,Object> props = new Hashtable<String,Object>();
@@ -161,10 +176,15 @@ public final class Runtime {
     
     public static synchronized Runtime getInstance(Configuration config) throws CosmosException, BundleException {
         if (instance == null) {
+            Patcher.patch();
             instance = new Runtime(config);
         } else if (instance.config != config) {
             throw new IllegalStateException("Runtime already initialized with different configuration");
         }
+        return instance;
+    }
+    
+    public static synchronized Runtime getActiveInstance() {
         return instance;
     }
     
@@ -183,6 +203,10 @@ public final class Runtime {
     
     public Bundle getBundle(String symbolicName) {
         return bundlesBySymbolicName.get(symbolicName);
+    }
+    
+    public Bundle getBundle(URL url) {
+        return bundlesByUrl.get(url);
     }
     
     BundleImpl getBundleByPackage(String pkg) {
