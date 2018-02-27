@@ -60,7 +60,7 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
 
     public void initialize() throws InitializationException {
         try {
-            Runtime runtime = Runtime.getInstance(Configuration.newDefault().logger(new PlexusLogger(logger)).initializer(new P2Initializer(new File("target/p2-data"), logger == null || logger.isDebugEnabled())).build());
+            Runtime runtime = Runtime.getInstance(Configuration.builder().setLogger(new PlexusLogger(logger)).setInitializer(new P2Initializer(new File("target/p2-data"), logger == null || logger.isDebugEnabled())).build());
             
             System.out.println("Setting up proxy configuration");
             Hashtable<String,Object> properties = new Hashtable<String,Object>();

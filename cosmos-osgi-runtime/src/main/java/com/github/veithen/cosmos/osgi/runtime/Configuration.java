@@ -27,12 +27,14 @@ public final class Configuration {
         private Logger logger;
         private RuntimeInitializer initializer;
 
-        public Builder logger(Logger logger) {
+        Builder() {}
+
+        public Builder setLogger(Logger logger) {
             this.logger = logger;
             return this;
         }
         
-        public Builder initializer(RuntimeInitializer initializer) {
+        public Builder setInitializer(RuntimeInitializer initializer) {
             this.initializer = initializer;
             return this;
         }
@@ -53,7 +55,7 @@ public final class Configuration {
         this.initializer = initializer;
     }
 
-    public static Builder newDefault() {
+    public static Builder builder() {
         return new Builder();
     }
     

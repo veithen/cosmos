@@ -29,7 +29,7 @@ import com.github.veithen.cosmos.osgi.runtime.Runtime;
 public class CosmosActivationByClassLoadingTest {
     @Test
     public void test() throws Exception {
-        Runtime runtime = Runtime.getInstance(Configuration.newDefault().build());
+        Runtime runtime = Runtime.getInstance(Configuration.builder().build());
         runtime.setProperty("foo", "bar");
         runtime.getBundle("bundle2").start();
         MyService myService = runtime.getService(MyService.class);

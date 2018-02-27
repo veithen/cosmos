@@ -29,7 +29,7 @@ import org.osgi.framework.Version;
 public class FrameworkUtilTest {
     @Test
     public void testGetBundle() throws Exception {
-        Runtime.getInstance(Configuration.newDefault().build());
+        Runtime.getInstance(Configuration.builder().build());
         Bundle bundle = FrameworkUtil.getBundle(Bundle.class);
         assertThat(bundle).isNotNull();
         assertThat(bundle.getSymbolicName()).isEqualTo("osgi.core");

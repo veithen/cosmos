@@ -29,7 +29,7 @@ import com.github.veithen.cosmos.osgi.runtime.Runtime;
 public class CosmosGetBundleContextTest {
     @Test
     public void test() throws Exception {
-        Runtime runtime = Runtime.getInstance(Configuration.newDefault().build());
+        Runtime runtime = Runtime.getInstance(Configuration.builder().build());
         Bundle bundle1 = runtime.getBundle("bundle1");
         assertEquals(Bundle.STARTING, bundle1.getState());
         assertNotNull(bundle1.getBundleContext());

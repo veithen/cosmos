@@ -28,7 +28,7 @@ import com.github.veithen.cosmos.osgi.runtime.Runtime;
 public class CosmosLoadClassTest {
     @Test
     public void test() throws Exception {
-        Runtime runtime = Runtime.getInstance(Configuration.newDefault().build());
+        Runtime runtime = Runtime.getInstance(Configuration.builder().build());
         Bundle bundle1 = runtime.getBundle("bundle1");
         assertEquals(Bundle.STARTING, bundle1.getState());
         bundle1.loadClass("bundle1.Helper");

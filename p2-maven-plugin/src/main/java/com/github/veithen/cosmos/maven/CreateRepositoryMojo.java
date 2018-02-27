@@ -61,7 +61,7 @@ public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo,
         try {
             List<Artifact> artifacts = resolveArtifacts();
             URI repoURI = outputDirectory.toURI();
-            Runtime runtime = Runtime.getInstance(Configuration.newDefault().logger(SimpleLogger.INSTANCE).initializer(new P2Initializer(new File("target/p2-data"), true)).build());
+            Runtime runtime = Runtime.getInstance(Configuration.builder().setLogger(SimpleLogger.INSTANCE).setInitializer(new P2Initializer(new File("target/p2-data"), true)).build());
             IProvisioningAgent agent = runtime.getService(IProvisioningAgent.class);
             IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
 //            IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
