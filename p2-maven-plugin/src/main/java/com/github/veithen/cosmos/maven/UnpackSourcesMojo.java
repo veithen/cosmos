@@ -40,6 +40,12 @@ public class UnpackSourcesMojo extends AbstractImportMojo {
     @Parameter(defaultValue="${project.build.directory}/bundle-sources", required=true)
     private File outputDirectory;
 
+    @Parameter
+    private String[] includes = new String[] { "**/*.java" };
+
+    @Parameter
+    private String[] excludes;
+
     @Override
     protected String transformBundleId(String bundleId) {
         return bundleId + ".source";
@@ -55,7 +61,8 @@ public class UnpackSourcesMojo extends AbstractImportMojo {
         outputDirectory.mkdirs();
         jarUnArchiver.setSourceFile(file);
         IncludeExcludeFileSelector selector = new IncludeExcludeFileSelector();
-        selector.setIncludes(new String[] { "**/*.java" });
+        selector.setIncludes(includes);
+        selector.setExcludes(excludes);
         jarUnArchiver.setFileSelectors(new FileSelector[] { selector });
         jarUnArchiver.setDestDirectory(outputDirectory);
         jarUnArchiver.extract();
