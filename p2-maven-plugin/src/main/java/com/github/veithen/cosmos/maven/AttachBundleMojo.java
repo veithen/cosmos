@@ -25,8 +25,8 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-@Mojo(name="copy")
-public class CopyMojo extends AbstractImportMojo {
+@Mojo(name="attach-bundle")
+public class AttachBundleMojo extends AbstractImportMojo {
     @Parameter(property="project.artifact")
     private Artifact projectArtifact;
 

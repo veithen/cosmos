@@ -31,7 +31,7 @@
                         <phases>
                             <generate-sources>com.github.veithen.cosmos:p2-maven-plugin:unpack-sources</generate-sources>
                             <compile>org.apache.maven.plugins:maven-compiler-plugin:3.7.0:compile</compile>
-                            <package>com.github.veithen.cosmos:p2-maven-plugin:copy</package>
+                            <package>com.github.veithen.cosmos:p2-maven-plugin:attach-bundle</package>
                             <install>org.apache.maven.plugins:maven-install-plugin:2.5.2:install</install>
                             <deploy>org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy</deploy>
                         </phases>
