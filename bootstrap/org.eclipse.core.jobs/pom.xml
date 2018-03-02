@@ -28,6 +28,7 @@
     </parent>
 
     <artifactId>org.eclipse.core.jobs</artifactId>
+    <packaging>imported-bundle</packaging>
 
     <url>https://github.com/veithen/cosmos</url>
 
@@ -41,4 +42,17 @@
     <properties>
         <bundleVersion>3.8.0.v20160509-0411</bundleVersion>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.osgi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.equinox.common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

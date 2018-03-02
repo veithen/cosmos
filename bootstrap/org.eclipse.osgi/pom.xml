@@ -28,6 +28,7 @@
     </parent>
 
     <artifactId>org.eclipse.osgi</artifactId>
+    <packaging>imported-bundle</packaging>
 
     <url>https://github.com/veithen/cosmos</url>
 
@@ -41,6 +42,14 @@
     <properties>
         <bundleVersion>3.11.3.v20170209-1843</bundleVersion>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.annotation</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

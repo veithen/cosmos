@@ -27,7 +27,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>org.eclipse.equinox.registry</artifactId>
+    <artifactId>org.eclipse.equinox.p2.metadata.repository</artifactId>
     <packaging>imported-bundle</packaging>
 
     <url>https://github.com/veithen/cosmos</url>
@@ -40,7 +40,7 @@
     </scm>
 
     <properties>
-        <bundleVersion>3.6.100.v20160223-2218</bundleVersion>
+        <bundleVersion>1.2.300.v20160419-0834</bundleVersion>
     </properties>
 
     <dependencies>
@@ -56,8 +56,42 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>org.eclipse.core.jobs</artifactId>
+            <artifactId>org.eclipse.equinox.registry</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.equinox.p2.core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.equinox.p2.repository</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.equinox.p2.metadata</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.tukaani.xz</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>p2-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>ant_tasks/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

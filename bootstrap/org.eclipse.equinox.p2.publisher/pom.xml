@@ -29,6 +29,7 @@
     </parent>
 
     <artifactId>org.eclipse.equinox.p2.publisher</artifactId>
+    <packaging>imported-bundle</packaging>
 
     <url>https://github.com/veithen/cosmos</url>
 
@@ -42,4 +43,42 @@
     <properties>
         <bundleVersion>1.4.100.v20160504-1450</bundleVersion>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.osgi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.equinox.app</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.equinox.common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.equinox.p2.core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.equinox.p2.metadata</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.equinox.p2.metadata.repository</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>org.eclipse.equinox.p2.artifact.repository</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

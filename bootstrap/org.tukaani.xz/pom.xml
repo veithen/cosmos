@@ -28,6 +28,7 @@
     </parent>
 
     <artifactId>org.tukaani.xz</artifactId>
+    <packaging>imported-bundle</packaging>
 
     <url>https://github.com/veithen/cosmos</url>
 
