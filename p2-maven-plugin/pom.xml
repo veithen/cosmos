@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.github.veithen.maven</groupId>
             <artifactId>mojo-aspects</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
