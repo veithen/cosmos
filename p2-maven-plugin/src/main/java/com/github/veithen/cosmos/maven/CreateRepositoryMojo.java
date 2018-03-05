@@ -65,12 +65,12 @@ public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo,
             Runtime runtime = Runtime.getInstance(Configuration.builder().setLogger(SimpleLogger.INSTANCE).setInitializer(new P2Initializer(true)).build());
             IProvisioningAgent agent = runtime.getService(IProvisioningAgentProvider.class).createAgent(new File("target/p2-data").toURI());
             IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
-//            IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
+            IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
             IArtifactRepository artifactRepository = artifactRepositoryManager.createRepository(repoURI, "Artifact Repository", IArtifactRepositoryManager.TYPE_SIMPLE_REPOSITORY, Collections.<String,String>emptyMap());
-//            IMetadataRepository metadataRepository = metadataRepositoryManager.createRepository(repoURI, "Metadata Repository", IMetadataRepositoryManager.TYPE_SIMPLE_REPOSITORY, Collections.<String,String>emptyMap());
+            IMetadataRepository metadataRepository = metadataRepositoryManager.createRepository(repoURI, "Metadata Repository", IMetadataRepositoryManager.TYPE_SIMPLE_REPOSITORY, Collections.<String,String>emptyMap());
             PublisherInfo publisherInfo = new PublisherInfo();
             publisherInfo.setArtifactRepository(artifactRepository);
-//            publisherInfo.setMetadataRepository(metadataRepository);
+            publisherInfo.setMetadataRepository(metadataRepository);
             publisherInfo.setArtifactOptions(IPublisherInfo.A_PUBLISH | IPublisherInfo.A_INDEX);
             Publisher publisher = new Publisher(publisherInfo);
             List<File> locations = new ArrayList<>();
