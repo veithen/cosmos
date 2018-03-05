@@ -33,6 +33,7 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
@@ -60,7 +61,7 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
 
     public void initialize() throws InitializationException {
         try {
-            Runtime runtime = Runtime.getInstance(Configuration.builder().setLogger(new PlexusLogger(logger)).setInitializer(new P2Initializer(new File("target/p2-data"), logger == null || logger.isDebugEnabled())).build());
+            Runtime runtime = Runtime.getInstance(Configuration.builder().setLogger(new PlexusLogger(logger)).setInitializer(new P2Initializer(logger == null || logger.isDebugEnabled())).build());
             
             System.out.println("Setting up proxy configuration");
             Hashtable<String,Object> properties = new Hashtable<String,Object>();
@@ -75,7 +76,7 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
             //    to switch to FTP would then cause occasional failures.
             runtime.setProperty("eclipse.p2.mirrors", "false");
             
-            IProvisioningAgent agent = runtime.getService(IProvisioningAgent.class);
+            IProvisioningAgent agent = runtime.getService(IProvisioningAgentProvider.class).createAgent(new File("target/p2-data").toURI());
             repoman = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
         } catch (Exception ex) {
             throw new InitializationException("Failed to initialize P2", ex);

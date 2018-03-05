@@ -19,8 +19,6 @@
  */
 package com.github.veithen.cosmos.p2;
 
-import java.io.File;
-
 import org.eclipse.osgi.service.debug.DebugOptions;
 import org.osgi.framework.BundleException;
 
@@ -68,11 +66,9 @@ public class P2Initializer implements RuntimeInitializer {
         "org.eclipse.ecf.provider.filetransfer.httpclient4/debug/methods/exiting",
     };
     
-    private final File p2DataArea;
     private final boolean trace;
     
-    public P2Initializer(File p2DataArea, boolean trace) {
-        this.p2DataArea = p2DataArea;
+    public P2Initializer(boolean trace) {
         this.trace = trace;
     }
 
@@ -85,7 +81,9 @@ public class P2Initializer implements RuntimeInitializer {
                 debugOptions.setOption(option, "true");
             }
         }
-        runtime.setProperty("eclipse.p2.data.area", p2DataArea.getAbsolutePath());
+        // Don't create a default agent. Users should use IProvisioningAgentProvider to create agents.
+        // See org.eclipse.equinox.internal.p2.core.Activator for property keys and values.
+        runtime.setProperty("eclipse.p2.data.area", "@none");
         runtime.getBundle("org.apache.felix.scr").start();
         runtime.getBundle("org.eclipse.equinox.p2.core").start();
     }

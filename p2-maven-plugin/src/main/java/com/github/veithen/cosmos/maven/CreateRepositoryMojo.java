@@ -33,6 +33,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.publisher.IPublisherAction;
 import org.eclipse.equinox.p2.publisher.IPublisherInfo;
 import org.eclipse.equinox.p2.publisher.Publisher;
@@ -61,8 +62,8 @@ public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo,
         try {
             List<Artifact> artifacts = resolveArtifacts();
             URI repoURI = outputDirectory.toURI();
-            Runtime runtime = Runtime.getInstance(Configuration.builder().setLogger(SimpleLogger.INSTANCE).setInitializer(new P2Initializer(new File("target/p2-data"), true)).build());
-            IProvisioningAgent agent = runtime.getService(IProvisioningAgent.class);
+            Runtime runtime = Runtime.getInstance(Configuration.builder().setLogger(SimpleLogger.INSTANCE).setInitializer(new P2Initializer(true)).build());
+            IProvisioningAgent agent = runtime.getService(IProvisioningAgentProvider.class).createAgent(new File("target/p2-data").toURI());
             IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
 //            IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
             IArtifactRepository artifactRepository = artifactRepositoryManager.createRepository(repoURI, "Artifact Repository", IArtifactRepositoryManager.TYPE_SIMPLE_REPOSITORY, Collections.<String,String>emptyMap());
