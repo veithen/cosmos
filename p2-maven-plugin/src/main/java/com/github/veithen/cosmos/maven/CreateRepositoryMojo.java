@@ -57,13 +57,16 @@ public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo,
     @Parameter(defaultValue="${project.build.directory}", required=true)
     private File outputDirectory;
 
+    @Parameter(defaultValue="${project.build.directory}/p2-agent", required=true)
+    private File agentLocation;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             List<Artifact> artifacts = resolveArtifacts();
             URI repoURI = outputDirectory.toURI();
             Runtime runtime = Runtime.getInstance(Configuration.builder().setLogger(SimpleLogger.INSTANCE).setInitializer(new P2Initializer(true)).build());
-            IProvisioningAgent agent = runtime.getService(IProvisioningAgentProvider.class).createAgent(new File("target/p2-data").toURI());
+            IProvisioningAgent agent = runtime.getService(IProvisioningAgentProvider.class).createAgent(agentLocation.toURI());
             IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
             IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
             IArtifactRepository artifactRepository = artifactRepositoryManager.createRepository(repoURI, "Artifact Repository", IArtifactRepositoryManager.TYPE_SIMPLE_REPOSITORY, Collections.<String,String>emptyMap());
