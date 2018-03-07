@@ -54,7 +54,7 @@ import com.github.veithen.mojo.SkippableMojo;
 
 @Mojo(name="create-repository", requiresDependencyResolution=ResolutionScope.TEST)
 public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo, ArtifactProcessingMojo {
-    @Parameter(defaultValue="${project.build.directory}", required=true)
+    @Parameter(defaultValue="${project.build.directory}/p2-repository", required=true)
     private File outputDirectory;
 
     @Parameter(defaultValue="${project.build.directory}/p2-agent", required=true)
