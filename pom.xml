@@ -183,6 +183,11 @@
                     <artifactId>plexus-component-metadata</artifactId>
                     <version>1.5.5</version>
                 </plugin>
+                <plugin>
+                    <groupId>com.github.veithen.invoker</groupId>
+                    <artifactId>resolver-proxy-maven-plugin</artifactId>
+                    <version>0.1.1</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>

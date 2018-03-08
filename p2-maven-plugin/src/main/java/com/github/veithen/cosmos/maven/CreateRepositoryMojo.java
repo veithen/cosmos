@@ -29,6 +29,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
@@ -44,16 +45,15 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
-import com.github.veithen.cosmos.osgi.runtime.Configuration;
-import com.github.veithen.cosmos.osgi.runtime.Runtime;
-import com.github.veithen.cosmos.osgi.runtime.logging.simple.SimpleLogger;
-import com.github.veithen.cosmos.p2.P2Initializer;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 import com.github.veithen.mojo.ArtifactProcessingMojo;
 import com.github.veithen.mojo.SkippableMojo;
 
 @Mojo(name="create-repository", requiresDependencyResolution=ResolutionScope.TEST)
 public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo, ArtifactProcessingMojo {
+    @Component
+    private IProvisioningAgentProvider provisioningAgentProvider;
+
     @Parameter(defaultValue="${project.build.directory}/p2-repository", required=true)
     private File outputDirectory;
 
@@ -65,8 +65,7 @@ public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo,
         try {
             List<Artifact> artifacts = resolveArtifacts();
             URI repoURI = outputDirectory.toURI();
-            Runtime runtime = Runtime.getInstance(Configuration.builder().setLogger(SimpleLogger.INSTANCE).setInitializer(new P2Initializer(true)).build());
-            IProvisioningAgent agent = runtime.getService(IProvisioningAgentProvider.class).createAgent(agentLocation.toURI());
+            IProvisioningAgent agent = provisioningAgentProvider.createAgent(agentLocation.toURI());
             IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
             IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
             IArtifactRepository artifactRepository = artifactRepositoryManager.createRepository(repoURI, "Artifact Repository", IArtifactRepositoryManager.TYPE_SIMPLE_REPOSITORY, Collections.<String,String>emptyMap());
@@ -83,6 +82,7 @@ public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo,
             publisher.publish(
                     new IPublisherAction[] { new BundlesAction(locations.toArray(new File[locations.size()])) },
                     new SystemOutProgressMonitor());
+            // TODO: stop the agent
         } catch (Exception ex) {
             throw new MojoExecutionException(ex.getMessage(), ex);
         }

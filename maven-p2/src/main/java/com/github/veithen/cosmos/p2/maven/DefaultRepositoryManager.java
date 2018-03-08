@@ -26,8 +26,6 @@ import java.util.Hashtable;
 import org.apache.maven.artifact.manager.WagonManager;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.logging.LogEnabled;
-import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Disposable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
@@ -39,29 +37,25 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.osgi.framework.Constants;
 
-import com.github.veithen.cosmos.osgi.runtime.Configuration;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
-import com.github.veithen.cosmos.osgi.runtime.logging.plexus.PlexusLogger;
-import com.github.veithen.cosmos.p2.P2Initializer;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 
 @Component(role=RepositoryManager.class)
-public class DefaultRepositoryManager implements RepositoryManager, Initializable, Disposable, LogEnabled {
+public class DefaultRepositoryManager implements RepositoryManager, Initializable, Disposable {
     private IArtifactRepositoryManager repoman;
+    
+    @Requirement
+    private CosmosRuntimeProvider cosmosRuntimeProvider;
+    
+    @Requirement
+    private IProvisioningAgentProvider provisioningAgentProvider;
     
     @Requirement
     private WagonManager wagonManager;
     
-    private Logger logger;
-    
-    @Override
-    public void enableLogging(Logger logger) {
-        this.logger = logger;
-    }
-
     public void initialize() throws InitializationException {
         try {
-            Runtime runtime = Runtime.getInstance(Configuration.builder().setLogger(new PlexusLogger(logger)).setInitializer(new P2Initializer(logger == null || logger.isDebugEnabled())).build());
+            Runtime runtime = cosmosRuntimeProvider.getRuntime();
             
             System.out.println("Setting up proxy configuration");
             Hashtable<String,Object> properties = new Hashtable<String,Object>();
@@ -76,7 +70,7 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
             //    to switch to FTP would then cause occasional failures.
             runtime.setProperty("eclipse.p2.mirrors", "false");
             
-            IProvisioningAgent agent = runtime.getService(IProvisioningAgentProvider.class).createAgent(new File("target/p2-data").toURI());
+            IProvisioningAgent agent = provisioningAgentProvider.createAgent(new File("target/p2-data").toURI());
             repoman = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
         } catch (Exception ex) {
             throw new InitializationException("Failed to initialize P2", ex);
