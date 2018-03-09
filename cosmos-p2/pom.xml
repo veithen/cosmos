@@ -129,11 +129,6 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>org.eclipse.equinox.p2.updatesite</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>org.eclipse.equinox.preferences</artifactId>
             <version>${project.version}</version>
         </dependency>
