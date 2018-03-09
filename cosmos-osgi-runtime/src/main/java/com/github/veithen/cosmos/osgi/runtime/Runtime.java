@@ -123,7 +123,7 @@ public final class Runtime {
             BundleImpl bundle = new BundleImpl(this, id, symbolicName, attrs, rootUrl, new File(dataRoot, symbolicName));
             bundlesBySymbolicName.put(symbolicName, bundle);
             bundlesById.put(id, bundle);
-            bundlesByUrl.put(getBundleUrl(rootUrl), bundle);
+            bundlesByUrl.put(bundle.getLocationUrl(), bundle);
             String exportPackage = attrs.getValue("Export-Package");
             if (exportPackage != null) {
                 Element[] elements;
@@ -144,19 +144,6 @@ public final class Runtime {
         RuntimeInitializer initializer = config.getInitializer();
         if (initializer != null) {
             initializer.initializeRuntime(this);
-        }
-    }
-
-    private static URL getBundleUrl(URL rootUrl) throws CosmosException {
-        if (rootUrl.getProtocol().equals("jar")) {
-            String path = rootUrl.getPath();
-            try {
-                return new URL(path.substring(0, path.lastIndexOf('!')));
-            } catch (MalformedURLException ex) {
-                throw new CosmosException("Failed to extract bundle URL", ex);
-            }
-        } else {
-            return rootUrl;
         }
     }
 

@@ -69,6 +69,7 @@ final class BundleImpl implements Bundle {
     private final String symbolicName;
     private final Attributes attrs;
     private final URL rootUrl;
+    private final URL locationUrl;
     private final File data;
     private BundleState state;
     private BundleContextImpl context;
@@ -80,6 +81,16 @@ final class BundleImpl implements Bundle {
         this.symbolicName = symbolicName;
         this.attrs = attrs;
         this.rootUrl = rootUrl;
+        if (rootUrl.getProtocol().equals("jar")) {
+            String path = rootUrl.getPath();
+            try {
+                locationUrl = new URL(path.substring(0, path.lastIndexOf('!')));
+            } catch (MalformedURLException ex) {
+                throw new BundleException("Failed to extract bundle URL", ex);
+            }
+        } else {
+            locationUrl = rootUrl;
+        }
         this.data = data;
         if ("lazy".equals(getHeaderValue(attrs, "Bundle-ActivationPolicy"))
                 || "true".equals(getHeaderValue(attrs, "Eclipse-LazyStart"))
@@ -286,8 +297,12 @@ final class BundleImpl implements Bundle {
         }
     }
 
+    public URL getLocationUrl() {
+        return locationUrl;
+    }
+
     public String getLocation() {
-        throw new UnsupportedOperationException();
+        return locationUrl.toString();
     }
 
     public ServiceReference<?>[] getRegisteredServices() {
