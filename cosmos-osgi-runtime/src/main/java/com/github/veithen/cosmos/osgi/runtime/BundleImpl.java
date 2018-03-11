@@ -76,7 +76,7 @@ final class BundleImpl implements Bundle {
 
     public BundleImpl(Runtime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl, File data) throws BundleException {
         this.runtime = runtime;
-        logger = runtime.getConfig().getLogger();
+        logger = runtime.getLogger();
         this.id = id;
         this.symbolicName = symbolicName;
         this.attrs = attrs;

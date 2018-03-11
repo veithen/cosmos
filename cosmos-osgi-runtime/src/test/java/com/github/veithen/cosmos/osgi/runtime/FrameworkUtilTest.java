@@ -26,10 +26,12 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.Version;
 
+import com.github.veithen.cosmos.osgi.runtime.logging.simple.SimpleLogger;
+
 public class FrameworkUtilTest {
     @Test
     public void testGetBundle() throws Exception {
-        Runtime.getInstance(Configuration.builder().build());
+        Runtime.getInstance(SimpleLogger.INSTANCE);
         Bundle bundle = FrameworkUtil.getBundle(Bundle.class);
         assertThat(bundle).isNotNull();
         assertThat(bundle.getSymbolicName()).isEqualTo("osgi.core");

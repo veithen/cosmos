@@ -25,10 +25,8 @@ import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
-import com.github.veithen.cosmos.osgi.runtime.Configuration;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
 import com.github.veithen.cosmos.osgi.runtime.logging.plexus.PlexusLogger;
-import com.github.veithen.cosmos.p2.P2Initializer;
 
 @Component(role=CosmosRuntimeProvider.class)
 public class DefaultCosmosRuntimeProvider implements CosmosRuntimeProvider, Initializable, LogEnabled {
@@ -42,7 +40,7 @@ public class DefaultCosmosRuntimeProvider implements CosmosRuntimeProvider, Init
 
     public void initialize() throws InitializationException {
         try {
-            runtime = Runtime.getInstance(Configuration.builder().setLogger(new PlexusLogger(logger)).setInitializer(P2Initializer.INSTANCE).build());
+            runtime = Runtime.getInstance(new PlexusLogger(logger));
         } catch (Exception ex) {
             throw new InitializationException("Failed to initialize Cosmos OSGi runtime", ex);
         }

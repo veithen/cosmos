@@ -62,14 +62,6 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
             properties.put(Constants.SERVICE_RANKING, Integer.valueOf(1));
             runtime.registerService(new String[] { IProxyService.class.getName() }, new ProxyServiceAdapter(wagonManager), properties);
             
-            // Don't let P2 use mirrors. There are two reasons for this:
-            // 1) Mirrors may occasionally be unreachable. Using them would make the build less stable and predictable.
-            // 2) P2 may use a mirror that uses a different protocol, typically FTP instead of HTTP. This is
-            //    a problem when building from behind a proxy: since Maven repositories almost exclusively use
-            //    HTTP, users generally don't have a correct FTP proxy configuration in settings.xml. Allowing P2
-            //    to switch to FTP would then cause occasional failures.
-            runtime.setProperty("eclipse.p2.mirrors", "false");
-            
             IProvisioningAgent agent = provisioningAgentProvider.createAgent(new File("target/p2-data").toURI());
             repoman = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
         } catch (Exception ex) {

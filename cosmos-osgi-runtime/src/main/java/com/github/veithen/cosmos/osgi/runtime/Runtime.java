@@ -60,7 +60,6 @@ import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
 public final class Runtime {
     private static Runtime instance;
 
-    private final Configuration config;
     private final Logger logger;
     private final Properties properties = new Properties();
     private final Map<String,BundleImpl> bundlesBySymbolicName = new HashMap<String,BundleImpl>();
@@ -77,9 +76,8 @@ public final class Runtime {
      */
     private final Map<String,BundleImpl> packageMap = new HashMap<String,BundleImpl>();
 
-    private Runtime(Configuration config) throws CosmosException, BundleException {
-        this.config = config;
-        logger = config.getLogger();
+    private Runtime(Logger logger) throws CosmosException, BundleException {
+        this.logger = logger;
         // TODO: make this configurable
         dataRoot = new File("target/osgi");
         Enumeration<URL> e;
@@ -138,13 +136,19 @@ public final class Runtime {
                 }
             }
         }
+        loadProperties("META-INF/cosmos.properties");
+        if (logger.isDebugEnabled()) {
+            loadProperties("META-INF/cosmos-debug.properties");
+            logger.debug(String.format("Properties: %s", properties));
+        }
         registerSAXParserFactory();
         registerDocumentBuilderFactory();
         registerService(null, new String[] { Logger.class.getName() }, logger, null);
         registerService(null, new String[] { LogService.class.getName() }, new LogServiceAdapter(logger), null);
-        RuntimeInitializer initializer = config.getInitializer();
-        if (initializer != null) {
-            initializer.initializeRuntime(this);
+        Bundle scrBundle = getBundle("org.apache.felix.scr");
+        if (scrBundle != null) {
+            logger.debug("Auto-start DS implementation");
+            scrBundle.start();
         }
     }
 
@@ -162,11 +166,28 @@ public final class Runtime {
         registerService(null, new String[] { DocumentBuilderFactory.class.getName() }, factory, props);
     }
     
-    public static synchronized Runtime getInstance(Configuration config) throws CosmosException, BundleException {
+    private void loadProperties(String resourceName) throws CosmosException {
+        Enumeration<URL> e;
+        try {
+            e = Runtime.class.getClassLoader().getResources(resourceName);
+        } catch (IOException ex) {
+            throw new CosmosException("Failed to properties", ex);
+        }
+        while (e.hasMoreElements()) {
+            URL url = e.nextElement();
+            try (InputStream in = url.openStream()) {
+                properties.load(in);
+            } catch (IOException ex) {
+                throw new CosmosException(String.format("Failed to load properties from %s", url), ex);
+            }
+        }
+    }
+    
+    public static synchronized Runtime getInstance(Logger logger) throws CosmosException, BundleException {
         if (instance == null) {
             Patcher.patch();
-            instance = new Runtime(config);
-        } else if (instance.config != config) {
+            instance = new Runtime(logger);
+        } else if (instance.logger != logger) {
             throw new IllegalStateException("Runtime already initialized with different configuration");
         }
         return instance;
@@ -176,14 +197,10 @@ public final class Runtime {
         return instance;
     }
     
-    public Logger getLogger() {
+    Logger getLogger() {
         return logger;
     }
     
-    Configuration getConfig() {
-        return config;
-    }
-
     Bundle[] getBundles() {
         Collection<BundleImpl> c = bundlesBySymbolicName.values();
         return c.toArray(new Bundle[c.size()]);
@@ -214,10 +231,6 @@ public final class Runtime {
             logger.debug("No value for property " + key);
         }
         return value;
-    }
-    
-    public void setProperty(String key, String value) {
-        properties.setProperty(key, value);
     }
     
     void addBundleListener(BundleListener listener) {

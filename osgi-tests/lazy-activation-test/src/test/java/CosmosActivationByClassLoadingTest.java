@@ -23,14 +23,13 @@ import org.junit.Test;
 
 import bundle2.MyService;
 
-import com.github.veithen.cosmos.osgi.runtime.Configuration;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
+import com.github.veithen.cosmos.osgi.runtime.logging.simple.SimpleLogger;
 
 public class CosmosActivationByClassLoadingTest {
     @Test
     public void test() throws Exception {
-        Runtime runtime = Runtime.getInstance(Configuration.builder().build());
-        runtime.setProperty("foo", "bar");
+        Runtime runtime = Runtime.getInstance(SimpleLogger.INSTANCE);
         runtime.getBundle("bundle2").start();
         MyService myService = runtime.getService(MyService.class);
         assertEquals("bar", myService.getProperty("foo"));

@@ -23,13 +23,13 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
 
-import com.github.veithen.cosmos.osgi.runtime.Configuration;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
+import com.github.veithen.cosmos.osgi.runtime.logging.simple.SimpleLogger;
 
 public class CosmosGetBundleContextTest {
     @Test
     public void test() throws Exception {
-        Runtime runtime = Runtime.getInstance(Configuration.builder().build());
+        Runtime runtime = Runtime.getInstance(SimpleLogger.INSTANCE);
         Bundle bundle1 = runtime.getBundle("bundle1");
         assertEquals(Bundle.STARTING, bundle1.getState());
         assertNotNull(bundle1.getBundleContext());
