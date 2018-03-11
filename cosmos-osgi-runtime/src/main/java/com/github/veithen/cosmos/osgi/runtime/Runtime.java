@@ -67,7 +67,7 @@ public final class Runtime {
     private final Map<Long,BundleImpl> bundlesById = new HashMap<Long,BundleImpl>();
     private final Map<URL,BundleImpl> bundlesByUrl = new HashMap<URL,BundleImpl>();
     private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
-    private final List<ServiceListenerSpec> serviceListeners = new LinkedList<ServiceListenerSpec>();
+    private final List<ServiceListenerSpec> serviceListeners = new ArrayList<>();
     private final List<Service> services = new LinkedList<Service>();
     private long nextServiceId = 1;
     private final File dataRoot;
@@ -228,13 +228,17 @@ public final class Runtime {
         if (logger.isDebugEnabled()) {
             logger.debug("Bundle " + bundle.getSymbolicName() + " starts listening for services with filter " + filter);
         }
-        serviceListeners.add(new ServiceListenerSpec(listener, filter));
+        synchronized (serviceListeners) {
+            serviceListeners.add(new ServiceListenerSpec(listener, filter));
+        }
     }
 
     void removeServiceListener(ServiceListener listener) {
-        for (Iterator<ServiceListenerSpec> it = serviceListeners.iterator(); it.hasNext(); ) {
-            if (it.next().getListener() == listener) {
-                it.remove();
+        synchronized (serviceListeners) {
+            for (Iterator<ServiceListenerSpec> it = serviceListeners.iterator(); it.hasNext(); ) {
+                if (it.next().getListener() == listener) {
+                    it.remove();
+                }
             }
         }
     }
@@ -263,6 +267,10 @@ public final class Runtime {
         actualProperties.put(Constants.SERVICE_ID, serviceId);
         Service service = new Service(logger, bundle, classes, serviceObject, actualProperties);
         services.add(service);
+        ServiceListenerSpec[] serviceListeners;
+        synchronized (this.serviceListeners) {
+            serviceListeners = this.serviceListeners.toArray(new ServiceListenerSpec[this.serviceListeners.size()]);
+        }
         for (ServiceListenerSpec listener : serviceListeners) {
             if (service.matches(null, listener.getFilter())) {
                 listener.getListener().serviceChanged(new ServiceEvent(ServiceEvent.REGISTERED, service));
