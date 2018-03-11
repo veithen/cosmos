@@ -55,6 +55,7 @@
         <module>code-coverage</module>
         <module>p2-maven-plugin</module>
         <module>maven-p2</module>
+        <module>dummy-signedcontent</module>
     </modules>
 
     <scm>

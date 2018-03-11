@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.osgi.runtime.equinox;
+package com.github.veithen.cosmos.osgi.runtime.equinox.signedcontent;
 
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;

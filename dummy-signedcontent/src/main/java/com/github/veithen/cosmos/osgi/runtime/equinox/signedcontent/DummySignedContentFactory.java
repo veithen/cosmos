@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.osgi.runtime.equinox;
+package com.github.veithen.cosmos.osgi.runtime.equinox.signedcontent;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +31,7 @@ import org.eclipse.osgi.signedcontent.SignedContent;
 import org.eclipse.osgi.signedcontent.SignedContentFactory;
 import org.osgi.framework.Bundle;
 
-final class DummySignedContentFactory implements SignedContentFactory {
+public final class DummySignedContentFactory implements SignedContentFactory {
     @Override
     public SignedContent getSignedContent(File content)
             throws IOException, InvalidKeyException, SignatureException, CertificateException,

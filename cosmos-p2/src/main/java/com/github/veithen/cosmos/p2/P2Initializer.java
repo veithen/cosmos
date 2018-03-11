@@ -74,7 +74,7 @@ public class P2Initializer implements RuntimeInitializer {
 
     @Override
     public void initializeRuntime(Runtime runtime) throws CosmosException, BundleException {
-        EquinoxInitializer.builder().setRegisterDummySignedContentFactory(true).build().initializeRuntime(runtime);
+        EquinoxInitializer.INSTANCE.initializeRuntime(runtime);
         if (trace) {
             DebugOptions debugOptions = runtime.getService(DebugOptions.class);
             for (String option : optionsForTrace) {
