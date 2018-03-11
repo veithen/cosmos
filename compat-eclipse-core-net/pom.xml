@@ -58,6 +58,11 @@
             <artifactId>org.eclipse.equinox.common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.component.annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -92,7 +97,7 @@
                         <_nouses>true</_nouses>
                         <Export-Package>org.eclipse.core.net.proxy;version="0.0.0"</Export-Package>
                         <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
-                        <Bundle-Activator>com.github.veithen.cosmos.compat.eclipse.core.net.Activator</Bundle-Activator>
+                        <_dsannotations>*</_dsannotations>
                     </instructions>
                 </configuration>
             </plugin>

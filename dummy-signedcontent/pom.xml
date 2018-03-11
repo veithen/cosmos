@@ -48,6 +48,11 @@
             <artifactId>org.eclipse.osgi</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.component.annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -60,7 +65,7 @@
                     <instructions>
                         <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
                         <Export-Package />
-                        <Service-Component>OSGI-INF/dummySignedContent.xml</Service-Component>
+                        <_dsannotations>*</_dsannotations>
                     </instructions>
                 </configuration>
             </plugin>

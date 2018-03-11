@@ -30,7 +30,9 @@ import java.security.cert.CertificateException;
 import org.eclipse.osgi.signedcontent.SignedContent;
 import org.eclipse.osgi.signedcontent.SignedContentFactory;
 import org.osgi.framework.Bundle;
+import org.osgi.service.component.annotations.Component;
 
+@Component(service={SignedContentFactory.class}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class DummySignedContentFactory implements SignedContentFactory {
     @Override
     public SignedContent getSignedContent(File content)

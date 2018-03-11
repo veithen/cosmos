@@ -20,7 +20,10 @@
 package com.github.veithen.cosmos.osgi.runtime.equinox;
 
 import org.eclipse.osgi.internal.location.BasicLocation;
+import org.eclipse.osgi.service.datalocation.Location;
+import org.osgi.service.component.annotations.Component;
 
+@Component(service={Location.class}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class DummyLocation extends BasicLocation {
     public DummyLocation() {
         super("dummy", null, false, null, null, null, null);

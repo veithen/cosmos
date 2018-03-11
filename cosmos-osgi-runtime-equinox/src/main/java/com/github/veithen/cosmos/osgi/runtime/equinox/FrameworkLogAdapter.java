@@ -26,18 +26,18 @@ import java.io.Writer;
 import org.eclipse.osgi.framework.log.FrameworkLog;
 import org.eclipse.osgi.framework.log.FrameworkLogEntry;
 import org.osgi.framework.FrameworkEvent;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
 
+@Component(service={FrameworkLog.class}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class FrameworkLogAdapter implements FrameworkLog {
     private Logger logger;
 
-    protected void bindLogger(Logger logger) {
+    @Reference
+    void setLogger(Logger logger) {
         this.logger = logger;
-    }
-
-    protected void unbindLogger() {
-        this.logger = null;
     }
 
     @Override

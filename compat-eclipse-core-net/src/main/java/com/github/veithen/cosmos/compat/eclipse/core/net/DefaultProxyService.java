@@ -26,8 +26,10 @@ import org.eclipse.core.net.proxy.IProxyChangeListener;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.CoreException;
+import org.osgi.service.component.annotations.Component;
 
-final class DefaultProxyService implements IProxyService {
+@Component(service={IProxyService.class}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
+public final class DefaultProxyService implements IProxyService {
     @Override
     public boolean isSystemProxiesEnabled() {
         return true;

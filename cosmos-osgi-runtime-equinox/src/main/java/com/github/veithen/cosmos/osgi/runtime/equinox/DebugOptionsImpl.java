@@ -25,7 +25,9 @@ import java.util.Map;
 
 import org.eclipse.osgi.service.debug.DebugOptions;
 import org.eclipse.osgi.service.debug.DebugTrace;
+import org.osgi.service.component.annotations.Component;
 
+@Component(service={DebugOptions.class}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class DebugOptionsImpl implements DebugOptions {
     private final Map<String,String> options = new HashMap<String,String>();
     
