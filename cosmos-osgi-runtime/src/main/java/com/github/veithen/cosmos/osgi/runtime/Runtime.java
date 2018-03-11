@@ -140,6 +140,7 @@ public final class Runtime {
         }
         registerSAXParserFactory();
         registerDocumentBuilderFactory();
+        registerService(null, new String[] { Logger.class.getName() }, logger, null);
         registerService(null, new String[] { LogService.class.getName() }, new LogServiceAdapter(logger), null);
         RuntimeInitializer initializer = config.getInitializer();
         if (initializer != null) {

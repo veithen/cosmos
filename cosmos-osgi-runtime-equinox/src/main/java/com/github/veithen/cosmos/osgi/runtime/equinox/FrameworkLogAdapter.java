@@ -29,11 +29,15 @@ import org.osgi.framework.FrameworkEvent;
 
 import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
 
-final class FrameworkLogAdapter implements FrameworkLog {
-    private final Logger logger;
+public final class FrameworkLogAdapter implements FrameworkLog {
+    private Logger logger;
 
-    FrameworkLogAdapter(Logger logger) {
+    protected void bindLogger(Logger logger) {
         this.logger = logger;
+    }
+
+    protected void unbindLogger() {
+        this.logger = null;
     }
 
     @Override

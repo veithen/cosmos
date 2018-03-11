@@ -29,6 +29,7 @@
     </parent>
 
     <artifactId>cosmos-osgi-runtime-equinox</artifactId>
+    <packaging>bundle</packaging>
 
     <name>Equinox Support for Cosmos OSGi Runtime</name>
     <url>https://github.com/veithen/cosmos</url>
@@ -73,4 +74,21 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+                        <Export-Package />
+                        <Service-Component>OSGI-INF/debugOptions.xml,OSGI-INF/dummyLocation.xml,OSGI-INF/frameworkLog.xml</Service-Component>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

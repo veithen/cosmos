@@ -26,7 +26,7 @@ import java.util.Map;
 import org.eclipse.osgi.service.debug.DebugOptions;
 import org.eclipse.osgi.service.debug.DebugTrace;
 
-final class DebugOptionsImpl implements DebugOptions {
+public final class DebugOptionsImpl implements DebugOptions {
     private final Map<String,String> options = new HashMap<String,String>();
     
     @Override

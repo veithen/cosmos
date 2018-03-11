@@ -25,7 +25,6 @@ import org.osgi.framework.BundleException;
 import com.github.veithen.cosmos.osgi.runtime.CosmosException;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
 import com.github.veithen.cosmos.osgi.runtime.RuntimeInitializer;
-import com.github.veithen.cosmos.osgi.runtime.equinox.EquinoxInitializer;
 
 public class P2Initializer implements RuntimeInitializer {
     private static final String[] optionsForTrace = {
@@ -74,7 +73,7 @@ public class P2Initializer implements RuntimeInitializer {
 
     @Override
     public void initializeRuntime(Runtime runtime) throws CosmosException, BundleException {
-        EquinoxInitializer.INSTANCE.initializeRuntime(runtime);
+        runtime.getBundle("org.apache.felix.scr").start();
         if (trace) {
             DebugOptions debugOptions = runtime.getService(DebugOptions.class);
             for (String option : optionsForTrace) {
@@ -84,7 +83,6 @@ public class P2Initializer implements RuntimeInitializer {
         // Don't create a default agent. Users should use IProvisioningAgentProvider to create agents.
         // See org.eclipse.equinox.internal.p2.core.Activator for property keys and values.
         runtime.setProperty("eclipse.p2.data.area", "@none");
-        runtime.getBundle("org.apache.felix.scr").start();
         runtime.getBundle("org.eclipse.equinox.p2.core").start();
     }
 }
