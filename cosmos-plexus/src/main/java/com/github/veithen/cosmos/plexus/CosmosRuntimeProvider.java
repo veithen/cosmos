@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.p2.maven;
+package com.github.veithen.cosmos.plexus;
 
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
 

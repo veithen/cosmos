@@ -39,6 +39,7 @@ import org.osgi.framework.Constants;
 
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
+import com.github.veithen.cosmos.plexus.CosmosRuntimeProvider;
 
 @Component(role=RepositoryManager.class)
 public class DefaultRepositoryManager implements RepositoryManager, Initializable, Disposable {

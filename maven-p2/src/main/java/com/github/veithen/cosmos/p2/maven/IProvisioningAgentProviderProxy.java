@@ -29,6 +29,8 @@ import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.core.ProvisionException;
 
+import com.github.veithen.cosmos.plexus.CosmosRuntimeProvider;
+
 @Component(role=IProvisioningAgentProvider.class)
 public class IProvisioningAgentProviderProxy implements IProvisioningAgentProvider, Initializable {
     private IProvisioningAgentProvider target;

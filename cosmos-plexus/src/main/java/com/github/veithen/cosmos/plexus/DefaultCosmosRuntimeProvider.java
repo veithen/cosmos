@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.p2.maven;
+package com.github.veithen.cosmos.plexus;
 
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.LogEnabled;
@@ -26,7 +26,6 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
-import com.github.veithen.cosmos.osgi.runtime.logging.plexus.PlexusLogger;
 
 @Component(role=CosmosRuntimeProvider.class)
 public class DefaultCosmosRuntimeProvider implements CosmosRuntimeProvider, Initializable, LogEnabled {

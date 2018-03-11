@@ -17,14 +17,14 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.osgi.runtime.logging.plexus;
+package com.github.veithen.cosmos.plexus;
 
 import org.codehaus.plexus.logging.Logger;
 
-public class PlexusLogger implements com.github.veithen.cosmos.osgi.runtime.logging.Logger {
+final class PlexusLogger implements com.github.veithen.cosmos.osgi.runtime.logging.Logger {
     private final Logger logger;
 
-    public PlexusLogger(Logger logger) {
+    PlexusLogger(Logger logger) {
         this.logger = logger;
     }
 

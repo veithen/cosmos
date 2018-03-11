@@ -56,6 +56,7 @@
         <module>p2-maven-plugin</module>
         <module>maven-p2</module>
         <module>dummy-signedcontent</module>
+        <module>cosmos-plexus</module>
     </modules>
 
     <scm>
