@@ -38,6 +38,5 @@ public class P2Initializer implements RuntimeInitializer {
         // Don't create a default agent. Users should use IProvisioningAgentProvider to create agents.
         // See org.eclipse.equinox.internal.p2.core.Activator for property keys and values.
         runtime.setProperty("eclipse.p2.data.area", "@none");
-        runtime.getBundle("org.eclipse.equinox.p2.core").start();
     }
 }
