@@ -222,6 +222,10 @@ final class BundleImpl implements Bundle {
             makeDependenciesReady();
         }
         runtime.fireBundleEvent(this, BundleEvent.STARTING);
+        // For bundles with lazy activation, the BundleContext has already been created
+        if (context == null) {
+            context = new BundleContextImpl(this);
+        }
         String activatorClassName = attrs.getValue("Bundle-Activator");
         if (activatorClassName != null) {
             BundleActivator activator;
@@ -229,10 +233,6 @@ final class BundleImpl implements Bundle {
                 activator = (BundleActivator)Class.forName(activatorClassName).newInstance();
             } catch (Exception ex) {
                 throw new BundleException("Failed to instantiate bundle activator " + activatorClassName, ex);
-            }
-            // For bundles with lazy activation, the BundleContext has already been created
-            if (context == null) {
-                context = new BundleContextImpl(this);
             }
             try {
                 activator.start(context);

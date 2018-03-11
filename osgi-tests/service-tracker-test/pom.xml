@@ -18,46 +18,39 @@
   limitations under the License.
   #L%
   -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.github.veithen.cosmos</groupId>
-        <artifactId>cosmos</artifactId>
+        <artifactId>osgi-tests</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>osgi-tests</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>service-tracker-test</artifactId>
 
-    <name>OSGi tests</name>
-
-    <modules>
-        <module>bundle1</module>
-        <module>bundle2</module>
-        <module>lazy-activation-test</module>
-        <module>service-tracker-test</module>
-    </modules>
-
-    <properties>
-        <skipDeploy>true</skipDeploy>
-    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cosmos-osgi-runtime</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.truth</groupId>
+            <artifactId>truth</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <configuration>
-                        <instructions>
-                            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        </instructions>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <plugins>
+        </plugins>
     </build>
 </project>

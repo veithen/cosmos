@@ -259,6 +259,7 @@ public final class Runtime {
                 actualProperties.put(key, properties.get(key));
             }
         }
+        actualProperties.put(Constants.OBJECTCLASS, classes);
         actualProperties.put(Constants.SERVICE_ID, serviceId);
         Service service = new Service(logger, bundle, classes, serviceObject, actualProperties);
         services.add(service);
