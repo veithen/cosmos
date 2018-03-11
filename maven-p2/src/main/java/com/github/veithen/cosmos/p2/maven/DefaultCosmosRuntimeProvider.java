@@ -42,7 +42,7 @@ public class DefaultCosmosRuntimeProvider implements CosmosRuntimeProvider, Init
 
     public void initialize() throws InitializationException {
         try {
-            runtime = Runtime.getInstance(Configuration.builder().setLogger(new PlexusLogger(logger)).setInitializer(new P2Initializer(logger.isDebugEnabled())).build());
+            runtime = Runtime.getInstance(Configuration.builder().setLogger(new PlexusLogger(logger)).setInitializer(P2Initializer.INSTANCE).build());
         } catch (Exception ex) {
             throw new InitializationException("Failed to initialize Cosmos OSGi runtime", ex);
         }

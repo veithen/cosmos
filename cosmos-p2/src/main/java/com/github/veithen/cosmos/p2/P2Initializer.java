@@ -19,7 +19,6 @@
  */
 package com.github.veithen.cosmos.p2;
 
-import org.eclipse.osgi.service.debug.DebugOptions;
 import org.osgi.framework.BundleException;
 
 import com.github.veithen.cosmos.osgi.runtime.CosmosException;
@@ -27,59 +26,15 @@ import com.github.veithen.cosmos.osgi.runtime.Runtime;
 import com.github.veithen.cosmos.osgi.runtime.RuntimeInitializer;
 
 public class P2Initializer implements RuntimeInitializer {
-    private static final String[] optionsForTrace = {
-        "org.eclipse.equinox.p2.core/debug",
-        "org.eclipse.equinox.p2.core/generator/parsing",
-        "org.eclipse.equinox.p2.core/engine/installregistry",
-        "org.eclipse.equinox.p2.core/metadata/parsing",
-        "org.eclipse.equinox.p2.core/artifacts/mirrors",
-        "org.eclipse.equinox.p2.core/core/parseproblems",
-        "org.eclipse.equinox.p2.core/planner/operands",
-        "org.eclipse.equinox.p2.core/planner/projector",
-        "org.eclipse.equinox.p2.core/engine/profilepreferences",
-        "org.eclipse.equinox.p2.core/publisher",
-        "org.eclipse.equinox.p2.core/reconciler",
-        "org.eclipse.equinox.p2.core/core/removeRepo",
-        "org.eclipse.equinox.p2.core/updatechecker",
-        "org.eclipse.equinox.p2.repository/credentials/debug",
-        "org.eclipse.equinox.p2.repository/transport/debug",
-        "org.eclipse.ecf/debug",
-        "org.eclipse.ecf/debug/exceptions/catching",
-        "org.eclipse.ecf/debug/exceptions/throwing",
-        "org.eclipse.ecf/debug/methods/entering",
-        "org.eclipse.ecf/debug/methods/exiting",
-        "org.eclipse.ecf.filetransfer/debug",
-        "org.eclipse.ecf.filetransfer/debug/exceptions/throwing",
-        "org.eclipse.ecf.filetransfer/debug/exceptions/catching",
-        "org.eclipse.ecf.filetransfer/debug/methods/entering",
-        "org.eclipse.ecf.filetransfer/debug/methods/exiting",
-        "org.eclipse.ecf.provider.filetransfer/debug",
-        "org.eclipse.ecf.provider.filetransfer/debug/exceptions/catching",
-        "org.eclipse.ecf.provider.filetransfer/debug/exceptions/throwing",
-        "org.eclipse.ecf.provider.filetransfer/debug/methods/entering",
-        "org.eclipse.ecf.provider.filetransfer/debug/methods/exiting",
-        "org.eclipse.ecf.provider.filetransfer.httpclient4/debug",
-        "org.eclipse.ecf.provider.filetransfer.httpclient4/debug/exceptions/catching",
-        "org.eclipse.ecf.provider.filetransfer.httpclient4/debug/exceptions/throwing",
-        "org.eclipse.ecf.provider.filetransfer.httpclient4/debug/methods/entering",
-        "org.eclipse.ecf.provider.filetransfer.httpclient4/debug/methods/exiting",
-    };
-    
-    private final boolean trace;
-    
-    public P2Initializer(boolean trace) {
-        this.trace = trace;
-    }
+    public static final RuntimeInitializer INSTANCE = new P2Initializer();
+
+    private P2Initializer() {}
 
     @Override
     public void initializeRuntime(Runtime runtime) throws CosmosException, BundleException {
+        // TODO: only set this when debugging is enabled
+        runtime.setProperty("ds.loglevel", "4");
         runtime.getBundle("org.apache.felix.scr").start();
-        if (trace) {
-            DebugOptions debugOptions = runtime.getService(DebugOptions.class);
-            for (String option : optionsForTrace) {
-                debugOptions.setOption(option, "true");
-            }
-        }
         // Don't create a default agent. Users should use IProvisioningAgentProvider to create agents.
         // See org.eclipse.equinox.internal.p2.core.Activator for property keys and values.
         runtime.setProperty("eclipse.p2.data.area", "@none");

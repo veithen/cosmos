@@ -30,6 +30,7 @@
     </parent>
 
     <artifactId>cosmos-p2</artifactId>
+    <packaging>bundle</packaging>
 
     <name>P2 Utilities</name>
     <url>https://github.com/veithen/cosmos</url>
@@ -164,5 +165,27 @@
             <artifactId>org.eclipse.osgi.compatibility.state</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.component.annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Export-Package />
+                        <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+                        <_dsannotations>*</_dsannotations>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
