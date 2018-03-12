@@ -58,13 +58,17 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>lazy-activation-test</artifactId>
+            <artifactId>cosmos-plexus</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>service-tracker-test</artifactId>
+            <artifactId>dummy-signedcontent</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>lazy-activation-test</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
@@ -72,6 +76,17 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>maven-p2</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>p2-maven-plugin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>service-tracker-test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
