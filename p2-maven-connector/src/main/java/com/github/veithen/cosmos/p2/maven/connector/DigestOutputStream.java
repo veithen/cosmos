@@ -35,7 +35,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.github.veithen.cosmos.p2.maven.wagon;
+package com.github.veithen.cosmos.p2.maven.connector;
 
 import java.io.IOException;
 import java.io.OutputStream;

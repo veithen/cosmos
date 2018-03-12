@@ -17,28 +17,16 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.p2.maven.wagon;
+package com.github.veithen.cosmos.p2.maven.connector;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 import org.codehaus.plexus.logging.Logger;
-import org.eclipse.equinox.p2.metadata.IArtifactKey;
+import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
-public abstract class ArtifactHandler implements ResourceHandler {
-    private final IArtifactKey key;
-    
-    public ArtifactHandler(IArtifactKey key) {
-        this.key = key;
-    }
-
-    public Resource get(IArtifactRepository artifactRepository, Logger logger) {
-        IArtifactDescriptor[] descriptors = artifactRepository.getArtifactDescriptors(key);
-        if (descriptors.length == 0) {
-            return null;
-        } else {
-            return get(artifactRepository, descriptors[0], logger);
-        }
-    }
-    
-    protected abstract Resource get(IArtifactRepository artifactRepository, IArtifactDescriptor descriptor, Logger logger);
+abstract class ArtifactHandler {
+    abstract void download(Artifact artifact, IArtifactRepository artifactRepository, IArtifactDescriptor descriptor, Logger logger, OutputStream out) throws IOException, DownloadException;
 }

@@ -17,28 +17,20 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.p2.maven.wagon;
+package com.github.veithen.cosmos.p2.maven.connector;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+final class DownloadException extends Exception {
+    private static final long serialVersionUID = 1L;
 
-import org.w3c.dom.Document;
-
-public final class DOMUtil {
-    private static final DocumentBuilder documentBuilder;
-    
-    static {
-        try {
-            documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch (ParserConfigurationException ex) {
-            throw new Error(ex);
-        }
+    DownloadException(Throwable cause) {
+        super(cause);
     }
-    
-    private DOMUtil() {}
-    
-    public static Document createDocument() {
-        return documentBuilder.newDocument();
+
+    DownloadException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    DownloadException(String message) {
+        super(message);
     }
 }

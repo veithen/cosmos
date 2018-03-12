@@ -17,11 +17,22 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.p2.maven.wagon;
+package com.github.veithen.cosmos.p2.maven.connector;
 
-import org.codehaus.plexus.logging.Logger;
-import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
+import org.eclipse.aether.repository.Proxy;
 
-public interface ResourceHandler {
-    Resource get(IArtifactRepository artifactRepository, Logger logger);
+/**
+ * Plexus component holding the currently configured proxy.
+ * <p>
+ * The P2 code only supports one globally configured proxy. This component holds the reference to
+ * the proxy that is currently configured. It is designed to allow two threads to proceed
+ * concurrently if they are using the same proxy.
+ */
+public interface ProxyHolder {
+    public interface Lease extends AutoCloseable {
+        void close();
+    }
+
+    Lease withProxy(Proxy proxy) throws InterruptedException;
+    Proxy getCurrentProxy();
 }

@@ -17,39 +17,29 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.p2.maven.wagon;
+package com.github.veithen.cosmos.p2.maven.connector;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.apache.maven.wagon.TransferFailedException;
 import org.codehaus.plexus.logging.Logger;
+import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 
-public class JARHandler extends ArtifactHandler {
-    public JARHandler(IArtifactKey key) {
-        super(key);
-    }
-
+final class JARHandler extends ArtifactHandler {
     @Override
-    protected Resource get(final IArtifactRepository artifactRepository, final IArtifactDescriptor descriptor, final Logger logger) {
-        return new Resource() {
-            @Override
-            public void fetchTo(OutputStream out) throws TransferFailedException, IOException {
-                IStatus status;
-                status = artifactRepository.getArtifact(descriptor, out, new SystemOutProgressMonitor());
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Status: " + status);
-                }
-                if (!status.isOK()) {
-                    throw new TransferFailedException(status.getMessage(), status.getException());
-                }
-            }
-        };
+    void download(Artifact artifact, IArtifactRepository artifactRepository, IArtifactDescriptor descriptor, Logger logger, OutputStream out) throws IOException, DownloadException {
+        IStatus status;
+        status = artifactRepository.getArtifact(descriptor, out, new SystemOutProgressMonitor());
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format("Status: %s", status));
+        }
+        if (!status.isOK()) {
+            throw new DownloadException(status.getMessage(), status.getException());
+        }
     }
 }

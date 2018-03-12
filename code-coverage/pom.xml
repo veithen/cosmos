@@ -79,6 +79,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>p2-maven-connector</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>p2-maven-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -87,11 +92,6 @@
             <artifactId>service-tracker-test</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>wagon-p2</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
