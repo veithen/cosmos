@@ -17,38 +17,44 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.wagon;
+package com.github.veithen.cosmos.p2.maven.wagon;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.security.NoSuchAlgorithmException;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.maven.wagon.TransferFailedException;
 import org.codehaus.plexus.logging.Logger;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.equinox.p2.metadata.IArtifactKey;
-import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
-import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
+public final class DigestHandler implements ResourceHandler {
+    private final ResourceHandler parent;
+    private final String algorithm;
 
-public class JARHandler extends ArtifactHandler {
-    public JARHandler(IArtifactKey key) {
-        super(key);
+    public DigestHandler(ResourceHandler parent, String algorithm) {
+        this.parent = parent;
+        this.algorithm = algorithm;
     }
 
     @Override
-    protected Resource get(final IArtifactRepository artifactRepository, final IArtifactDescriptor descriptor, final Logger logger) {
+    public Resource get(IArtifactRepository artifactRepository, Logger logger) {
+        final Resource resource = parent.get(artifactRepository, logger);
         return new Resource() {
             @Override
             public void fetchTo(OutputStream out) throws TransferFailedException, IOException {
-                IStatus status;
-                status = artifactRepository.getArtifact(descriptor, out, new SystemOutProgressMonitor());
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Status: " + status);
+                DigestOutputStream digester;
+                try {
+                    digester = new DigestOutputStream(algorithm);
+                } catch (NoSuchAlgorithmException ex) {
+                    throw new Error(ex);
                 }
-                if (!status.isOK()) {
-                    throw new TransferFailedException(status.getMessage(), status.getException());
-                }
+                resource.fetchTo(digester);
+                OutputStreamWriter writer = new OutputStreamWriter(out, "ascii");
+                writer.write(DatatypeConverter.printHexBinary(digester.digest()));
+                writer.flush();
             }
         };
     }

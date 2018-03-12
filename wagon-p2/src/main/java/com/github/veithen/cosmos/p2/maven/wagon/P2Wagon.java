@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.wagon;
+package com.github.veithen.cosmos.p2.maven.wagon;
 
 import java.io.File;
 import java.io.FileOutputStream;

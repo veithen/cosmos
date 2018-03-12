@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.maven;
+package com.github.veithen.cosmos.p2.maven.plugin;
 
 import java.io.File;
 

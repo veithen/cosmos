@@ -17,43 +17,30 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.wagon;
+package com.github.veithen.cosmos.p2.maven.wagon;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.security.NoSuchAlgorithmException;
-
-import javax.xml.bind.DatatypeConverter;
 
 import org.apache.maven.wagon.TransferFailedException;
 import org.codehaus.plexus.logging.Logger;
+import org.eclipse.equinox.p2.metadata.IArtifactKey;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
-public final class DigestHandler implements ResourceHandler {
-    private final ResourceHandler parent;
-    private final String algorithm;
-
-    public DigestHandler(ResourceHandler parent, String algorithm) {
-        this.parent = parent;
-        this.algorithm = algorithm;
+public class JARMD5Handler extends ArtifactHandler {
+    public JARMD5Handler(IArtifactKey key) {
+        super(key);
     }
 
     @Override
-    public Resource get(IArtifactRepository artifactRepository, Logger logger) {
-        final Resource resource = parent.get(artifactRepository, logger);
+    protected Resource get(IArtifactRepository artifactRepository, final IArtifactDescriptor descriptor, Logger logger) {
         return new Resource() {
             @Override
             public void fetchTo(OutputStream out) throws TransferFailedException, IOException {
-                DigestOutputStream digester;
-                try {
-                    digester = new DigestOutputStream(algorithm);
-                } catch (NoSuchAlgorithmException ex) {
-                    throw new Error(ex);
-                }
-                resource.fetchTo(digester);
                 OutputStreamWriter writer = new OutputStreamWriter(out, "ascii");
-                writer.write(DatatypeConverter.printHexBinary(digester.digest()));
+                writer.write(descriptor.getProperty(IArtifactDescriptor.DOWNLOAD_MD5));
                 writer.flush();
             }
         };

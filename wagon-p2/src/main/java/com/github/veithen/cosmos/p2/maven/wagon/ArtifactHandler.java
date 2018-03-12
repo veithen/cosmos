@@ -17,32 +17,28 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.wagon;
+package com.github.veithen.cosmos.p2.maven.wagon;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-
-import org.apache.maven.wagon.TransferFailedException;
 import org.codehaus.plexus.logging.Logger;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
-public class JARMD5Handler extends ArtifactHandler {
-    public JARMD5Handler(IArtifactKey key) {
-        super(key);
+public abstract class ArtifactHandler implements ResourceHandler {
+    private final IArtifactKey key;
+    
+    public ArtifactHandler(IArtifactKey key) {
+        this.key = key;
     }
 
-    @Override
-    protected Resource get(IArtifactRepository artifactRepository, final IArtifactDescriptor descriptor, Logger logger) {
-        return new Resource() {
-            @Override
-            public void fetchTo(OutputStream out) throws TransferFailedException, IOException {
-                OutputStreamWriter writer = new OutputStreamWriter(out, "ascii");
-                writer.write(descriptor.getProperty(IArtifactDescriptor.DOWNLOAD_MD5));
-                writer.flush();
-            }
-        };
+    public Resource get(IArtifactRepository artifactRepository, Logger logger) {
+        IArtifactDescriptor[] descriptors = artifactRepository.getArtifactDescriptors(key);
+        if (descriptors.length == 0) {
+            return null;
+        } else {
+            return get(artifactRepository, descriptors[0], logger);
+        }
     }
+    
+    protected abstract Resource get(IArtifactRepository artifactRepository, IArtifactDescriptor descriptor, Logger logger);
 }

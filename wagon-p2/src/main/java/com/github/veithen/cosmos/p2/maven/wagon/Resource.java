@@ -17,11 +17,13 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.wagon;
+package com.github.veithen.cosmos.p2.maven.wagon;
 
-import org.codehaus.plexus.logging.Logger;
-import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
+import java.io.IOException;
+import java.io.OutputStream;
 
-public interface ResourceHandler {
-    Resource get(IArtifactRepository artifactRepository, Logger logger);
+import org.apache.maven.wagon.TransferFailedException;
+
+public interface Resource {
+    void fetchTo(OutputStream out) throws TransferFailedException, IOException;
 }
