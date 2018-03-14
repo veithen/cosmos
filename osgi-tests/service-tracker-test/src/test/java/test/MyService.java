@@ -1,3 +1,4 @@
+package test;
 /*-
  * #%L
  * Cosmos
