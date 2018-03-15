@@ -27,7 +27,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>p2-maven-plugin</artifactId>
+    <artifactId>p2-publisher-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
 
     <url>https://github.com/veithen/cosmos</url>
@@ -68,11 +68,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>org.eclipse.equinox.p2.publisher.eclipse</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-archiver</artifactId>
-            <version>3.5</version>
         </dependency>
     </dependencies>
 

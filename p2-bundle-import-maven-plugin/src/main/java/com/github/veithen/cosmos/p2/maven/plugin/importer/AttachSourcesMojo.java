@@ -17,21 +17,31 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.p2.maven.plugin;
+package com.github.veithen.cosmos.p2.maven.plugin.importer;
 
 import java.io.File;
 
-import org.apache.maven.artifact.Artifact;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
 
-@Mojo(name="attach-bundle")
-public class AttachBundleMojo extends AbstractImportMojo {
-    @Parameter(property="project.artifact")
-    private Artifact projectArtifact;
+@Mojo(name="attach-sources")
+public class AttachSourcesMojo extends AbstractImportMojo {
+    @Component
+    private MavenProjectHelper projectHelper;
 
-    @Parameter(defaultValue="${project.build.directory}/${project.build.finalName}.jar", required=true)
+    @Parameter(property="project")
+    private MavenProject project;
+
+    @Parameter(defaultValue="${project.build.directory}/${project.build.finalName}-sources.jar", required=true)
     private File outputLocation;
+
+    @Override
+    protected String transformBundleId(String bundleId) {
+        return bundleId + ".source";
+    }
 
     @Override
     protected File getOutputLocation() {
@@ -40,6 +50,6 @@ public class AttachBundleMojo extends AbstractImportMojo {
 
     @Override
     protected void processArtifact(File file) {
-        projectArtifact.setFile(file);
+        projectHelper.attachArtifact(project, file, "sources");
     }
 }

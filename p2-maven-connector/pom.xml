@@ -115,7 +115,7 @@
             </plugin>
             <plugin>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>p2-maven-plugin</artifactId>
+                <artifactId>p2-publisher-maven-plugin</artifactId>
                 <version>${project.version}</version>
                 <executions>
                     <execution>

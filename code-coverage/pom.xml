@@ -79,12 +79,17 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>p2-bundle-import-maven-plugin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>p2-maven-connector</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>p2-maven-plugin</artifactId>
+            <artifactId>p2-publisher-maven-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
