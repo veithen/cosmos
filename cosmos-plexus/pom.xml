@@ -80,6 +80,26 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                            <manifestLocation>${project.build.testOutputDirectory}/META-INF</manifestLocation>
+                            <instructions>
+                                <Bundle-SymbolicName>test</Bundle-SymbolicName>
+                                <Bundle-Activator>com.github.veithen.cosmos.plexus.Activator</Bundle-Activator>
+                            </instructions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
