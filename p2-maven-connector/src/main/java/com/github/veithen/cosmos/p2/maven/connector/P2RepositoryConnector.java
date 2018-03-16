@@ -90,6 +90,9 @@ final class P2RepositoryConnector implements RepositoryConnector {
 
     private IArtifactRepository getArtifactRepository() throws DownloadException {
         if (artifactRepository == null) {
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format("Loading repository %s", repository.getUrl()));
+            }
             try {
                 artifactRepository = artifactRepositoryManager.loadRepository(new URI(repository.getUrl()), new SystemOutProgressMonitor());
             } catch (URISyntaxException | ProvisionException ex) {
@@ -105,19 +108,31 @@ final class P2RepositoryConnector implements RepositoryConnector {
         if (p2Coordinate == null) {
             return false;
         }
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format("Resolving artifact %s...", p2Coordinate));
+        }
         IArtifactRepository artifactRepository = getArtifactRepository();
         IArtifactDescriptor[] descriptors = artifactRepository.getArtifactDescriptors(p2Coordinate.createIArtifactKey(artifactRepository));
         if (descriptors.length == 0) {
+            logger.debug("Not found");
             return false;
         }
         IArtifactDescriptor descriptor = descriptors[0];
-        ArtifactHandler artifactHandler = artifactHandlers.get(artifact.getExtension());
+        String extension = artifact.getExtension();
+        ArtifactHandler artifactHandler = artifactHandlers.get(extension);
         if (artifactHandler == null) {
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format("No handler found for extension %s", extension));
+            }
             return false;
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format("Using handler of type %s", artifactHandler.getClass().getSimpleName()));
         }
         // TODO: write to temporary file
         try (FileOutputStream out = new FileOutputStream(artifactDownload.getFile())) {
             artifactHandler.download(artifact, artifactRepository, descriptor, logger, out);
+            logger.debug("Artifact download complete");
             return true;
         } catch (IOException ex) {
             throw new DownloadException(ex);
@@ -202,6 +217,7 @@ final class P2RepositoryConnector implements RepositoryConnector {
                             artifactDownload.setException(new ArtifactNotFoundException(artifactDownload.getArtifact(), repository));
                         }
                     } catch (DownloadException ex) {
+                        logger.debug("Caught exception", ex);
                         artifactDownload.setException(new ArtifactTransferException(artifactDownload.getArtifact(), repository, ex.getMessage(), ex.getCause()));
                     }
                 }
@@ -213,6 +229,7 @@ final class P2RepositoryConnector implements RepositoryConnector {
                             metadataDownload.setException(new MetadataNotFoundException(metadataDownload.getMetadata(), repository));
                         }
                     } catch (DownloadException ex) {
+                        logger.debug("Caught exception", ex);
                         metadataDownload.setException(new MetadataTransferException(metadataDownload.getMetadata(), repository, ex.getMessage(), ex.getCause()));
                     }
                 }

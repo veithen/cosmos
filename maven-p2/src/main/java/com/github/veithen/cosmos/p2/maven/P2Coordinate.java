@@ -49,4 +49,9 @@ public final class P2Coordinate {
     public Version getVersion() {
         return version;
     }
+
+    @Override
+    public String toString() {
+        return String.format("[classifier=%s,id=%s,version=%s]", classifier, id, version);
+    }
 }
