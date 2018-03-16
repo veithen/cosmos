@@ -88,12 +88,7 @@ final class P2RepositoryConnector implements RepositoryConnector {
         this.logger = logger;
     }
 
-    private boolean process(ArtifactDownload artifactDownload) throws DownloadException {
-        Artifact artifact = artifactDownload.getArtifact();
-        P2Coordinate p2Coordinate = artifactCoordinateMapper.createP2Coordinate(artifact);
-        if (p2Coordinate == null) {
-            return false;
-        }
+    private IArtifactRepository getArtifactRepository() throws DownloadException {
         if (artifactRepository == null) {
             try {
                 artifactRepository = artifactRepositoryManager.loadRepository(new URI(repository.getUrl()), new SystemOutProgressMonitor());
@@ -101,6 +96,16 @@ final class P2RepositoryConnector implements RepositoryConnector {
                 throw new DownloadException(ex);
             }
         }
+        return artifactRepository;
+    }
+
+    private boolean process(ArtifactDownload artifactDownload) throws DownloadException {
+        Artifact artifact = artifactDownload.getArtifact();
+        P2Coordinate p2Coordinate = artifactCoordinateMapper.createP2Coordinate(artifact);
+        if (p2Coordinate == null) {
+            return false;
+        }
+        IArtifactRepository artifactRepository = getArtifactRepository();
         IArtifactDescriptor[] descriptors = artifactRepository.getArtifactDescriptors(p2Coordinate.createIArtifactKey(artifactRepository));
         if (descriptors.length == 0) {
             return false;
@@ -120,6 +125,7 @@ final class P2RepositoryConnector implements RepositoryConnector {
     }
 
     private boolean process(MetadataDownload metadataDownload) throws DownloadException {
+        IArtifactRepository artifactRepository = getArtifactRepository();
         Metadata metadata = metadataDownload.getMetadata();
         IQueryResult<IArtifactKey> queryResult = artifactRepository.query(
                 artifactCoordinateMapper.createArtifactKeyQuery(metadata.getGroupId(), metadata.getArtifactId()),
