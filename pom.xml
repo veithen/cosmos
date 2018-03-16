@@ -71,6 +71,8 @@
         <javaVersion>1.7</javaVersion>
         <maven.version>3.5.2</maven.version>
         <maven.resolver.version>1.1.0</maven.resolver.version>
+        <!-- Note: we bootstrap the build using a previous Cosmos version -->
+        <bootstrap.version>20180317</bootstrap.version>
     </properties>
 
     <repositories>
@@ -209,11 +211,15 @@
                 <plugin>
                     <groupId>${project.groupId}</groupId>
                     <artifactId>p2-bundle-import-maven-plugin</artifactId>
-                    <!-- Note: we bootstrap the build using a previous Cosmos version -->
-                    <version>20180316</version>
+                    <version>${bootstrap.version}</version>
                     <configuration>
                         <repositoryUri>http://download.eclipse.org/releases/neon</repositoryUri>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.veithen.daemon</groupId>
+                    <artifactId>daemon-maven-plugin</artifactId>
+                    <version>0.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
