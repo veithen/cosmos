@@ -198,27 +198,10 @@ final class P2RepositoryConnector implements RepositoryConnector {
             versionElement.setTextContent(artifactKey.getVersion().toString());
             versionsElement.appendChild(versionElement);
         }
-        // TODO: need to fill in metadata/versioning/lastUpdated ??
-        // TODO: use DOM LS API here
-        final Transformer transformer;
-        try {
-            transformer = TransformerFactory.newInstance().newTransformer();
-        } catch (TransformerConfigurationException ex) {
-            throw new Error(ex);
-        }
         writeFile(metadataDownload.getFile(), new ContentProvider() {
             @Override
             void writeTo(OutputStream out) throws IOException, DownloadException {
-                try {
-                    transformer.transform(new DOMSource(document), new StreamResult(out));
-                } catch (TransformerException ex) {
-                    Throwable cause = ex.getCause();
-                    if (cause instanceof IOException) {
-                        throw new DownloadException(cause);
-                    } else {
-                        throw new DownloadException(ex);
-                    }
-                }
+                DOMUtil.serialize(document, out);
             }
         });
         return true;

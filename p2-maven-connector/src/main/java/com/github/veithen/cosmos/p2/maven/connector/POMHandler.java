@@ -28,9 +28,6 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSOutput;
-import org.w3c.dom.ls.LSSerializer;
 
 final class POMHandler extends ArtifactHandler {
     private static final String POM_NS = "http://maven.apache.org/POM/4.0.0";
@@ -54,10 +51,6 @@ final class POMHandler extends ArtifactHandler {
         addPOMElement(projectElement, "groupId", artifact.getGroupId());
         addPOMElement(projectElement, "artifactId", artifact.getArtifactId());
         addPOMElement(projectElement, "version", artifact.getVersion());
-        DOMImplementationLS ls = (DOMImplementationLS)document.getImplementation();
-        LSSerializer serializer = ls.createLSSerializer();
-        LSOutput output = ls.createLSOutput();
-        output.setByteStream(out);
-        serializer.write(document, output);
+        DOMUtil.serialize(document, out);
     }
 }

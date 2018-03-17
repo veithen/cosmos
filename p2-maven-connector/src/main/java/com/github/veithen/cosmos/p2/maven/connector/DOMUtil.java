@@ -19,13 +19,18 @@
  */
 package com.github.veithen.cosmos.p2.maven.connector;
 
+import java.io.OutputStream;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
+import org.w3c.dom.ls.LSSerializer;
 
-public final class DOMUtil {
+final class DOMUtil {
     private static final DocumentBuilder documentBuilder;
     
     static {
@@ -38,7 +43,15 @@ public final class DOMUtil {
     
     private DOMUtil() {}
     
-    public static Document createDocument() {
+    static Document createDocument() {
         return documentBuilder.newDocument();
+    }
+
+    static void serialize(Document document, OutputStream out) {
+        DOMImplementationLS ls = (DOMImplementationLS)document.getImplementation();
+        LSSerializer serializer = ls.createLSSerializer();
+        LSOutput output = ls.createLSOutput();
+        output.setByteStream(out);
+        serializer.write(document, output);
     }
 }
