@@ -19,8 +19,10 @@
  */
 package com.github.veithen.cosmos.p2.maven.connector;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -102,8 +104,38 @@ final class P2RepositoryConnector implements RepositoryConnector {
         return artifactRepository;
     }
 
+    private void writeFile(File file, ContentProvider contentProvider) throws DownloadException {
+        File dir = file.getParentFile();
+        if (!dir.isDirectory() && !dir.mkdirs()) {
+            throw new DownloadException(String.format("Unable to create directory %s", dir));
+        }
+        File tmpFile;
+        try {
+            tmpFile = File.createTempFile(file.getName(), ".tmp", dir);
+        } catch (IOException ex) {
+            throw new DownloadException(String.format("Unable to create temporary file in %s", dir));
+        }
+        boolean success = false;
+        try {
+            try (FileOutputStream out = new FileOutputStream(tmpFile)) {
+                contentProvider.writeTo(out);
+            }
+            if (!tmpFile.renameTo(file)) {
+                throw new DownloadException(String.format("Failed to move file into place (%s)", file));
+            }
+            success = true;
+        } catch (IOException ex) {
+            throw new DownloadException(ex);
+        } finally {
+            if (!success && !tmpFile.delete()) {
+                // Log the error, but continue with the original exception
+                logger.error(String.format("Unable to delete temporary file %s", tmpFile));
+            }
+        }
+    }
+
     private boolean process(ArtifactDownload artifactDownload) throws DownloadException {
-        Artifact artifact = artifactDownload.getArtifact();
+        final Artifact artifact = artifactDownload.getArtifact();
         P2Coordinate p2Coordinate = artifactCoordinateMapper.createP2Coordinate(artifact);
         if (p2Coordinate == null) {
             return false;
@@ -111,15 +143,15 @@ final class P2RepositoryConnector implements RepositoryConnector {
         if (logger.isDebugEnabled()) {
             logger.debug(String.format("Resolving artifact %s...", p2Coordinate));
         }
-        IArtifactRepository artifactRepository = getArtifactRepository();
+        final IArtifactRepository artifactRepository = getArtifactRepository();
         IArtifactDescriptor[] descriptors = artifactRepository.getArtifactDescriptors(p2Coordinate.createIArtifactKey(artifactRepository));
         if (descriptors.length == 0) {
             logger.debug("Not found");
             return false;
         }
-        IArtifactDescriptor descriptor = descriptors[0];
+        final IArtifactDescriptor descriptor = descriptors[0];
         String extension = artifact.getExtension();
-        ArtifactHandler artifactHandler = artifactHandlers.get(extension);
+        final ArtifactHandler artifactHandler = artifactHandlers.get(extension);
         if (artifactHandler == null) {
             if (logger.isDebugEnabled()) {
                 logger.debug(String.format("No handler found for extension %s", extension));
@@ -129,14 +161,14 @@ final class P2RepositoryConnector implements RepositoryConnector {
         if (logger.isDebugEnabled()) {
             logger.debug(String.format("Using handler of type %s", artifactHandler.getClass().getSimpleName()));
         }
-        // TODO: write to temporary file
-        try (FileOutputStream out = new FileOutputStream(artifactDownload.getFile())) {
-            artifactHandler.download(artifact, artifactRepository, descriptor, logger, out);
-            logger.debug("Artifact download complete");
-            return true;
-        } catch (IOException ex) {
-            throw new DownloadException(ex);
-        }
+        writeFile(artifactDownload.getFile(), new ContentProvider() {
+            @Override
+            void writeTo(OutputStream out) throws IOException, DownloadException {
+                artifactHandler.download(artifact, artifactRepository, descriptor, logger, out);
+            }
+        });
+        logger.debug("Artifact download complete");
+        return true;
     }
 
     private boolean process(MetadataDownload metadataDownload) throws DownloadException {
@@ -148,7 +180,7 @@ final class P2RepositoryConnector implements RepositoryConnector {
         if (queryResult.isEmpty()) {
             return false;
         }
-        Document document = DOMUtil.createDocument();
+        final Document document = DOMUtil.createDocument();
         Element metadataElement = document.createElement("metadata");
         document.appendChild(metadataElement);
         Element groupIdElement = document.createElement("groupId");
@@ -168,25 +200,28 @@ final class P2RepositoryConnector implements RepositoryConnector {
         }
         // TODO: need to fill in metadata/versioning/lastUpdated ??
         // TODO: use DOM LS API here
-        Transformer transformer;
+        final Transformer transformer;
         try {
             transformer = TransformerFactory.newInstance().newTransformer();
         } catch (TransformerConfigurationException ex) {
             throw new Error(ex);
         }
-        try (FileOutputStream out = new FileOutputStream(metadataDownload.getFile())) {
-            transformer.transform(new DOMSource(document), new StreamResult(out));
-            return true;
-        } catch (IOException ex) {
-            throw new DownloadException(ex);
-        } catch (TransformerException ex) {
-            Throwable cause = ex.getCause();
-            if (cause instanceof IOException) {
-                throw new DownloadException(cause);
-            } else {
-                throw new DownloadException(ex);
+        writeFile(metadataDownload.getFile(), new ContentProvider() {
+            @Override
+            void writeTo(OutputStream out) throws IOException, DownloadException {
+                try {
+                    transformer.transform(new DOMSource(document), new StreamResult(out));
+                } catch (TransformerException ex) {
+                    Throwable cause = ex.getCause();
+                    if (cause instanceof IOException) {
+                        throw new DownloadException(cause);
+                    } else {
+                        throw new DownloadException(ex);
+                    }
+                }
             }
-        }
+        });
+        return true;
     }
 
     @Override
