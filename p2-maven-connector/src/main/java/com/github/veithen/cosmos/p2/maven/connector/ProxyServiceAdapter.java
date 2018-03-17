@@ -20,7 +20,6 @@
 package com.github.veithen.cosmos.p2.maven.connector;
 
 import java.net.URI;
-import java.util.Locale;
 
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;

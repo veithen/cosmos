@@ -56,7 +56,7 @@ public final class DebugOptionsImpl implements DebugOptions {
     }
 
     @Override
-    public Map getOptions() {
+    public Map<String,String> getOptions() {
         // TODO
         throw new UnsupportedOperationException();
     }
@@ -69,7 +69,7 @@ public final class DebugOptionsImpl implements DebugOptions {
     }
 
     @Override
-    public void setOptions(Map options) {
+    public void setOptions(Map<String,String> options) {
         // TODO
         throw new UnsupportedOperationException();
     }
@@ -111,7 +111,7 @@ public final class DebugOptionsImpl implements DebugOptions {
     }
 
     @Override
-    public DebugTrace newDebugTrace(String bundleSymbolicName, Class traceEntryClass) {
+    public DebugTrace newDebugTrace(String bundleSymbolicName, Class<?> traceEntryClass) {
         // TODO
         throw new UnsupportedOperationException();
     }
