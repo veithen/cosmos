@@ -34,6 +34,11 @@ public final class P2Coordinate {
         this.version = version;
     }
 
+    public P2Coordinate(String id, Version version) {
+        // TODO: use constant for osgi.bundle
+        this("osgi.bundle", id, version);
+    }
+
     public IArtifactKey createIArtifactKey(IArtifactRepository repository) {
         return repository.createArtifactKey(classifier, id, version);
     }

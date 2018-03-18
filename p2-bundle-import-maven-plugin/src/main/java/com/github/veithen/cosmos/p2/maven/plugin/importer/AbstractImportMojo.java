@@ -26,6 +26,8 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -62,10 +64,13 @@ public abstract class AbstractImportMojo extends AbstractMojo {
     @Parameter(property="session.repositorySession", required=true, readonly=true)
     private RepositorySystemSession session;
 
+    @Parameter(property="project.dependencyManagement")
+    private DependencyManagement dependencyManagement;
+
     @Parameter(defaultValue="${project.artifactId}", required=true)
     private String bundleId;
 
-    @Parameter(property="bundleVersion", required=true)
+    @Parameter(property="bundleVersion")
     private String bundleVersion;
 
     @Parameter(required=true)
@@ -73,8 +78,25 @@ public abstract class AbstractImportMojo extends AbstractMojo {
 
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
-        // TODO: use constant for osgi.bundle
-        P2Coordinate p2Coordinate = new P2Coordinate("osgi.bundle", transformBundleId(bundleId), Version.parseVersion(bundleVersion));
+        String bundleVersion = this.bundleVersion;
+        if (bundleVersion == null) {
+            Artifact artifactWithoutVersion = artifactCoordinateMapper.createArtifact(new P2Coordinate(bundleId, null));
+            if (dependencyManagement != null) {
+                for (Dependency dependency : dependencyManagement.getDependencies()) {
+                    if (dependency.getArtifactId().equals(artifactWithoutVersion.getArtifactId())
+                            && dependency.getGroupId().equals(artifactWithoutVersion.getGroupId())
+                            && dependency.getClassifier() == null
+                            && dependency.getType().equals("jar")) {
+                        bundleVersion = dependency.getVersion();
+                        break;
+                    }
+                }
+            }
+        }
+        if (bundleVersion == null) {
+            throw new MojoExecutionException("No bundle version specified");
+        }
+        P2Coordinate p2Coordinate = new P2Coordinate(transformBundleId(bundleId), Version.parseVersion(bundleVersion));
         Artifact artifact = artifactCoordinateMapper.createArtifact(p2Coordinate);
         try {
             artifact = repositorySystem.resolveArtifact(session, new ArtifactRequest(artifact, null, null)).getArtifact();

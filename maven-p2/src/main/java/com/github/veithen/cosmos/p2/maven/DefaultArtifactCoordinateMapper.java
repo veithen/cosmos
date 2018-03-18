@@ -39,8 +39,9 @@ public class DefaultArtifactCoordinateMapper implements ArtifactCoordinateMapper
             artifactId = id;
             classifier = null;
         }
+        Version version = p2Coordinate.getVersion();
         return new DefaultArtifact(p2Coordinate.getClassifier(), artifactId, classifier, "jar",
-                p2Coordinate.getVersion().toString());
+                version == null ? "" : version.toString());
     }
 
     @Override
