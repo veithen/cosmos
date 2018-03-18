@@ -210,7 +210,7 @@
                     <groupId>${project.groupId}</groupId>
                     <artifactId>p2-bundle-import-maven-plugin</artifactId>
                     <!-- Note: we bootstrap the build using a previous Cosmos version -->
-                    <version>20180317</version>
+                    <version>20180318</version>
                     <configuration>
                         <repositoryUri>http://download.eclipse.org/releases/neon</repositoryUri>
                     </configuration>
