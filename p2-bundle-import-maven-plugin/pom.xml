@@ -39,15 +39,6 @@
         <tag>HEAD</tag>
     </scm>
 
-    <repositories>
-        <repository>
-            <id>p2-neon</id>
-            <layout>p2</layout>
-            <name>Neon release repository</name>
-            <url>http://download.eclipse.org/releases/neon/201606221000</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
@@ -72,19 +63,6 @@
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-archiver</artifactId>
             <version>3.5</version>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>1.0.0.v20091030</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>1.0.0.v20091030</version>
-            <classifier>sources</classifier>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -120,12 +98,10 @@
                         </goals>
                         <configuration>
                             <skip>${skipTests}</skip>
-                            <dependencySet>
-                                <scope>test</scope>
-                                <includes>
-                                    <include>osgi.bundle:*:*</include>
-                                </includes>
-                            </dependencySet>
+                            <bundles>
+                                <bundle>src/test/bundles/javax.inject.source_1.0.0.v20091030.jar</bundle>
+                                <bundle>src/test/bundles/javax.inject_1.0.0.v20091030.jar</bundle>
+                            </bundles>
                         </configuration>
                     </execution>
                 </executions>
@@ -177,12 +153,5 @@
                 </executions>
             </plugin>
         </plugins>
-        <extensions>
-            <extension>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>p2-maven-connector</artifactId>
-                <version>${bootstrap.version}</version>
-            </extension>
-        </extensions>
     </build>
 </project>

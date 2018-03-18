@@ -71,8 +71,6 @@
         <javaVersion>1.7</javaVersion>
         <maven.version>3.5.2</maven.version>
         <maven.resolver.version>1.1.0</maven.resolver.version>
-        <!-- Note: we bootstrap the build using a previous Cosmos version -->
-        <bootstrap.version>20180317</bootstrap.version>
     </properties>
 
     <repositories>
@@ -211,7 +209,8 @@
                 <plugin>
                     <groupId>${project.groupId}</groupId>
                     <artifactId>p2-bundle-import-maven-plugin</artifactId>
-                    <version>${bootstrap.version}</version>
+                    <!-- Note: we bootstrap the build using a previous Cosmos version -->
+                    <version>20180317</version>
                     <configuration>
                         <repositoryUri>http://download.eclipse.org/releases/neon</repositoryUri>
                     </configuration>

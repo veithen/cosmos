@@ -22,6 +22,7 @@ package com.github.veithen.cosmos.p2.maven.plugin.publisher;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,6 +61,9 @@ public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo,
     @Parameter(defaultValue="${project.build.directory}/p2-agent", required=true)
     private File agentLocation;
 
+    @Parameter
+    private File[] bundles;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
@@ -78,6 +82,9 @@ public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo,
             List<File> locations = new ArrayList<>();
             for (Artifact artifact : artifacts) {
                 locations.add(artifact.getFile());
+            }
+            if (bundles != null) {
+                locations.addAll(Arrays.asList(bundles));
             }
             publisher.publish(
                     new IPublisherAction[] { new BundlesAction(locations.toArray(new File[locations.size()])) },
