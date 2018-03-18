@@ -23,6 +23,7 @@ import static com.google.common.truth.Truth.assertThat;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
@@ -38,7 +39,9 @@ public class ServiceTrackerTest {
         tracker.open();
         assertThat(tracker.getService()).isNull();
         MyServiceImpl service = new MyServiceImpl();
-        bundleContext.registerService(MyService.class, service, null);
+        ServiceRegistration<MyService> registration = bundleContext.registerService(MyService.class, service, null);
         assertThat(tracker.getService()).isSameAs(service);
+        registration.unregister();
+        assertThat(tracker.getService()).isNull();
     }
 }

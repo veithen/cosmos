@@ -264,6 +264,18 @@ public final class Runtime {
         return (ServiceRegistration<T>)registerService((BundleImpl)bundle, classes, serviceObject, properties);
     }
     
+    private void fireServiceChangedEvent(int type, Service service) {
+        ServiceListenerSpec[] serviceListeners;
+        synchronized (this.serviceListeners) {
+            serviceListeners = this.serviceListeners.toArray(new ServiceListenerSpec[this.serviceListeners.size()]);
+        }
+        for (ServiceListenerSpec listener : serviceListeners) {
+            if (service.matches(null, listener.getFilter())) {
+                listener.getListener().serviceChanged(new ServiceEvent(type, service));
+            }
+        }
+    }
+    
     Service registerService(BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
         long serviceId = nextServiceId++;
         if (logger.isDebugEnabled()) {
@@ -278,18 +290,18 @@ public final class Runtime {
         }
         actualProperties.put(Constants.OBJECTCLASS, classes);
         actualProperties.put(Constants.SERVICE_ID, serviceId);
-        Service service = new Service(logger, bundle, classes, serviceObject, actualProperties);
+        Service service = new Service(this, bundle, classes, serviceObject, actualProperties);
         services.add(service);
-        ServiceListenerSpec[] serviceListeners;
-        synchronized (this.serviceListeners) {
-            serviceListeners = this.serviceListeners.toArray(new ServiceListenerSpec[this.serviceListeners.size()]);
-        }
-        for (ServiceListenerSpec listener : serviceListeners) {
-            if (service.matches(null, listener.getFilter())) {
-                listener.getListener().serviceChanged(new ServiceEvent(ServiceEvent.REGISTERED, service));
-            }
-        }
+        fireServiceChangedEvent(ServiceEvent.REGISTERED, service);
         return service;
+    }
+
+    void unregisterService(Service service) {
+        if (logger.isDebugEnabled()) {
+            logger.debug(String.format("Unregistering service %s", service.getProperty(Constants.SERVICE_ID)));
+        }
+        fireServiceChangedEvent(ServiceEvent.UNREGISTERING, service);
+        services.remove(service);
     }
 
     ServiceReference<?>[] getServiceReferences(String clazz, Filter filter) {

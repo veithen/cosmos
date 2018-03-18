@@ -70,26 +70,29 @@ public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo,
             List<Artifact> artifacts = resolveArtifacts();
             URI repoURI = outputDirectory.toURI();
             IProvisioningAgent agent = provisioningAgentProvider.createAgent(agentLocation.toURI());
-            IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
-            IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
-            IArtifactRepository artifactRepository = artifactRepositoryManager.createRepository(repoURI, "Artifact Repository", IArtifactRepositoryManager.TYPE_SIMPLE_REPOSITORY, Collections.<String,String>emptyMap());
-            IMetadataRepository metadataRepository = metadataRepositoryManager.createRepository(repoURI, "Metadata Repository", IMetadataRepositoryManager.TYPE_SIMPLE_REPOSITORY, Collections.<String,String>emptyMap());
-            PublisherInfo publisherInfo = new PublisherInfo();
-            publisherInfo.setArtifactRepository(artifactRepository);
-            publisherInfo.setMetadataRepository(metadataRepository);
-            publisherInfo.setArtifactOptions(IPublisherInfo.A_PUBLISH | IPublisherInfo.A_INDEX);
-            Publisher publisher = new Publisher(publisherInfo);
-            List<File> locations = new ArrayList<>();
-            for (Artifact artifact : artifacts) {
-                locations.add(artifact.getFile());
+            try {
+                IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
+                IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
+                IArtifactRepository artifactRepository = artifactRepositoryManager.createRepository(repoURI, "Artifact Repository", IArtifactRepositoryManager.TYPE_SIMPLE_REPOSITORY, Collections.<String,String>emptyMap());
+                IMetadataRepository metadataRepository = metadataRepositoryManager.createRepository(repoURI, "Metadata Repository", IMetadataRepositoryManager.TYPE_SIMPLE_REPOSITORY, Collections.<String,String>emptyMap());
+                PublisherInfo publisherInfo = new PublisherInfo();
+                publisherInfo.setArtifactRepository(artifactRepository);
+                publisherInfo.setMetadataRepository(metadataRepository);
+                publisherInfo.setArtifactOptions(IPublisherInfo.A_PUBLISH | IPublisherInfo.A_INDEX);
+                Publisher publisher = new Publisher(publisherInfo);
+                List<File> locations = new ArrayList<>();
+                for (Artifact artifact : artifacts) {
+                    locations.add(artifact.getFile());
+                }
+                if (bundles != null) {
+                    locations.addAll(Arrays.asList(bundles));
+                }
+                publisher.publish(
+                        new IPublisherAction[] { new BundlesAction(locations.toArray(new File[locations.size()])) },
+                        new SystemOutProgressMonitor());
+            } finally {
+                agent.stop();
             }
-            if (bundles != null) {
-                locations.addAll(Arrays.asList(bundles));
-            }
-            publisher.publish(
-                    new IPublisherAction[] { new BundlesAction(locations.toArray(new File[locations.size()])) },
-                    new SystemOutProgressMonitor());
-            // TODO: stop the agent
         } catch (Exception ex) {
             throw new MojoExecutionException(ex.getMessage(), ex);
         }
