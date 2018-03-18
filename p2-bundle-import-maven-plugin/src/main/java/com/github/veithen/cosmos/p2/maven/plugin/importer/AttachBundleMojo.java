@@ -22,10 +22,11 @@ package com.github.veithen.cosmos.p2.maven.plugin.importer;
 import java.io.File;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-@Mojo(name="attach-bundle")
+@Mojo(name="attach-bundle", defaultPhase=LifecyclePhase.PACKAGE)
 public class AttachBundleMojo extends AbstractImportMojo {
     @Parameter(property="project.artifact")
     private Artifact projectArtifact;

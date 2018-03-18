@@ -22,6 +22,7 @@ package com.github.veithen.cosmos.p2.maven.plugin.importer;
 import java.io.File;
 
 import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -29,7 +30,7 @@ import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.components.io.fileselectors.FileSelector;
 import org.codehaus.plexus.components.io.fileselectors.IncludeExcludeFileSelector;
 
-@Mojo(name="unpack-sources")
+@Mojo(name="unpack-sources", defaultPhase=LifecyclePhase.GENERATE_SOURCES)
 public class UnpackSourcesMojo extends AbstractImportMojo {
     @Component(hint="jar")
     private UnArchiver jarUnArchiver;
