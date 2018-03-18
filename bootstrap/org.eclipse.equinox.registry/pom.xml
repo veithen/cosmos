@@ -39,10 +39,6 @@
         <tag>HEAD</tag>
     </scm>
 
-    <properties>
-        <bundleVersion>3.6.100.v20160223-2218</bundleVersion>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

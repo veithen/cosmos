@@ -40,10 +40,6 @@
         <tag>HEAD</tag>
     </scm>
 
-    <properties>
-        <bundleVersion>1.1.500.v20160419-0834</bundleVersion>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

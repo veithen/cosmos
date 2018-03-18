@@ -39,10 +39,6 @@
         <tag>HEAD</tag>
     </scm>
 
-    <properties>
-        <bundleVersion>3.11.3.v20170209-1843</bundleVersion>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.osgi</groupId>
