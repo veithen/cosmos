@@ -70,11 +70,10 @@ final class BundleImpl implements Bundle {
     private final Attributes attrs;
     private final URL rootUrl;
     private final URL locationUrl;
-    private final File data;
     private BundleState state;
     private BundleContextImpl context;
 
-    public BundleImpl(Runtime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl, File data) throws BundleException {
+    public BundleImpl(Runtime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
         this.runtime = runtime;
         logger = runtime.getLogger();
         this.id = id;
@@ -91,7 +90,6 @@ final class BundleImpl implements Bundle {
         } else {
             locationUrl = rootUrl;
         }
-        this.data = data;
         if ("lazy".equals(getHeaderValue(attrs, "Bundle-ActivationPolicy"))
                 || "true".equals(getHeaderValue(attrs, "Eclipse-LazyStart"))
                 || "true".equals(getHeaderValue(attrs, "Eclipse-AutoStart"))) {
@@ -352,6 +350,7 @@ final class BundleImpl implements Bundle {
     }
 
     public File getDataFile(String filename) {
-        return filename == null ? data : new File(data, filename);
+        // We don't have filesystem support.
+        return null;
     }
 }

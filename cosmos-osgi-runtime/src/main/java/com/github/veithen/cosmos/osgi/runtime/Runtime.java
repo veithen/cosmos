@@ -19,7 +19,6 @@
  */
 package com.github.veithen.cosmos.osgi.runtime;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -69,7 +68,6 @@ public final class Runtime {
     private final List<ServiceListenerSpec> serviceListeners = new ArrayList<>();
     private final List<Service> services = new LinkedList<Service>();
     private long nextServiceId = 1;
-    private final File dataRoot;
     
     /**
      * Maps exported packages to their corresponding bundles.
@@ -78,8 +76,6 @@ public final class Runtime {
 
     private Runtime(Logger logger) throws CosmosException, BundleException {
         this.logger = logger;
-        // TODO: make this configurable
-        dataRoot = new File("target/osgi");
         Enumeration<URL> e;
         try {
             e = Runtime.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
@@ -118,7 +114,7 @@ public final class Runtime {
             }
             // There cannot be any bundle listeners yet, so no need to call BundleListeners
             long id = bundleId++;
-            BundleImpl bundle = new BundleImpl(this, id, symbolicName, attrs, rootUrl, new File(dataRoot, symbolicName));
+            BundleImpl bundle = new BundleImpl(this, id, symbolicName, attrs, rootUrl);
             bundlesBySymbolicName.put(symbolicName, bundle);
             bundlesById.put(id, bundle);
             bundlesByUrl.put(bundle.getLocationUrl(), bundle);
