@@ -43,7 +43,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>org.eclipse.osgi</artifactId>
+            <artifactId>cosmos-equinox</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

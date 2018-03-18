@@ -45,7 +45,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cosmos-osgi-runtime-equinox</artifactId>
+            <artifactId>cosmos-equinox</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -63,18 +63,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>compat-eclipse-core-net</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>dummy-signedcontent</artifactId>
-            <version>${project.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>equinox-location</artifactId>
-            <version>${project.version}</version>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -154,11 +142,6 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>org.eclipse.equinox.security</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>org.eclipse.osgi.services</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

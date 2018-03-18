@@ -59,10 +59,7 @@
         <module>org.eclipse.equinox.security</module>
         <module>org.eclipse.equinox.simpleconfigurator</module>
         <module>org.eclipse.equinox.simpleconfigurator.manipulator</module>
-        <module>org.eclipse.osgi</module>
         <module>org.eclipse.osgi.compatibility.state</module>
-        <module>org.eclipse.osgi.services</module>
-        <module>org.eclipse.osgi.util</module>
         <module>org.tukaani.xz</module>
     </modules>
 

@@ -18,25 +18,19 @@
   limitations under the License.
   #L%
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.github.veithen.cosmos</groupId>
         <artifactId>cosmos</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>compat-eclipse-core-net</artifactId>
+    <artifactId>cosmos-equinox</artifactId>
     <packaging>bundle</packaging>
 
-    <name>org.eclipse.core.net Compatibility Bundle</name>
-    <description>
-        Replacement bundle for org.eclipse.core.net. It doesn't use the preference service and instead
-        registers an IProxyService that uses the standard Java system properties to select proxies.
-        The bundle provides a copy of the classes in the org.eclipse.core.net.proxy package.
-    </description>
+    <name>Equinox Support for Cosmos OSGi Runtime</name>
     <url>https://github.com/veithen/cosmos</url>
 
     <scm>
@@ -49,13 +43,13 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cosmos-equinox</artifactId>
+            <artifactId>cosmos-osgi-runtime</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>org.eclipse.equinox.common</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.resolver</artifactId>
+            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
@@ -75,10 +69,10 @@
                             <goal>unpack-sources</goal>
                         </goals>
                         <configuration>
-                            <bundleId>org.eclipse.core.net</bundleId>
-                            <includes>
-                                <include>org/eclipse/core/net/proxy/**/*.java</include>
-                            </includes>
+                            <bundleId>org.eclipse.osgi</bundleId>
+                            <excludes>
+                                <exclude>org/osgi/**/*.java</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                 </executions>
@@ -89,12 +83,22 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>com.github.veithen.cosmos.compat.eclipse.core.net</Bundle-SymbolicName>
-                        <_nouses>true</_nouses>
-                        <Export-Package>org.eclipse.core.net.proxy;version="0.0.0"</Export-Package>
+                        <Bundle-Activator>com.github.veithen.cosmos.equinox.Activator</Bundle-Activator>
                         <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+                        <Export-Package>
+                            org.eclipse.osgi.signedcontent;version="1.0"
+                        </Export-Package>
                         <_dsannotations>*</_dsannotations>
                     </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.veithen.phos</groupId>
+                <artifactId>enforcer-maven-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>com/github/veithen/cosmos/**/*.class</include>
+                    </includes>
                 </configuration>
             </plugin>
         </plugins>
