@@ -132,7 +132,7 @@ public class BundleContextImpl implements BundleContext {
     }
 
     public ServiceReference<?>[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
-        // TODO
+        // Since we don't have per bundle class loaders, getAllServiceReferences is the same as getServiceReferences.
         return getServiceReferences(clazz, filter);
     }
 
