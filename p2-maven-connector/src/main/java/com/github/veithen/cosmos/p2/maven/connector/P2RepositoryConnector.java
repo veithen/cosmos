@@ -29,13 +29,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import org.codehaus.plexus.logging.Logger;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.metadata.Metadata;
@@ -68,10 +61,7 @@ final class P2RepositoryConnector implements RepositoryConnector {
     static {
         artifactHandlers = new HashMap<>();
         artifactHandlers.put("jar", new JARHandler());
-        artifactHandlers.put("jar.md5", new JARMD5Handler());
-        POMHandler pomHandler = new POMHandler();
-        artifactHandlers.put("pom", pomHandler);
-        artifactHandlers.put("pom.md5", pomHandler);
+        artifactHandlers.put("pom", new POMHandler());
     }
     
     private final RemoteRepository repository;
