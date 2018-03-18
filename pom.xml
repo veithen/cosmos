@@ -206,27 +206,27 @@
             <dependency>
                 <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.ecf</artifactId>
-                <version>3.8.0.v20160823-2221</version>
+                <version>3.8.0.v20160405-1820</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.ecf.filetransfer</artifactId>
-                <version>5.0.0.v20160823-2221</version>
+                <version>5.0.0.v20160405-1820</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.ecf.identity</artifactId>
-                <version>3.7.0.v20160823-2221</version>
+                <version>3.7.0.v20160405-1820</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.ecf.provider.filetransfer</artifactId>
-                <version>3.2.200.v20160823-2221</version>
+                <version>3.2.200.v20160405-1820</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.ecf.provider.filetransfer.httpclient4</artifactId>
-                <version>1.1.100.v20160823-2221</version>
+                <version>1.1.100.v20160405-1820</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
@@ -296,12 +296,12 @@
             <dependency>
                 <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.equinox.p2.transport.ecf</artifactId>
-                <version>1.1.201.v20161115-1927</version>
+                <version>1.1.200.v20160606-1311</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.equinox.preferences</artifactId>
-                <version>3.6.1.v20160815-1406</version>
+                <version>3.6.0.v20160120-1756</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
@@ -326,7 +326,7 @@
             <dependency>
                 <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.osgi</artifactId>
-                <version>3.11.3.v20170209-1843</version>
+                <version>3.11.0.v20160603-1336</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
@@ -384,7 +384,7 @@
                     <!-- Note: we bootstrap the build using a previous Cosmos version -->
                     <version>20180318</version>
                     <configuration>
-                        <repositoryUri>http://download.eclipse.org/releases/neon</repositoryUri>
+                        <repositoryUri>http://download.eclipse.org/releases/neon/201606221000</repositoryUri>
                     </configuration>
                 </plugin>
                 <plugin>
