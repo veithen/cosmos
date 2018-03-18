@@ -57,6 +57,7 @@
         <module>maven-p2</module>
         <module>dummy-signedcontent</module>
         <module>cosmos-plexus</module>
+        <module>equinox-location</module>
     </modules>
 
     <scm>
