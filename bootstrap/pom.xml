@@ -35,6 +35,7 @@
 
     <modules>
         <module>org.eclipse.core.jobs</module>
+        <module>org.eclipse.core.net</module>
         <module>org.eclipse.ecf</module>
         <module>org.eclipse.ecf.filetransfer</module>
         <module>org.eclipse.ecf.identity</module>

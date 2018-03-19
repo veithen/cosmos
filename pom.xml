@@ -46,7 +46,6 @@
     <modules>
         <module>cosmos-osgi-runtime</module>
         <module>osgi-tests</module>
-        <module>compat-eclipse-core-net</module>
         <module>cosmos-p2</module>
         <module>p2-maven-connector</module>
         <module>bootstrap</module>
