@@ -44,7 +44,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>cosmos-equinox</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -55,97 +55,97 @@
             <version>1.6.2</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.core.jobs</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.ecf</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.ecf.filetransfer</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.ecf.identity</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.ecf.provider.filetransfer</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.ecf.provider.filetransfer.httpclient4</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.equinox.common</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.equinox.p2.artifact.repository</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.equinox.p2.core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.equinox.p2.jarprocessor</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.equinox.p2.metadata</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.equinox.p2.publisher</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.equinox.p2.repository</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.equinox.p2.transport.ecf</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.equinox.preferences</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.equinox.registry</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.equinox.security</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.tukaani.xz</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.osgi.compatibility.state</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -40,7 +40,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>cosmos-p2</artifactId>
             <version>${project.version}</version>
             <exclusions>
@@ -65,7 +65,7 @@
             <artifactId>maven-resolver-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>cosmos-plexus</artifactId>
             <version>${project.version}</version>
         </dependency>

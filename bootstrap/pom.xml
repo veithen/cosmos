@@ -28,6 +28,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <groupId>com.github.veithen.cosmos.bootstrap</groupId>
     <artifactId>bootstrap</artifactId>
     <packaging>pom</packaging>
 
@@ -84,7 +85,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>${project.groupId}</groupId>
+                <groupId>com.github.veithen.cosmos</groupId>
                 <artifactId>p2-bundle-import-maven-plugin</artifactId>
                 <extensions>true</extensions>
             </plugin>

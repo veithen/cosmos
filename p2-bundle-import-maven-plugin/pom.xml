@@ -55,7 +55,7 @@
             <artifactId>maven-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>maven-p2</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -87,7 +87,7 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>${project.groupId}</groupId>
+                <groupId>com.github.veithen.cosmos</groupId>
                 <artifactId>p2-publisher-maven-plugin</artifactId>
                 <version>${project.version}</version>
                 <executions>

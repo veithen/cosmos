@@ -34,19 +34,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>bundle1</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>bundle2</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>cosmos-osgi-runtime</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>

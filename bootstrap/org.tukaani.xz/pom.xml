@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.veithen.cosmos</groupId>
+        <groupId>com.github.veithen.cosmos.bootstrap</groupId>
         <artifactId>bootstrap</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>

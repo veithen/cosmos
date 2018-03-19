@@ -36,53 +36,53 @@
 
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>cosmos-equinox</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>cosmos-osgi-runtime</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>cosmos-p2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>cosmos-plexus</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>lazy-activation-test</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>maven-p2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>p2-bundle-import-maven-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>p2-maven-connector</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>p2-publisher-maven-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>service-tracker-test</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
