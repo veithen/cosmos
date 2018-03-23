@@ -94,6 +94,7 @@
                         <Export-Package>
                             org.eclipse.osgi.signedcontent;version="1.0"
                         </Export-Package>
+                        <Import-Package>!org.slf4j,*</Import-Package>
                         <_dsannotations>*</_dsannotations>
                     </instructions>
                 </configuration>
