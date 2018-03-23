@@ -33,7 +33,6 @@ public class ServiceTrackerTest {
     @Test
     public void test() throws Exception {
         Bundle bundle = Runtime.getInstance().getBundle("service-tracker-test");
-        bundle.start();
         BundleContext bundleContext = bundle.getBundleContext();
         ServiceTracker<MyService,MyService> tracker = new ServiceTracker<>(bundleContext, MyService.class, null);
         tracker.open();

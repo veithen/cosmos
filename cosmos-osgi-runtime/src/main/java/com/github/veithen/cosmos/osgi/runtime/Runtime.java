@@ -29,12 +29,14 @@ import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -76,6 +78,7 @@ public final class Runtime {
     private final Map<String,BundleImpl> packageMap = new HashMap<String,BundleImpl>();
 
     private Runtime() throws CosmosException, BundleException {
+        Set<Bundle> autostartBundles = new HashSet<>();
         Enumeration<URL> e;
         try {
             e = Runtime.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
@@ -131,6 +134,9 @@ public final class Runtime {
                     packageMap.put(element.getValue(), bundle);
                 }
             }
+            if ("true".equals(attrs.getValue("Cosmos-AutoStart"))) {
+                autostartBundles.add(bundle);
+            }
         }
         loadProperties("META-INF/cosmos.properties");
         if (logger.isDebugEnabled()) {
@@ -142,10 +148,13 @@ public final class Runtime {
         registerService(null, new String[] { Logger.class.getName() }, logger, null);
         // TODO: make this a ServiceFactory and use a per bundle SLF4J logger
         registerService(null, new String[] { LogService.class.getName() }, new LogServiceAdapter(LoggerFactory.getLogger("osgi")), null);
+        // Always auto-start the Declarative Services implementation if it's available
         Bundle scrBundle = getBundle("org.apache.felix.scr");
         if (scrBundle != null) {
-            logger.debug("Auto-start DS implementation");
-            scrBundle.start();
+            autostartBundles.add(scrBundle);
+        }
+        for (Bundle bundle : autostartBundles) {
+            bundle.start();
         }
     }
 

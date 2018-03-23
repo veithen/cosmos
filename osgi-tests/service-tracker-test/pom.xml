@@ -68,6 +68,9 @@
                         <configuration>
                             <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
                             <manifestLocation>${project.build.testOutputDirectory}/META-INF</manifestLocation>
+                            <instructions>
+                                <Cosmos-AutoStart>true</Cosmos-AutoStart>
+                            </instructions>
                         </configuration>
                     </execution>
                 </executions>
