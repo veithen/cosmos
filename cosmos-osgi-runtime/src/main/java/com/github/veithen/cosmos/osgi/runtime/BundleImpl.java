@@ -41,10 +41,12 @@ import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-
-import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class BundleImpl implements Bundle {
+    private static final Logger logger = LoggerFactory.getLogger(BundleImpl.class);
+
     static abstract class Reason<T> {
         abstract String format(T context);
     }
@@ -64,7 +66,6 @@ final class BundleImpl implements Bundle {
     };
     
     private final Runtime runtime;
-    private final Logger logger;
     private final long id;
     private final String symbolicName;
     private final Attributes attrs;
@@ -75,7 +76,6 @@ final class BundleImpl implements Bundle {
 
     public BundleImpl(Runtime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
         this.runtime = runtime;
-        logger = runtime.getLogger();
         this.id = id;
         this.symbolicName = symbolicName;
         this.attrs = attrs;

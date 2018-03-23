@@ -20,9 +20,14 @@
 package com.github.veithen.cosmos.osgi.runtime;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 
 final class FrameworkUtil {
     public static Bundle getBundle(Class<?> classFromBundle) {
-        return Runtime.getActiveInstance().getBundle(classFromBundle.getProtectionDomain().getCodeSource().getLocation());
+        try {
+            return Runtime.getInstance().getBundle(classFromBundle.getProtectionDomain().getCodeSource().getLocation());
+        } catch (CosmosException | BundleException ex) {
+            return null;
+        }
     }
 }

@@ -67,7 +67,7 @@ final class Service implements CosmosServiceReference<Object>, ServiceRegistrati
     public Object getService(BundleImpl bundle) {
         ServiceContext context = contexts.get(bundle);
         if (context == null) {
-            context = new ServiceContext(runtime.getLogger(), this, bundle);
+            context = new ServiceContext(this, bundle);
             contexts.put(bundle, context);
         }
         return context.getService();

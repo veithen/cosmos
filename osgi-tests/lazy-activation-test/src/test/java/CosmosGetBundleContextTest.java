@@ -24,12 +24,11 @@ import org.junit.Test;
 import org.osgi.framework.Bundle;
 
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
-import com.github.veithen.cosmos.osgi.runtime.logging.simple.SimpleLogger;
 
 public class CosmosGetBundleContextTest {
     @Test
     public void test() throws Exception {
-        Runtime runtime = Runtime.getInstance(SimpleLogger.INSTANCE);
+        Runtime runtime = Runtime.getInstance();
         Bundle bundle1 = runtime.getBundle("bundle1");
         assertEquals(Bundle.STARTING, bundle1.getState());
         assertNotNull(bundle1.getBundleContext());

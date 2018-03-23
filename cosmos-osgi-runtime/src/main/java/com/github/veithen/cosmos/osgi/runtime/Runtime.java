@@ -53,13 +53,14 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 import org.osgi.util.xml.XMLParserActivator;
-
-import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class Runtime {
+    private static final Logger logger = LoggerFactory.getLogger(Runtime.class);
+
     private static Runtime instance;
 
-    private final Logger logger;
     private final Properties properties = new Properties();
     private final Map<String,BundleImpl> bundlesBySymbolicName = new HashMap<String,BundleImpl>();
     private final Map<Long,BundleImpl> bundlesById = new HashMap<Long,BundleImpl>();
@@ -74,8 +75,7 @@ public final class Runtime {
      */
     private final Map<String,BundleImpl> packageMap = new HashMap<String,BundleImpl>();
 
-    private Runtime(Logger logger) throws CosmosException, BundleException {
-        this.logger = logger;
+    private Runtime() throws CosmosException, BundleException {
         Enumeration<URL> e;
         try {
             e = Runtime.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
@@ -140,7 +140,8 @@ public final class Runtime {
         registerSAXParserFactory();
         registerDocumentBuilderFactory();
         registerService(null, new String[] { Logger.class.getName() }, logger, null);
-        registerService(null, new String[] { LogService.class.getName() }, new LogServiceAdapter(logger), null);
+        // TODO: make this a ServiceFactory and use a per bundle SLF4J logger
+        registerService(null, new String[] { LogService.class.getName() }, new LogServiceAdapter(LoggerFactory.getLogger("osgi")), null);
         Bundle scrBundle = getBundle("org.apache.felix.scr");
         if (scrBundle != null) {
             logger.debug("Auto-start DS implementation");
@@ -179,22 +180,12 @@ public final class Runtime {
         }
     }
     
-    public static synchronized Runtime getInstance(Logger logger) throws CosmosException, BundleException {
+    public static synchronized Runtime getInstance() throws CosmosException, BundleException {
         if (instance == null) {
             Patcher.patch();
-            instance = new Runtime(logger);
-        } else if (instance.logger != logger) {
-            throw new IllegalStateException("Runtime already initialized with different configuration");
+            instance = new Runtime();
         }
         return instance;
-    }
-    
-    public static synchronized Runtime getActiveInstance() {
-        return instance;
-    }
-    
-    Logger getLogger() {
-        return logger;
     }
     
     Bundle[] getBundles() {

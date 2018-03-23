@@ -24,12 +24,11 @@ import org.junit.Test;
 import org.osgi.framework.Bundle;
 
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
-import com.github.veithen.cosmos.osgi.runtime.logging.simple.SimpleLogger;
 
 public class EclipseCoreRuntimeTest {
     @Test
     public void test() throws Exception {
-        Bundle bundle = Runtime.getInstance(SimpleLogger.INSTANCE).getBundle("org.eclipse.core.runtime");
+        Bundle bundle = Runtime.getInstance().getBundle("org.eclipse.core.runtime");
         bundle.start();
         assertThat(Platform.isRunning()).isTrue();
     }

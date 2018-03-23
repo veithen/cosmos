@@ -22,29 +22,21 @@ package com.github.veithen.cosmos.plexus;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.logging.LogEnabled;
-import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
 
 @Component(role=CosmosRuntimeProvider.class)
-public class DefaultCosmosRuntimeProvider implements CosmosRuntimeProvider, Initializable, LogEnabled {
+public class DefaultCosmosRuntimeProvider implements CosmosRuntimeProvider, Initializable {
     @Requirement
     private PlexusContainer plexusContainer;
     
-    private Logger logger;
     private Runtime runtime;
     
-    @Override
-    public void enableLogging(Logger logger) {
-        this.logger = logger;
-    }
-
     public void initialize() throws InitializationException {
         try {
-            runtime = Runtime.getInstance(new PlexusLogger(logger));
+            runtime = Runtime.getInstance();
             runtime.registerService(new String[] { PlexusContainer.class.getName() }, plexusContainer, null);
         } catch (Exception ex) {
             throw new InitializationException("Failed to initialize Cosmos OSGi runtime", ex);

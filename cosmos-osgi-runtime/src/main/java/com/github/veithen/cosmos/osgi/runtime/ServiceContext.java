@@ -21,18 +21,18 @@ package com.github.veithen.cosmos.osgi.runtime;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceFactory;
-
-import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class ServiceContext {
-    private final Logger logger;
+    private static final Logger logger = LoggerFactory.getLogger(ServiceContext.class);
+
     private final Service service;
     private final BundleImpl bundle;
     private int refCount;
     private Object serviceObject;
     
-    ServiceContext(Logger logger, Service service, BundleImpl bundle) {
-        this.logger = logger;
+    ServiceContext(Service service, BundleImpl bundle) {
         this.service = service;
         this.bundle = bundle;
     }

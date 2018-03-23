@@ -23,13 +23,11 @@ import org.junit.Test;
 import org.osgi.framework.Bundle;
 
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
-import com.github.veithen.cosmos.osgi.runtime.logging.simple.SimpleLogger;
 
 public class CosmosLoadClassTest {
     @Test
     public void test() throws Exception {
-        Runtime runtime = Runtime.getInstance(SimpleLogger.INSTANCE);
-        Bundle bundle1 = runtime.getBundle("bundle1");
+        Bundle bundle1 = Runtime.getInstance().getBundle("bundle1");
         assertEquals(Bundle.STARTING, bundle1.getState());
         bundle1.loadClass("bundle1.Helper");
         assertEquals(Bundle.ACTIVE, bundle1.getState());

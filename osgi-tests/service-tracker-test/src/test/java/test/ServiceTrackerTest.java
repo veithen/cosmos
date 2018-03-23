@@ -27,12 +27,11 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
-import com.github.veithen.cosmos.osgi.runtime.logging.simple.SimpleLogger;
 
 public class ServiceTrackerTest {
     @Test
     public void test() throws Exception {
-        Bundle bundle = Runtime.getInstance(SimpleLogger.INSTANCE).getBundle("service-tracker-test");
+        Bundle bundle = Runtime.getInstance().getBundle("service-tracker-test");
         bundle.start();
         BundleContext bundleContext = bundle.getBundleContext();
         ServiceTracker<MyService,MyService> tracker = new ServiceTracker<>(bundleContext, MyService.class, null);

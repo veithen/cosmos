@@ -21,8 +21,7 @@ package com.github.veithen.cosmos.osgi.runtime;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
-
-import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
+import org.slf4j.Logger;
 
 final class LogServiceAdapter implements LogService {
     private final Logger logger;
