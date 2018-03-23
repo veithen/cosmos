@@ -77,13 +77,13 @@ public final class Runtime {
      */
     private final Map<String,BundleImpl> packageMap = new HashMap<String,BundleImpl>();
 
-    private Runtime() throws CosmosException, BundleException {
+    private Runtime() throws BundleException {
         Set<Bundle> autostartBundles = new HashSet<>();
         Enumeration<URL> e;
         try {
             e = Runtime.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
         } catch (IOException ex) {
-            throw new CosmosException("Failed to load manifests", ex);
+            throw new BundleException("Failed to load manifests", ex);
         }
         long bundleId = 1;
         while (e.hasMoreElements()) {
@@ -97,7 +97,7 @@ public final class Runtime {
                     in.close();
                 }
             } catch (IOException ex) {
-                throw new CosmosException("Failed to read " + url, ex);
+                throw new BundleException("Failed to read " + url, ex);
             }
             Attributes attrs = manifest.getMainAttributes();
             String symbolicName = attrs.getValue("Bundle-SymbolicName");
@@ -113,7 +113,7 @@ public final class Runtime {
             try {
                 rootUrl = new URL(url, "..");
             } catch (MalformedURLException ex) {
-                throw new CosmosException("Unexpected exception", ex);
+                throw new BundleException("Unexpected exception", ex);
             }
             // There cannot be any bundle listeners yet, so no need to call BundleListeners
             long id = bundleId++;
@@ -172,24 +172,24 @@ public final class Runtime {
         registerService(null, new String[] { DocumentBuilderFactory.class.getName() }, factory, props);
     }
     
-    private void loadProperties(String resourceName) throws CosmosException {
+    private void loadProperties(String resourceName) throws BundleException {
         Enumeration<URL> e;
         try {
             e = Runtime.class.getClassLoader().getResources(resourceName);
         } catch (IOException ex) {
-            throw new CosmosException("Failed to properties", ex);
+            throw new BundleException("Failed to properties", ex);
         }
         while (e.hasMoreElements()) {
             URL url = e.nextElement();
             try (InputStream in = url.openStream()) {
                 properties.load(in);
             } catch (IOException ex) {
-                throw new CosmosException(String.format("Failed to load properties from %s", url), ex);
+                throw new BundleException(String.format("Failed to load properties from %s", url), ex);
             }
         }
     }
     
-    public static synchronized Runtime getInstance() throws CosmosException, BundleException {
+    public static synchronized Runtime getInstance() throws BundleException {
         if (instance == null) {
             Patcher.patch();
             instance = new Runtime();

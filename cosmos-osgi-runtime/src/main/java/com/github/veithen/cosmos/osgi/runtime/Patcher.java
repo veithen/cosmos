@@ -27,9 +27,10 @@ import java.lang.reflect.Method;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
+import org.osgi.framework.BundleException;
 
 final class Patcher {
-    static void patch() throws CosmosException {
+    static void patch() throws BundleException {
         try {
             ClassLoader classLoader = Patcher.class.getClassLoader();
             Method defineClass = ClassLoader.class.getDeclaredMethod("defineClass", String.class, byte[].class, int.class, int.class);
@@ -48,7 +49,7 @@ final class Patcher {
             byte[] bytes = classWriter.toByteArray();
             defineClass.invoke(classLoader, "org.osgi.framework.FrameworkUtil", bytes, 0, bytes.length);
         } catch (IOException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-            throw new CosmosException("Failed to patch FrameworkUtil", ex);
+            throw new BundleException("Failed to patch FrameworkUtil", ex);
         }
     }
 }

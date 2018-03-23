@@ -26,7 +26,7 @@ final class FrameworkUtil {
     public static Bundle getBundle(Class<?> classFromBundle) {
         try {
             return Runtime.getInstance().getBundle(classFromBundle.getProtectionDomain().getCodeSource().getLocation());
-        } catch (CosmosException | BundleException ex) {
+        } catch (BundleException ex) {
             return null;
         }
     }
