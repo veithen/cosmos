@@ -50,13 +50,12 @@
             <artifactId>cosmos-p2</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- TODO: enable when new bootstrap version is available -->
-        <!-- dependency>
+        <dependency>
             <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>eclipse-core-runtime-test</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
-        </dependency -->
+        </dependency>
         <dependency>
             <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>lazy-activation-test</artifactId>

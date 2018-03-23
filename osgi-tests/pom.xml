@@ -36,8 +36,7 @@
     <modules>
         <module>bundle1</module>
         <module>bundle2</module>
-        <!-- TODO: enable this when we have a new bootstrap version -->
-        <!-- module>eclipse-core-runtime-test</module -->
+        <module>eclipse-core-runtime-test</module>
         <module>lazy-activation-test</module>
         <module>service-tracker-test</module>
     </modules>
