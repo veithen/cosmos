@@ -23,20 +23,12 @@ import static com.google.common.truth.Truth.assertThat;
 
 import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.equinox.p2.metadata.Version;
-import org.junit.Before;
 import org.junit.Test;
 
 public class DefaultArtifactCoordinateMapperTest {
-    private ArtifactCoordinateMapper mapper;
-
-    @Before
-    public void setUp() {
-        mapper = new DefaultArtifactCoordinateMapper();
-    }
-
     @Test
     public void testCreateIArtifactKey() {
-        P2Coordinate p2Coordinate = mapper.createP2Coordinate(new DefaultArtifact("osgi.bundle", "mybundle", "jar", "2.1.0"));
+        P2Coordinate p2Coordinate = ArtifactCoordinateMapper.createP2Coordinate(new DefaultArtifact("osgi.bundle", "mybundle", "jar", "2.1.0"));
         assertThat(p2Coordinate.getClassifier()).isEqualTo("osgi.bundle");
         assertThat(p2Coordinate.getId()).isEqualTo("mybundle");
         assertThat(p2Coordinate.getVersion()).isEqualTo(Version.createOSGi(2, 1, 0));

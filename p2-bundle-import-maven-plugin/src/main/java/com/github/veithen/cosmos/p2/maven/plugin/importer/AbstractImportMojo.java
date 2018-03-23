@@ -56,9 +56,6 @@ public abstract class AbstractImportMojo extends AbstractMojo {
     private RepositoryManager repositoryManager;
 
     @Component
-    private ArtifactCoordinateMapper artifactCoordinateMapper;
-
-    @Component
     private RepositorySystem repositorySystem;
 
     @Parameter(property="session.repositorySession", required=true, readonly=true)
@@ -80,7 +77,7 @@ public abstract class AbstractImportMojo extends AbstractMojo {
     public final void execute() throws MojoExecutionException, MojoFailureException {
         String bundleVersion = this.bundleVersion;
         if (bundleVersion == null) {
-            Artifact artifactWithoutVersion = artifactCoordinateMapper.createArtifact(new P2Coordinate(bundleId, null));
+            Artifact artifactWithoutVersion = ArtifactCoordinateMapper.createArtifact(new P2Coordinate(bundleId, null));
             if (dependencyManagement != null) {
                 for (Dependency dependency : dependencyManagement.getDependencies()) {
                     if (dependency.getArtifactId().equals(artifactWithoutVersion.getArtifactId())
@@ -97,7 +94,7 @@ public abstract class AbstractImportMojo extends AbstractMojo {
             throw new MojoExecutionException("No bundle version specified");
         }
         P2Coordinate p2Coordinate = new P2Coordinate(transformBundleId(bundleId), Version.parseVersion(bundleVersion));
-        Artifact artifact = artifactCoordinateMapper.createArtifact(p2Coordinate);
+        Artifact artifact = ArtifactCoordinateMapper.createArtifact(p2Coordinate);
         try {
             artifact = repositorySystem.resolveArtifact(session, new ArtifactRequest(artifact, null, null)).getArtifact();
         } catch (ArtifactResolutionException ex) {

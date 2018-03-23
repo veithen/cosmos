@@ -20,10 +20,43 @@
 package com.github.veithen.cosmos.p2.maven;
 
 import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.repository.artifact.ArtifactKeyQuery;
 
-public interface ArtifactCoordinateMapper {
-    Artifact createArtifact(P2Coordinate p2Coordinate);
-    P2Coordinate createP2Coordinate(Artifact artifact);
-    ArtifactKeyQuery createArtifactKeyQuery(String groupId, String artifactId);
+public final class ArtifactCoordinateMapper {
+    private ArtifactCoordinateMapper() {}
+
+    public static Artifact createArtifact(P2Coordinate p2Coordinate) {
+        String id = p2Coordinate.getId();
+        String artifactId;
+        String classifier;
+        if (id.endsWith(".source")) {
+            artifactId = id.substring(0, id.length()-7);
+            classifier = "sources";
+        } else {
+            artifactId = id;
+            classifier = null;
+        }
+        Version version = p2Coordinate.getVersion();
+        return new DefaultArtifact(p2Coordinate.getClassifier(), artifactId, classifier, "jar",
+                version == null ? "" : version.toString());
+    }
+
+    public static P2Coordinate createP2Coordinate(Artifact artifact) {
+        String id;
+        String classifier = artifact.getClassifier();
+        if (classifier.isEmpty()) {
+            id = artifact.getArtifactId();
+        } else if (classifier.equals("sources")) {
+            id = artifact.getArtifactId() + ".source";
+        } else {
+            return null;
+        }
+        return new P2Coordinate(artifact.getGroupId(), id, Version.create(artifact.getVersion()));
+    }
+
+    public static ArtifactKeyQuery createArtifactKeyQuery(String groupId, String artifactId) {
+        return new ArtifactKeyQuery(groupId, artifactId, null);
+    }
 }

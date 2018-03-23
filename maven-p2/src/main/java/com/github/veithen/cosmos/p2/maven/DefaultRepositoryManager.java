@@ -39,31 +39,24 @@ import org.osgi.framework.Constants;
 
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
-import com.github.veithen.cosmos.plexus.CosmosRuntimeProvider;
 
 @Component(role=RepositoryManager.class)
 public class DefaultRepositoryManager implements RepositoryManager, Initializable, Disposable {
     private IArtifactRepositoryManager repoman;
     
     @Requirement
-    private CosmosRuntimeProvider cosmosRuntimeProvider;
-    
-    @Requirement
-    private IProvisioningAgentProvider provisioningAgentProvider;
-    
-    @Requirement
     private WagonManager wagonManager;
     
     public void initialize() throws InitializationException {
         try {
-            Runtime runtime = cosmosRuntimeProvider.getRuntime();
+            Runtime runtime = Runtime.getInstance();
             
             System.out.println("Setting up proxy configuration");
             Hashtable<String,Object> properties = new Hashtable<String,Object>();
             properties.put(Constants.SERVICE_RANKING, Integer.valueOf(1));
             runtime.registerService(new String[] { IProxyService.class.getName() }, new ProxyServiceAdapter(wagonManager), properties);
             
-            IProvisioningAgent agent = provisioningAgentProvider.createAgent(new File("target/p2-data").toURI());
+            IProvisioningAgent agent = runtime.getService(IProvisioningAgentProvider.class).createAgent(new File("target/p2-data").toURI());
             repoman = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
         } catch (Exception ex) {
             throw new InitializationException("Failed to initialize P2", ex);

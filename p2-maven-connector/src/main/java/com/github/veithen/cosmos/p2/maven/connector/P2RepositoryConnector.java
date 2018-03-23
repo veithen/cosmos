@@ -66,17 +66,13 @@ final class P2RepositoryConnector implements RepositoryConnector {
     
     private final RemoteRepository repository;
     private final IArtifactRepositoryManager artifactRepositoryManager;
-    private final ArtifactCoordinateMapper artifactCoordinateMapper;
-    private final ProxyHolder proxyHolder;
     private final Logger logger;
     private IArtifactRepository artifactRepository;
 
     P2RepositoryConnector(RemoteRepository repository, IArtifactRepositoryManager artifactRepositoryManager,
-            ArtifactCoordinateMapper artifactCoordinateMapper, ProxyHolder proxyHolder, Logger logger) {
+            Logger logger) {
         this.repository = repository;
         this.artifactRepositoryManager = artifactRepositoryManager;
-        this.artifactCoordinateMapper = artifactCoordinateMapper;
-        this.proxyHolder = proxyHolder;
         this.logger = logger;
     }
 
@@ -126,7 +122,7 @@ final class P2RepositoryConnector implements RepositoryConnector {
 
     private boolean process(ArtifactDownload artifactDownload) throws DownloadException {
         final Artifact artifact = artifactDownload.getArtifact();
-        P2Coordinate p2Coordinate = artifactCoordinateMapper.createP2Coordinate(artifact);
+        P2Coordinate p2Coordinate = ArtifactCoordinateMapper.createP2Coordinate(artifact);
         if (p2Coordinate == null) {
             return false;
         }
@@ -165,7 +161,7 @@ final class P2RepositoryConnector implements RepositoryConnector {
         IArtifactRepository artifactRepository = getArtifactRepository();
         Metadata metadata = metadataDownload.getMetadata();
         IQueryResult<IArtifactKey> queryResult = artifactRepository.query(
-                artifactCoordinateMapper.createArtifactKeyQuery(metadata.getGroupId(), metadata.getArtifactId()),
+                ArtifactCoordinateMapper.createArtifactKeyQuery(metadata.getGroupId(), metadata.getArtifactId()),
                 new SystemOutProgressMonitor());
         if (queryResult.isEmpty()) {
             return false;
@@ -202,7 +198,7 @@ final class P2RepositoryConnector implements RepositoryConnector {
             Collection<? extends MetadataDownload> metadataDownloads) {
         ProxyHolder.Lease lease;
         try {
-            lease = proxyHolder.withProxy(repository.getProxy());
+            lease = ProxyHolder.withProxy(repository.getProxy());
         } catch (InterruptedException ex) {
             if (artifactDownloads != null) {
                 for (ArtifactDownload artifactDownload : artifactDownloads) {

@@ -54,7 +54,6 @@
         <module>p2-bundle-import-maven-plugin</module>
         <module>p2-publisher-maven-plugin</module>
         <module>maven-p2</module>
-        <module>cosmos-plexus</module>
     </modules>
 
     <scm>

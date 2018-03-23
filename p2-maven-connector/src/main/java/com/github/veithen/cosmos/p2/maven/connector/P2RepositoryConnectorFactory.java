@@ -36,20 +36,14 @@ import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+import org.osgi.framework.BundleException;
 
+import com.github.veithen.cosmos.osgi.runtime.CosmosException;
+import com.github.veithen.cosmos.osgi.runtime.Runtime;
 import com.github.veithen.cosmos.p2.maven.ArtifactCoordinateMapper;
 
 @Component(role=RepositoryConnectorFactory.class, hint="p2")
 public final class P2RepositoryConnectorFactory implements RepositoryConnectorFactory, LogEnabled {
-    @Requirement
-    private IProvisioningAgentProvider provisioningAgentProvider;
-    
-    @Requirement
-    private ArtifactCoordinateMapper artifactCoordinateMapper;
-    
-    @Requirement
-    private ProxyHolder proxyHolder;
-    
     private Logger logger;
     
     private final Map<File,IProvisioningAgent> provisioningAgents = new HashMap<>();
@@ -75,8 +69,8 @@ public final class P2RepositoryConnectorFactory implements RepositoryConnectorFa
                     logger.debug(String.format("Creating new provisioning agent for local repository %s", localRepositoryDir));
                 }
                 try {
-                    provisioningAgent = provisioningAgentProvider.createAgent(new File(localRepositoryDir, ".p2-metadata").toURI());
-                } catch (ProvisionException ex) {
+                    provisioningAgent = Runtime.getInstance().getService(IProvisioningAgentProvider.class).createAgent(new File(localRepositoryDir, ".p2-metadata").toURI());
+                } catch (ProvisionException | CosmosException | BundleException ex) {
                     logger.error(String.format("Failed to create provisioning agent for local repository %s", localRepositoryDir));
                     throw new NoRepositoryConnectorException(repository, ex);
                 }
@@ -84,7 +78,7 @@ public final class P2RepositoryConnectorFactory implements RepositoryConnectorFa
             }
             return new P2RepositoryConnector(repository,
                     (IArtifactRepositoryManager)provisioningAgent.getService(IArtifactRepositoryManager.SERVICE_NAME),
-                    artifactCoordinateMapper, proxyHolder, logger);
+                    logger);
         } else {
             throw new NoRepositoryConnectorException(repository);
         }

@@ -21,36 +21,19 @@ package com.github.veithen.cosmos.p2.maven.connector;
 
 import java.net.URI;
 
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.eclipse.aether.repository.Proxy;
 import org.eclipse.core.net.proxy.IProxyChangeListener;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.CoreException;
 import org.osgi.framework.Constants;
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 @Component(
         service=IProxyService.class,
         property={Constants.SERVICE_RANKING + ":Integer=1"},
         xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
 public class ProxyServiceAdapter implements IProxyService {
-    private PlexusContainer plexusContainer;
-    private ProxyHolder proxyHolder;
-    
-    @Reference
-    private void setPlexusContainer(PlexusContainer plexusContainer) {
-        this.plexusContainer = plexusContainer;
-    }
-    
-    @Activate
-    private void activate() throws ComponentLookupException {
-        proxyHolder = plexusContainer.lookup(ProxyHolder.class);
-    }
-    
     @Override
     public void setProxiesEnabled(boolean enabled) {
         throw new UnsupportedOperationException();
@@ -58,7 +41,7 @@ public class ProxyServiceAdapter implements IProxyService {
 
     @Override
     public boolean isProxiesEnabled() {
-        return proxyHolder.getCurrentProxy() != null;
+        return ProxyHolder.getCurrentProxy() != null;
     }
 
     @Override
@@ -85,7 +68,7 @@ public class ProxyServiceAdapter implements IProxyService {
     public IProxyData[] select(URI uri) {
         String protocol = uri.getScheme();
         if (protocol.equals("http") || protocol.equals("https")) {
-            Proxy proxy = proxyHolder.getCurrentProxy();
+            Proxy proxy = ProxyHolder.getCurrentProxy();
             if (proxy != null) {
                 return new IProxyData[] { new ProxyDataAdapter(proxy) };
             }

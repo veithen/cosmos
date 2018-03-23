@@ -30,7 +30,6 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
@@ -46,15 +45,13 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
+import com.github.veithen.cosmos.osgi.runtime.Runtime;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 import com.github.veithen.mojo.ArtifactProcessingMojo;
 import com.github.veithen.mojo.SkippableMojo;
 
 @Mojo(name="create-repository", requiresDependencyResolution=ResolutionScope.TEST)
 public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo, ArtifactProcessingMojo {
-    @Component
-    private IProvisioningAgentProvider provisioningAgentProvider;
-
     @Parameter(defaultValue="${project.build.directory}/p2-repository", required=true)
     private File outputDirectory;
 
@@ -69,7 +66,7 @@ public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo,
         try {
             List<Artifact> artifacts = resolveArtifacts();
             URI repoURI = outputDirectory.toURI();
-            IProvisioningAgent agent = provisioningAgentProvider.createAgent(agentLocation.toURI());
+            IProvisioningAgent agent = Runtime.getInstance().getService(IProvisioningAgentProvider.class).createAgent(agentLocation.toURI());
             try {
                 IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
                 IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
