@@ -78,66 +78,53 @@ public final class Runtime {
     private final Map<String,BundleImpl> packageMap = new HashMap<String,BundleImpl>();
 
     private Runtime() throws BundleException {
-        Set<Bundle> autostartBundles = new HashSet<>();
-        Enumeration<URL> e;
-        try {
-            e = Runtime.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
-        } catch (IOException ex) {
-            throw new BundleException("Failed to load manifests", ex);
-        }
-        long bundleId = 1;
-        while (e.hasMoreElements()) {
-            URL url = e.nextElement();
-            Manifest manifest;
-            try {
-                InputStream in = url.openStream();
+        final Set<Bundle> autostartBundles = new HashSet<>();
+        ResourceUtil.processResources("META-INF/MANIFEST.MF", new ResourceProcessor() {
+            private long bundleId = 1;
+
+            @Override
+            public void process(URL url, InputStream in) throws IOException, BundleException {
+                Manifest manifest = new Manifest(in);
+                Attributes attrs = manifest.getMainAttributes();
+                String symbolicName = attrs.getValue("Bundle-SymbolicName");
+                if (symbolicName == null) {
+                    return;
+                }
+                // Remove the "singleton" attribute
+                int idx = symbolicName.indexOf(';');
+                if (idx != -1) {
+                    symbolicName = symbolicName.substring(0, idx);
+                }
+                URL rootUrl;
                 try {
-                    manifest = new Manifest(in);
-                } finally {
-                    in.close();
+                    rootUrl = new URL(url, "..");
+                } catch (MalformedURLException ex) {
+                    throw new BundleException("Unexpected exception", ex);
                 }
-            } catch (IOException ex) {
-                throw new BundleException("Failed to read " + url, ex);
-            }
-            Attributes attrs = manifest.getMainAttributes();
-            String symbolicName = attrs.getValue("Bundle-SymbolicName");
-            if (symbolicName == null) {
-                continue;
-            }
-            // Remove the "singleton" attribute
-            int idx = symbolicName.indexOf(';');
-            if (idx != -1) {
-                symbolicName = symbolicName.substring(0, idx);
-            }
-            URL rootUrl;
-            try {
-                rootUrl = new URL(url, "..");
-            } catch (MalformedURLException ex) {
-                throw new BundleException("Unexpected exception", ex);
-            }
-            // There cannot be any bundle listeners yet, so no need to call BundleListeners
-            long id = bundleId++;
-            BundleImpl bundle = new BundleImpl(this, id, symbolicName, attrs, rootUrl);
-            bundlesBySymbolicName.put(symbolicName, bundle);
-            bundlesById.put(id, bundle);
-            bundlesByUrl.put(bundle.getLocationUrl(), bundle);
-            String exportPackage = attrs.getValue("Export-Package");
-            if (exportPackage != null) {
-                Element[] elements;
-                try {
-                    elements = Element.parseHeaderValue(exportPackage);
-                } catch (ParseException ex) {
-                    throw new BundleException("Unable to parse Export-Package header", BundleException.MANIFEST_ERROR, ex);
+                // There cannot be any bundle listeners yet, so no need to call BundleListeners
+                long id = bundleId++;
+                BundleImpl bundle = new BundleImpl(Runtime.this, id, symbolicName, attrs, rootUrl);
+                bundlesBySymbolicName.put(symbolicName, bundle);
+                bundlesById.put(id, bundle);
+                bundlesByUrl.put(bundle.getLocationUrl(), bundle);
+                String exportPackage = attrs.getValue("Export-Package");
+                if (exportPackage != null) {
+                    Element[] elements;
+                    try {
+                        elements = Element.parseHeaderValue(exportPackage);
+                    } catch (ParseException ex) {
+                        throw new BundleException("Unable to parse Export-Package header", BundleException.MANIFEST_ERROR, ex);
+                    }
+                    for (Element element : elements) {
+                        // TODO: what if the same package is exported by multiple bundles??
+                        packageMap.put(element.getValue(), bundle);
+                    }
                 }
-                for (Element element : elements) {
-                    // TODO: what if the same package is exported by multiple bundles??
-                    packageMap.put(element.getValue(), bundle);
+                if ("true".equals(attrs.getValue("Cosmos-AutoStart"))) {
+                    autostartBundles.add(bundle);
                 }
             }
-            if ("true".equals(attrs.getValue("Cosmos-AutoStart"))) {
-                autostartBundles.add(bundle);
-            }
-        }
+        });
         loadProperties("META-INF/cosmos.properties");
         if (logger.isDebugEnabled()) {
             loadProperties("META-INF/cosmos-debug.properties");
@@ -173,20 +160,12 @@ public final class Runtime {
     }
     
     private void loadProperties(String resourceName) throws BundleException {
-        Enumeration<URL> e;
-        try {
-            e = Runtime.class.getClassLoader().getResources(resourceName);
-        } catch (IOException ex) {
-            throw new BundleException("Failed to properties", ex);
-        }
-        while (e.hasMoreElements()) {
-            URL url = e.nextElement();
-            try (InputStream in = url.openStream()) {
+        ResourceUtil.processResources(resourceName, new ResourceProcessor() {
+            @Override
+            public void process(URL url, InputStream in) throws IOException {
                 properties.load(in);
-            } catch (IOException ex) {
-                throw new BundleException(String.format("Failed to load properties from %s", url), ex);
             }
-        }
+        });
     }
     
     public static synchronized Runtime getInstance() throws BundleException {
