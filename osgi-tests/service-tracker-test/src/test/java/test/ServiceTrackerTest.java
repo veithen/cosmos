@@ -1,4 +1,3 @@
-package test;
 /*-
  * #%L
  * Cosmos
@@ -18,6 +17,8 @@ package test;
  * limitations under the License.
  * #L%
  */
+package test;
+
 import static com.google.common.truth.Truth.assertThat;
 
 import org.junit.Test;

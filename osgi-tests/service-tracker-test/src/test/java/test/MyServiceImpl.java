@@ -1,4 +1,3 @@
-package test;
 /*-
  * #%L
  * Cosmos
@@ -18,6 +17,8 @@ package test;
  * limitations under the License.
  * #L%
  */
+package test;
+
 public class MyServiceImpl implements MyService {
 
 }
