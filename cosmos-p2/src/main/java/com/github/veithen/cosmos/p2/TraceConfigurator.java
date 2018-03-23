@@ -23,8 +23,8 @@ import org.eclipse.osgi.service.debug.DebugOptions;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-
-import com.github.veithen.cosmos.osgi.runtime.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component(immediate=true, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class TraceConfigurator {
@@ -66,13 +66,9 @@ public final class TraceConfigurator {
         "org.eclipse.ecf.provider.filetransfer.httpclient4/debug/methods/exiting",
     };
     
-    private Logger logger;
+    private static final Logger logger = LoggerFactory.getLogger("p2.trace");
+
     private DebugOptions debugOptions;
-    
-    @Reference
-    private void setLogger(Logger logger) {
-        this.logger = logger;
-    }
     
     @Reference
     private void setDebugOptions(DebugOptions debugOptions) {
