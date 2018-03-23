@@ -69,6 +69,9 @@
         <javaVersion>1.7</javaVersion>
         <maven.version>3.5.2</maven.version>
         <maven.resolver.version>1.1.0</maven.resolver.version>
+        <!-- Note: we bootstrap the build using a previous Cosmos version -->
+        <bootstrap.version>0.1</bootstrap.version>
+        <eclipse.p2.repository>http://download.eclipse.org/releases/mars/201506241002</eclipse.p2.repository>
     </properties>
 
     <dependencyManagement>
@@ -148,6 +151,11 @@
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.core.contenttype</artifactId>
+                <version>3.5.0.v20150421-2214</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.core.jobs</artifactId>
                 <version>3.7.0.v20150330-2103</version>
             </dependency>
@@ -155,6 +163,11 @@
                 <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.core.net</artifactId>
                 <version>1.2.300.v20141118-1725</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.core.runtime</artifactId>
+                <version>3.11.0.v20150405-1723</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
@@ -324,10 +337,9 @@
                 <plugin>
                     <groupId>com.github.veithen.cosmos</groupId>
                     <artifactId>p2-bundle-import-maven-plugin</artifactId>
-                    <!-- Note: we bootstrap the build using a previous Cosmos version -->
-                    <version>0.1</version>
+                    <version>${bootstrap.version}</version>
                     <configuration>
-                        <repositoryUri>http://download.eclipse.org/releases/mars/201506241002</repositoryUri>
+                        <repositoryUri>${eclipse.p2.repository}</repositoryUri>
                     </configuration>
                 </plugin>
                 <plugin>

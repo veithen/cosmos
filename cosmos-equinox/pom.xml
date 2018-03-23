@@ -52,6 +52,12 @@
             <version>1.0.1</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr</artifactId>
+            <!-- TODO: update this to a newer version -->
+            <version>1.6.2</version>
+        </dependency>
+        <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.service.component.annotations</artifactId>
             <scope>provided</scope>

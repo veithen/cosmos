@@ -49,12 +49,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.scr</artifactId>
-            <!-- TODO: update this to a newer version -->
-            <version>1.6.2</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.veithen.cosmos.bootstrap</groupId>
             <artifactId>org.eclipse.core.jobs</artifactId>
             <version>${project.version}</version>
