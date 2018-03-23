@@ -71,51 +71,6 @@
         <maven.resolver.version>1.1.0</maven.resolver.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>github-veithen-releases</id>
-            <url>https://raw.githubusercontent.com/veithen/mvn-repo/master/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>github-veithen-snapshots</id>
-            <url>https://raw.githubusercontent.com/veithen/mvn-repo/master/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>github-veithen-releases</id>
-            <url>https://raw.githubusercontent.com/veithen/mvn-repo/master/releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>github-veithen-snapshots</id>
-            <url>https://raw.githubusercontent.com/veithen/mvn-repo/master/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -370,7 +325,7 @@
                     <groupId>com.github.veithen.cosmos</groupId>
                     <artifactId>p2-bundle-import-maven-plugin</artifactId>
                     <!-- Note: we bootstrap the build using a previous Cosmos version -->
-                    <version>20180318.1</version>
+                    <version>0.1</version>
                     <configuration>
                         <repositoryUri>http://download.eclipse.org/releases/mars/201506241002</repositoryUri>
                     </configuration>
