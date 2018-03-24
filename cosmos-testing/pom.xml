@@ -23,60 +23,35 @@
 
     <parent>
         <groupId>com.github.veithen.cosmos</groupId>
-        <artifactId>osgi-tests</artifactId>
+        <artifactId>cosmos</artifactId>
         <version>0.3-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>lazy-activation-test</artifactId>
+    <artifactId>cosmos-testing</artifactId>
 
-    <name>Lazy Activation Test</name>
+    <url>https://github.com/veithen/cosmos</url>
+
+    <scm>
+        <url>https://github.com/veithen/cosmos/tree/master</url>
+        <connection>scm:git:http://github.com/veithen/cosmos.git</connection>
+        <developerConnection>scm:git:https://github.com/veithen/cosmos.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencies>
         <dependency>
             <groupId>com.github.veithen.cosmos</groupId>
-            <artifactId>bundle1</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.veithen.cosmos</groupId>
-            <artifactId>bundle2</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.veithen.cosmos</groupId>
             <artifactId>cosmos-osgi-runtime</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.veithen.cosmos</groupId>
-            <artifactId>cosmos-testing</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <reuseForks>false</reuseForks>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

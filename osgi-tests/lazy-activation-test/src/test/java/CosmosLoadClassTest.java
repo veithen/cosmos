@@ -20,14 +20,19 @@
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.osgi.framework.Bundle;
 
-import com.github.veithen.cosmos.osgi.runtime.Runtime;
+import com.github.veithen.cosmos.osgi.runtime.FrameworkUtil;
+import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 
+import bundle1.Helper;
+
+@RunWith(CosmosRunner.class)
 public class CosmosLoadClassTest {
     @Test
     public void test() throws Exception {
-        Bundle bundle1 = Runtime.getInstance().getBundle("bundle1");
+        Bundle bundle1 = FrameworkUtil.getBundle(Helper.class);
         assertEquals(Bundle.STARTING, bundle1.getState());
         bundle1.loadClass("bundle1.Helper");
         assertEquals(Bundle.ACTIVE, bundle1.getState());

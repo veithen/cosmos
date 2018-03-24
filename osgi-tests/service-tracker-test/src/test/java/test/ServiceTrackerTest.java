@@ -21,19 +21,23 @@ package test;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import javax.inject.Inject;
+
 import org.junit.Test;
-import org.osgi.framework.Bundle;
+import org.junit.runner.RunWith;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.github.veithen.cosmos.osgi.runtime.Runtime;
+import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 
+@RunWith(CosmosRunner.class)
 public class ServiceTrackerTest {
+    @Inject
+    private BundleContext bundleContext;
+
     @Test
     public void test() throws Exception {
-        Bundle bundle = Runtime.getInstance().getBundle("service-tracker-test");
-        BundleContext bundleContext = bundle.getBundleContext();
         ServiceTracker<MyService,MyService> tracker = new ServiceTracker<>(bundleContext, MyService.class, null);
         tracker.open();
         assertThat(tracker.getService()).isNull();

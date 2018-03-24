@@ -181,7 +181,7 @@ public final class Runtime {
         return c.toArray(new Bundle[c.size()]);
     }
     
-    public Bundle getBundle(String symbolicName) {
+    Bundle getBundle(String symbolicName) {
         return bundlesBySymbolicName.get(symbolicName);
     }
     

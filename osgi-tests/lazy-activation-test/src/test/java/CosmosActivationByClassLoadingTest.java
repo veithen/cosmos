@@ -19,18 +19,27 @@
  */
 import static org.junit.Assert.assertEquals;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.osgi.framework.Bundle;
 
 import bundle2.MyService;
 
-import com.github.veithen.cosmos.osgi.runtime.Runtime;
+import com.github.veithen.cosmos.osgi.runtime.FrameworkUtil;
+import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 
+@RunWith(CosmosRunner.class)
 public class CosmosActivationByClassLoadingTest {
+    @Inject
+    private Provider<MyService> myService;
+
     @Test
     public void test() throws Exception {
-        Runtime runtime = Runtime.getInstance();
-        runtime.getBundle("bundle2").start();
-        MyService myService = runtime.getService(MyService.class);
-        assertEquals("bar", myService.getProperty("foo"));
+        Bundle bundle2 = FrameworkUtil.getBundle(MyService.class);
+        bundle2.start();
+        assertEquals("bar", myService.get().getProperty("foo"));
     }
 }

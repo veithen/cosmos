@@ -21,15 +21,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.osgi.framework.Bundle;
 
+import com.github.veithen.cosmos.osgi.runtime.FrameworkUtil;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
+import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 
+import bundle1.Helper;
+
+@RunWith(CosmosRunner.class)
 public class CosmosGetBundleContextTest {
     @Test
     public void test() throws Exception {
-        Runtime runtime = Runtime.getInstance();
-        Bundle bundle1 = runtime.getBundle("bundle1");
+        Bundle bundle1 = FrameworkUtil.getBundle(Helper.class);
         assertEquals(Bundle.STARTING, bundle1.getState());
         assertNotNull(bundle1.getBundleContext());
         assertEquals(Bundle.STARTING, bundle1.getState());
