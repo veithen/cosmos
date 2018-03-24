@@ -73,6 +73,7 @@ final class BundleImpl implements Bundle {
     private final URL locationUrl;
     private BundleState state;
     private BundleContextImpl context;
+    private BundleActivator activator;
 
     public BundleImpl(Runtime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
         this.runtime = runtime;
@@ -213,6 +214,9 @@ final class BundleImpl implements Bundle {
     }
     
     public void start() throws BundleException {
+        if (state == BundleState.ACTIVE) {
+            return;
+        }
         if (logger.isDebugEnabled()) {
             logger.debug("Starting bundle " + symbolicName + " ...");
         }
@@ -226,7 +230,6 @@ final class BundleImpl implements Bundle {
         }
         String activatorClassName = attrs.getValue("Bundle-Activator");
         if (activatorClassName != null) {
-            BundleActivator activator;
             try {
                 activator = (BundleActivator)Class.forName(activatorClassName).newInstance();
             } catch (Exception ex) {
@@ -251,6 +254,14 @@ final class BundleImpl implements Bundle {
 
     public void stop() throws BundleException {
         // TODO: there is more required here
+        if (state == BundleState.ACTIVE) {
+            try {
+                activator.stop(context);
+            } catch (Exception ex) {
+                throw new BundleException("Failed to stop bundle " + symbolicName, ex);
+            }
+        }
+        context = null;
         state = BundleState.READY;
     }
 
