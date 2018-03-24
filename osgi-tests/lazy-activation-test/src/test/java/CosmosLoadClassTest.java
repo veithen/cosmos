@@ -22,8 +22,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
-import com.github.veithen.cosmos.osgi.runtime.FrameworkUtil;
 import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 
 import bundle1.Helper;

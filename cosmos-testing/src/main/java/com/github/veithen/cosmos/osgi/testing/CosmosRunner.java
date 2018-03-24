@@ -28,8 +28,8 @@ import javax.inject.Provider;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 
-import com.github.veithen.cosmos.osgi.runtime.FrameworkUtil;
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
 
 public class CosmosRunner extends BlockJUnit4ClassRunner {

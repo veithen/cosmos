@@ -19,17 +19,24 @@
  */
 package com.github.veithen.cosmos.osgi.runtime;
 
-import java.net.URL;
-import java.util.Map;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
-import org.osgi.framework.Bundle;
+final class RelocatingMethodVisitor extends MethodVisitor {
+    private final String from;
+    private final String to;
 
-final class FrameworkUtil {
-    private static Map<URL,Bundle> bundlesByUrl;
+    RelocatingMethodVisitor(MethodVisitor mv, String from, String to) {
+        super(Opcodes.ASM6, mv);
+        this.from = from;
+        this.to = to;
+    }
 
-    private FrameworkUtil() {}
-
-    public static Bundle getBundle(Class<?> classFromBundle) {
-        return bundlesByUrl.get(classFromBundle.getProtectionDomain().getCodeSource().getLocation());
+    @Override
+    public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+        if (owner.equals(from)) {
+            owner = to;
+        }
+        super.visitFieldInsn(opcode, owner, name, desc);
     }
 }

@@ -66,7 +66,6 @@ public final class Runtime {
     private final Properties properties = new Properties();
     private final Map<String,BundleImpl> bundlesBySymbolicName = new HashMap<String,BundleImpl>();
     private final Map<Long,BundleImpl> bundlesById = new HashMap<Long,BundleImpl>();
-    private final Map<URL,BundleImpl> bundlesByUrl = new HashMap<URL,BundleImpl>();
     private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
     private final List<ServiceListenerSpec> serviceListeners = new ArrayList<>();
     private final List<Service> services = new LinkedList<Service>();
@@ -79,6 +78,7 @@ public final class Runtime {
 
     private Runtime() throws BundleException {
         final Set<Bundle> autostartBundles = new HashSet<>();
+        final Map<URL,Bundle> bundlesByUrl = new HashMap<URL,Bundle>();
         ResourceUtil.processResources("META-INF/MANIFEST.MF", new ResourceProcessor() {
             private long bundleId = 1;
 
@@ -125,6 +125,7 @@ public final class Runtime {
                 }
             }
         });
+        Patcher.injectBundles(bundlesByUrl);
         loadProperties("META-INF/cosmos.properties");
         if (logger.isDebugEnabled()) {
             loadProperties("META-INF/cosmos-debug.properties");
@@ -183,10 +184,6 @@ public final class Runtime {
     
     Bundle getBundle(String symbolicName) {
         return bundlesBySymbolicName.get(symbolicName);
-    }
-    
-    public Bundle getBundle(URL url) {
-        return bundlesByUrl.get(url);
     }
     
     BundleImpl getBundleByPackage(String pkg) {

@@ -21,13 +21,18 @@ package com.github.veithen.cosmos.osgi.runtime;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.Map;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkUtil;
 
 final class Patcher {
     static void patch() throws BundleException {
@@ -44,12 +49,22 @@ final class Patcher {
             try (InputStream in = classLoader.getResourceAsStream("org/osgi/framework/FrameworkUtil.class")) {
                 ClassReader classReader = new ClassReader(in);
                 classWriter = new ClassWriter(classReader, 0);
-                classReader.accept(new MethodInjector(classWriter, classNode.methods), 0);
+                classReader.accept(new MemberInjector(classWriter, classNode), 0);
             }
             byte[] bytes = classWriter.toByteArray();
             defineClass.invoke(classLoader, "org.osgi.framework.FrameworkUtil", bytes, 0, bytes.length);
         } catch (IOException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
             throw new BundleException("Failed to patch FrameworkUtil", ex);
+        }
+    }
+
+    static void injectBundles(Map<URL,Bundle> bundlesByUrl) throws BundleException {
+        try {
+            Field field = FrameworkUtil.class.getDeclaredField("bundlesByUrl");
+            field.setAccessible(true);
+            field.set(null, bundlesByUrl);
+        } catch (NoSuchFieldException | IllegalAccessException ex) {
+            throw new BundleException("Failed to inject bundles into FrameworkUtil", ex);
         }
     }
 }

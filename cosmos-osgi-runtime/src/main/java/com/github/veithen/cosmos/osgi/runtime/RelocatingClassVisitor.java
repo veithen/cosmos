@@ -19,36 +19,24 @@
  */
 package com.github.veithen.cosmos.osgi.runtime;
 
-import java.util.List;
-
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.MethodNode;
 
-final class MethodInjector extends ClassVisitor {
-    private final List<MethodNode> methods;
+final class RelocatingClassVisitor extends ClassVisitor {
+    private final String from;
+    private final String to;
 
-    MethodInjector(ClassVisitor cv, List<MethodNode> methods) {
+    RelocatingClassVisitor(ClassVisitor cv, String from, String to) {
         super(Opcodes.ASM6, cv);
-        this.methods = methods;
+        this.from = from;
+        this.to = to;
     }
 
     @Override
-    public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        for (MethodNode method : methods) {
-            if (name.equals(method.name) && desc.equals(method.desc)) {
-                return null;
-            }
-        }
-        return super.visitMethod(access, name, desc, signature, exceptions);
-    }
-
-    @Override
-    public void visitEnd() {
-        for (MethodNode method : methods) {
-            method.accept(cv);
-        }
-        super.visitEnd();
+    public MethodVisitor visitMethod(int access, String name, String desc, String signature,
+            String[] exceptions) {
+        MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
+        return mv == null ? null : new RelocatingMethodVisitor(mv, from, to);
     }
 }

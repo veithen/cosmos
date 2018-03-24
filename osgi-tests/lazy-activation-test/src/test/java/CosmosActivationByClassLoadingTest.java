@@ -25,10 +25,10 @@ import javax.inject.Provider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 import bundle2.MyService;
 
-import com.github.veithen.cosmos.osgi.runtime.FrameworkUtil;
 import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 
 @RunWith(CosmosRunner.class)
