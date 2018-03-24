@@ -22,11 +22,10 @@ package com.github.veithen.cosmos.p2.maven.connector;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.codehaus.plexus.logging.Logger;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 
 abstract class ArtifactHandler {
-    abstract void download(Artifact artifact, IArtifactRepository artifactRepository, IArtifactDescriptor descriptor, Logger logger, OutputStream out) throws IOException, DownloadException;
+    abstract void download(Artifact artifact, IArtifactRepository artifactRepository, IArtifactDescriptor descriptor, OutputStream out) throws IOException, DownloadException;
 }

@@ -29,7 +29,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.plexus.logging.Logger;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.metadata.Metadata;
 import org.eclipse.aether.repository.RemoteRepository;
@@ -48,6 +47,8 @@ import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -56,6 +57,8 @@ import com.github.veithen.cosmos.p2.maven.ArtifactCoordinateMapper;
 import com.github.veithen.cosmos.p2.maven.P2Coordinate;
 
 final class P2RepositoryConnector implements RepositoryConnector {
+    private static final Logger logger = LoggerFactory.getLogger(P2RepositoryConnector.class);
+    
     private static final Map<String,ArtifactHandler> artifactHandlers;
     
     static {
@@ -66,14 +69,11 @@ final class P2RepositoryConnector implements RepositoryConnector {
     
     private final RemoteRepository repository;
     private final IArtifactRepositoryManager artifactRepositoryManager;
-    private final Logger logger;
     private IArtifactRepository artifactRepository;
 
-    P2RepositoryConnector(RemoteRepository repository, IArtifactRepositoryManager artifactRepositoryManager,
-            Logger logger) {
+    P2RepositoryConnector(RemoteRepository repository, IArtifactRepositoryManager artifactRepositoryManager) {
         this.repository = repository;
         this.artifactRepositoryManager = artifactRepositoryManager;
-        this.logger = logger;
     }
 
     private IArtifactRepository getArtifactRepository() throws DownloadException {
@@ -150,7 +150,7 @@ final class P2RepositoryConnector implements RepositoryConnector {
         writeFile(artifactDownload.getFile(), new ContentProvider() {
             @Override
             void writeTo(OutputStream out) throws IOException, DownloadException {
-                artifactHandler.download(artifact, artifactRepository, descriptor, logger, out);
+                artifactHandler.download(artifact, artifactRepository, descriptor, out);
             }
         });
         logger.debug("Artifact download complete");

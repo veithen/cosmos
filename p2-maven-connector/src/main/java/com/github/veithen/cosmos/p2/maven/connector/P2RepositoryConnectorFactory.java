@@ -23,9 +23,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.logging.LogEnabled;
-import org.codehaus.plexus.logging.Logger;
+import javax.inject.Named;
+
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.spi.connector.RepositoryConnector;
@@ -36,19 +35,16 @@ import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.osgi.framework.BundleException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.veithen.cosmos.osgi.runtime.CosmosRuntime;
 
-@Component(role=RepositoryConnectorFactory.class, hint="p2")
-public final class P2RepositoryConnectorFactory implements RepositoryConnectorFactory, LogEnabled {
-    private Logger logger;
+@Named("p2")
+public final class P2RepositoryConnectorFactory implements RepositoryConnectorFactory {
+    private static final Logger logger = LoggerFactory.getLogger(P2RepositoryConnectorFactory.class);
     
     private final Map<File,IProvisioningAgent> provisioningAgents = new HashMap<>();
-    
-    @Override
-    public void enableLogging(Logger logger) {
-        this.logger = logger;
-    }
     
     @Override
     public float getPriority() {
@@ -74,8 +70,7 @@ public final class P2RepositoryConnectorFactory implements RepositoryConnectorFa
                 provisioningAgents.put(localRepositoryDir, provisioningAgent);
             }
             return new P2RepositoryConnector(repository,
-                    (IArtifactRepositoryManager)provisioningAgent.getService(IArtifactRepositoryManager.SERVICE_NAME),
-                    logger);
+                    (IArtifactRepositoryManager)provisioningAgent.getService(IArtifactRepositoryManager.SERVICE_NAME));
         } else {
             throw new NoRepositoryConnectorException(repository);
         }

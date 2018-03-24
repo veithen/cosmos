@@ -42,8 +42,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.eclipse.sisu</groupId>
-            <artifactId>org.eclipse.sisu.plexus</artifactId>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -76,12 +76,12 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.plexus</groupId>
-                <artifactId>plexus-component-metadata</artifactId>
+                <groupId>org.eclipse.sisu</groupId>
+                <artifactId>sisu-maven-plugin</artifactId>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>generate-metadata</goal>
+                            <goal>main-index</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -94,7 +94,7 @@
                     <instructions>
                         <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
                         <Export-Package />
-                        <Include-Resource>{maven-resources},META-INF/plexus/components.xml=${project.build.directory}/components.xml</Include-Resource>
+                        <Include-Resource>{maven-resources},META-INF/sisu/javax.inject.Named=${project.build.outputDirectory}/META-INF/sisu/javax.inject.Named</Include-Resource>
                         <_dsannotations>*</_dsannotations>
                     </instructions>
                 </configuration>
@@ -206,6 +206,7 @@
                         <configuration>
                             <debug>true</debug>
                             <addTestClassPath>true</addTestClassPath>
+                            <mavenOpts>${argLine} -Dsisu.debug</mavenOpts>
                         </configuration>
                     </execution>
                 </executions>

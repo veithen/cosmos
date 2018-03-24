@@ -22,17 +22,20 @@ package com.github.veithen.cosmos.p2.maven.connector;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.codehaus.plexus.logging.Logger;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 
 final class JARHandler extends ArtifactHandler {
+    private static final Logger logger = LoggerFactory.getLogger(JARHandler.class);
+
     @Override
-    void download(Artifact artifact, IArtifactRepository artifactRepository, IArtifactDescriptor descriptor, Logger logger, OutputStream out) throws IOException, DownloadException {
+    void download(Artifact artifact, IArtifactRepository artifactRepository, IArtifactDescriptor descriptor, OutputStream out) throws IOException, DownloadException {
         IStatus status;
         status = artifactRepository.getArtifact(descriptor, out, new SystemOutProgressMonitor());
         if (logger.isDebugEnabled()) {
