@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.LogEnabled;
 import org.codehaus.plexus.logging.Logger;
 import org.eclipse.aether.RepositorySystemSession;
@@ -39,7 +38,6 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.osgi.framework.BundleException;
 
 import com.github.veithen.cosmos.osgi.runtime.CosmosRuntime;
-import com.github.veithen.cosmos.p2.maven.ArtifactCoordinateMapper;
 
 @Component(role=RepositoryConnectorFactory.class, hint="p2")
 public final class P2RepositoryConnectorFactory implements RepositoryConnectorFactory, LogEnabled {
