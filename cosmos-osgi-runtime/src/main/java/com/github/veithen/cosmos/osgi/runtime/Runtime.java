@@ -308,4 +308,17 @@ public final class Runtime {
             listener.bundleChanged(event);
         }
     }
+
+    public void dispose() {
+        for (BundleImpl bundle : bundlesBySymbolicName.values()) {
+            try {
+                bundle.stop();
+            } catch (BundleException ex) {
+                logger.warn(String.format("Failed to stop bundle %s", bundle.getSymbolicName()), ex);
+            }
+        }
+        synchronized (Runtime.class) {
+            instance = null;
+        }
+    }
 }

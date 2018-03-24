@@ -25,56 +25,55 @@ import java.lang.reflect.ParameterizedType;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.Statement;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 
 import com.github.veithen.cosmos.osgi.runtime.Runtime;
 
 public class CosmosRunner extends BlockJUnit4ClassRunner {
-    private Class<?> klass;
-    private BundleContext bundleContext;
-
     public CosmosRunner(Class<?> klass) throws InitializationError {
         super(klass);
-        this.klass = klass;
-    }
-
-    private BundleContext getBundleContext() {
-        if (bundleContext == null) {
-            bundleContext = FrameworkUtil.getBundle(klass).getBundleContext();
-        }
-        return bundleContext;
     }
 
     @Override
     protected Object createTest() throws Exception {
-        // Always execute this to force initialization of the runtime.
-        final Runtime runtime = Runtime.getInstance();
-
         Object object = super.createTest();
-        Class<?> clazz = object.getClass();
+        Class<?> testClass = object.getClass();
+        Class<?> clazz = testClass;
         do {
-            for (Field field : object.getClass().getDeclaredFields()) {
+            for (Field field : clazz.getDeclaredFields()) {
                 Inject injectAnnotation = field.getAnnotation(Inject.class);
                 if (injectAnnotation != null) {
+                    final Runtime runtime = Runtime.getInstance();
                     field.setAccessible(true);
                     Class<?> type = field.getType();
+                    Object value;
                     if (type == BundleContext.class) {
-                        field.set(object, getBundleContext());
+                        value = FrameworkUtil.getBundle(testClass).getBundleContext();
                     } else if (type == Provider.class) {
                         final Class<?> serviceClass = (Class<?>)((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0];
-                        field.set(object, new Provider<Object>() {
+                        value = new Provider<Object>() {
                             @Override
                             public Object get() {
                                 return runtime.getService(serviceClass);
                             }
-                        });
+                        };
+                    } else {
+                        value = runtime.getService(type);
                     }
+                    field.set(object, value);
                 }
             }
         } while ((clazz = clazz.getSuperclass()) != Object.class);
         return object;
+    }
+
+    @Override
+    protected Statement classBlock(RunNotifier notifier) {
+        return new RunWithCosmosRuntime(super.classBlock(notifier));
     }
 }

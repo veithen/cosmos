@@ -250,7 +250,8 @@ final class BundleImpl implements Bundle {
     }
 
     public void stop() throws BundleException {
-        throw new UnsupportedOperationException();
+        // TODO: there is more required here
+        state = BundleState.READY;
     }
 
     public int compareTo(Bundle o) {

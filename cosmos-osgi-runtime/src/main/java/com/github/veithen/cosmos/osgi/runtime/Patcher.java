@@ -35,7 +35,12 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;
 
 final class Patcher {
-    static void patch() throws BundleException {
+    private static boolean patched;
+
+    static synchronized void patch() throws BundleException {
+        if (patched) {
+            return;
+        }
         try {
             ClassLoader classLoader = Patcher.class.getClassLoader();
             Method defineClass = ClassLoader.class.getDeclaredMethod("defineClass", String.class, byte[].class, int.class, int.class);
@@ -53,6 +58,7 @@ final class Patcher {
             }
             byte[] bytes = classWriter.toByteArray();
             defineClass.invoke(classLoader, "org.osgi.framework.FrameworkUtil", bytes, 0, bytes.length);
+            patched = true;
         } catch (IOException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
             throw new BundleException("Failed to patch FrameworkUtil", ex);
         }
