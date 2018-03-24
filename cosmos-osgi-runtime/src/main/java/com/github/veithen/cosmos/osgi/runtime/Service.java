@@ -29,14 +29,14 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
 final class Service implements CosmosServiceReference<Object>, ServiceRegistration<Object> {
-    private final Runtime runtime;
+    private final CosmosRuntime runtime;
     private final BundleImpl bundle;
     private final String[] classes;
     private final Object serviceObject;
     private final Dictionary<String,?> properties;
     private final Map<BundleImpl,ServiceContext> contexts = new HashMap<BundleImpl,ServiceContext>();
     
-    Service(Runtime runtime, BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
+    Service(CosmosRuntime runtime, BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
         this.runtime = runtime;
         this.bundle = bundle;
         this.classes = classes;

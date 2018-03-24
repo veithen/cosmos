@@ -32,7 +32,7 @@ final class ResourceUtil {
     static void processResources(String resourceName, ResourceProcessor processor) throws BundleException {
         Enumeration<URL> e;
         try {
-            e = Runtime.class.getClassLoader().getResources(resourceName);
+            e = CosmosRuntime.class.getClassLoader().getResources(resourceName);
         } catch (IOException ex) {
             throw new BundleException(String.format("Failed to load %s resources", resourceName), ex);
         }

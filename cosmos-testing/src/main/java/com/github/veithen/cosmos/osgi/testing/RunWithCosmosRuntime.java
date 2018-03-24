@@ -21,7 +21,7 @@ package com.github.veithen.cosmos.osgi.testing;
 
 import org.junit.runners.model.Statement;
 
-import com.github.veithen.cosmos.osgi.runtime.Runtime;
+import com.github.veithen.cosmos.osgi.runtime.CosmosRuntime;
 
 final class RunWithCosmosRuntime extends Statement {
     private final Statement next;
@@ -32,7 +32,7 @@ final class RunWithCosmosRuntime extends Statement {
 
     @Override
     public void evaluate() throws Throwable {
-        Runtime runtime = Runtime.getInstance();
+        CosmosRuntime runtime = CosmosRuntime.getInstance();
         try {
             next.evaluate();
         } finally {

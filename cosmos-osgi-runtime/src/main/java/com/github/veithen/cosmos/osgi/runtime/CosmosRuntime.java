@@ -58,10 +58,10 @@ import org.osgi.util.xml.XMLParserActivator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class Runtime {
-    private static final Logger logger = LoggerFactory.getLogger(Runtime.class);
+public final class CosmosRuntime {
+    private static final Logger logger = LoggerFactory.getLogger(CosmosRuntime.class);
 
-    private static Runtime instance;
+    private static CosmosRuntime instance;
 
     private final Properties properties = new Properties();
     private final Map<String,BundleImpl> bundlesBySymbolicName = new HashMap<String,BundleImpl>();
@@ -76,7 +76,7 @@ public final class Runtime {
      */
     private final Map<String,BundleImpl> packageMap = new HashMap<String,BundleImpl>();
 
-    private Runtime() throws BundleException {
+    private CosmosRuntime() throws BundleException {
         final Set<Bundle> autostartBundles = new HashSet<>();
         final Map<URL,Bundle> bundlesByUrl = new HashMap<URL,Bundle>();
         ResourceUtil.processResources("META-INF/MANIFEST.MF", new ResourceProcessor() {
@@ -103,7 +103,7 @@ public final class Runtime {
                 }
                 // There cannot be any bundle listeners yet, so no need to call BundleListeners
                 long id = bundleId++;
-                BundleImpl bundle = new BundleImpl(Runtime.this, id, symbolicName, attrs, rootUrl);
+                BundleImpl bundle = new BundleImpl(CosmosRuntime.this, id, symbolicName, attrs, rootUrl);
                 bundlesBySymbolicName.put(symbolicName, bundle);
                 bundlesById.put(id, bundle);
                 bundlesByUrl.put(bundle.getLocationUrl(), bundle);
@@ -169,10 +169,10 @@ public final class Runtime {
         });
     }
     
-    public static synchronized Runtime getInstance() throws BundleException {
+    public static synchronized CosmosRuntime getInstance() throws BundleException {
         if (instance == null) {
             Patcher.patch();
-            instance = new Runtime();
+            instance = new CosmosRuntime();
         }
         return instance;
     }
@@ -335,7 +335,7 @@ public final class Runtime {
                 logger.warn(String.format("Failed to stop bundle %s", bundle.getSymbolicName()), ex);
             }
         }
-        synchronized (Runtime.class) {
+        synchronized (CosmosRuntime.class) {
             instance = null;
         }
     }

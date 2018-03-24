@@ -65,7 +65,7 @@ final class BundleImpl implements Bundle {
         }
     };
     
-    private final Runtime runtime;
+    private final CosmosRuntime runtime;
     private final long id;
     private final String symbolicName;
     private final Attributes attrs;
@@ -75,7 +75,7 @@ final class BundleImpl implements Bundle {
     private BundleContextImpl context;
     private BundleActivator activator;
 
-    public BundleImpl(Runtime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
+    public BundleImpl(CosmosRuntime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
         this.runtime = runtime;
         this.id = id;
         this.symbolicName = symbolicName;
@@ -123,7 +123,7 @@ final class BundleImpl implements Bundle {
         }
     }
 
-    Runtime getRuntime() {
+    CosmosRuntime getRuntime() {
         return runtime;
     }
 

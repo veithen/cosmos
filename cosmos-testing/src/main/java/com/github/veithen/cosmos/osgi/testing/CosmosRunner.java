@@ -32,7 +32,7 @@ import org.junit.runners.model.Statement;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 
-import com.github.veithen.cosmos.osgi.runtime.Runtime;
+import com.github.veithen.cosmos.osgi.runtime.CosmosRuntime;
 
 public class CosmosRunner extends BlockJUnit4ClassRunner {
     public CosmosRunner(Class<?> klass) throws InitializationError {
@@ -48,7 +48,7 @@ public class CosmosRunner extends BlockJUnit4ClassRunner {
             for (Field field : clazz.getDeclaredFields()) {
                 Inject injectAnnotation = field.getAnnotation(Inject.class);
                 if (injectAnnotation != null) {
-                    final Runtime runtime = Runtime.getInstance();
+                    final CosmosRuntime runtime = CosmosRuntime.getInstance();
                     field.setAccessible(true);
                     Class<?> type = field.getType();
                     Object value;

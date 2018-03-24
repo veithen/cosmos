@@ -37,7 +37,7 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.osgi.framework.Constants;
 
-import com.github.veithen.cosmos.osgi.runtime.Runtime;
+import com.github.veithen.cosmos.osgi.runtime.CosmosRuntime;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 
 @Component(role=RepositoryManager.class)
@@ -49,7 +49,7 @@ public class DefaultRepositoryManager implements RepositoryManager, Initializabl
     
     public void initialize() throws InitializationException {
         try {
-            Runtime runtime = Runtime.getInstance();
+            CosmosRuntime runtime = CosmosRuntime.getInstance();
             
             System.out.println("Setting up proxy configuration");
             Hashtable<String,Object> properties = new Hashtable<String,Object>();

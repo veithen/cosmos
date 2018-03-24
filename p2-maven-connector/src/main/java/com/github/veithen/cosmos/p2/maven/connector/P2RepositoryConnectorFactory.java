@@ -38,7 +38,7 @@ import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.osgi.framework.BundleException;
 
-import com.github.veithen.cosmos.osgi.runtime.Runtime;
+import com.github.veithen.cosmos.osgi.runtime.CosmosRuntime;
 import com.github.veithen.cosmos.p2.maven.ArtifactCoordinateMapper;
 
 @Component(role=RepositoryConnectorFactory.class, hint="p2")
@@ -68,7 +68,7 @@ public final class P2RepositoryConnectorFactory implements RepositoryConnectorFa
                     logger.debug(String.format("Creating new provisioning agent for local repository %s", localRepositoryDir));
                 }
                 try {
-                    provisioningAgent = Runtime.getInstance().getService(IProvisioningAgentProvider.class).createAgent(new File(localRepositoryDir, ".p2-metadata").toURI());
+                    provisioningAgent = CosmosRuntime.getInstance().getService(IProvisioningAgentProvider.class).createAgent(new File(localRepositoryDir, ".p2-metadata").toURI());
                 } catch (BundleException | ProvisionException ex) {
                     logger.error(String.format("Failed to create provisioning agent for local repository %s", localRepositoryDir));
                     throw new NoRepositoryConnectorException(repository, ex);

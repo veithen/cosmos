@@ -45,7 +45,7 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
-import com.github.veithen.cosmos.osgi.runtime.Runtime;
+import com.github.veithen.cosmos.osgi.runtime.CosmosRuntime;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 import com.github.veithen.mojo.ArtifactProcessingMojo;
 import com.github.veithen.mojo.SkippableMojo;
@@ -66,7 +66,7 @@ public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo,
         try {
             List<Artifact> artifacts = resolveArtifacts();
             URI repoURI = outputDirectory.toURI();
-            IProvisioningAgent agent = Runtime.getInstance().getService(IProvisioningAgentProvider.class).createAgent(agentLocation.toURI());
+            IProvisioningAgent agent = CosmosRuntime.getInstance().getService(IProvisioningAgentProvider.class).createAgent(agentLocation.toURI());
             try {
                 IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
                 IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
