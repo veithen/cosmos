@@ -253,16 +253,24 @@ final class BundleImpl implements Bundle {
     }
 
     public void stop() throws BundleException {
-        // TODO: there is more required here
-        if (state == BundleState.ACTIVE) {
+        if (state == BundleState.LOADED || state == BundleState.READY) {
+            return;
+        }
+        logger.debug("Stopping bundle {} ...", symbolicName);
+        runtime.fireBundleEvent(this, BundleEvent.STOPPING);
+        if (state == BundleState.ACTIVE && activator != null) {
             try {
                 activator.stop(context);
             } catch (Exception ex) {
                 throw new BundleException("Failed to stop bundle " + symbolicName, ex);
             }
         }
+        runtime.unregisterServices(this);
+        // TODO: also unregister service and bundle listeners (or store them in the bundle context)
         context = null;
         state = BundleState.READY;
+        runtime.fireBundleEvent(this, BundleEvent.STOPPED);
+        logger.debug("Bundle {} stopped", symbolicName);
     }
 
     public int compareTo(Bundle o) {

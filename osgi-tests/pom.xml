@@ -38,8 +38,8 @@
         <module>bundle2</module>
         <module>eclipse-core-runtime-test</module>
         <module>lazy-activation-test</module>
-        <module>service-tracker-test</module>
         <module>start-stop-bundle-test</module>
+        <module>tracker-test</module>
     </modules>
 
     <properties>

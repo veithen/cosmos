@@ -251,7 +251,7 @@ public final class Runtime {
     Service registerService(BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
         long serviceId = nextServiceId++;
         if (logger.isDebugEnabled()) {
-            logger.debug("Registering service " + serviceObject.getClass().getName() + " with interfaces " + Arrays.asList(classes) + " and properties " + properties + "; id is " + serviceId);
+            logger.debug("Registering service " + serviceObject.getClass().getName() + " with types " + Arrays.asList(classes) + " and properties " + properties + "; id is " + serviceId);
         }
         Hashtable<String,Object> actualProperties = new Hashtable<String,Object>();
         if (properties != null) {
@@ -263,7 +263,9 @@ public final class Runtime {
         actualProperties.put(Constants.OBJECTCLASS, classes);
         actualProperties.put(Constants.SERVICE_ID, serviceId);
         Service service = new Service(this, bundle, classes, serviceObject, actualProperties);
-        services.add(service);
+        synchronized (services) {
+            services.add(service);
+        }
         fireServiceChangedEvent(ServiceEvent.REGISTERED, service);
         return service;
     }
@@ -273,7 +275,23 @@ public final class Runtime {
             logger.debug(String.format("Unregistering service %s", service.getProperty(Constants.SERVICE_ID)));
         }
         fireServiceChangedEvent(ServiceEvent.UNREGISTERING, service);
-        services.remove(service);
+        synchronized (services) {
+            services.remove(service);
+        }
+    }
+
+    void unregisterServices(BundleImpl bundle) {
+        List<Service> servicesToUnregister = new ArrayList<>();
+        synchronized (services) {
+            for (Service service : services) {
+                if (service.getBundle() == bundle) {
+                    servicesToUnregister.add(service);
+                }
+            }
+        }
+        for (Service service : servicesToUnregister) {
+            unregisterService(service);
+        }
     }
 
     ServiceReference<?>[] getServiceReferences(String clazz, Filter filter) {

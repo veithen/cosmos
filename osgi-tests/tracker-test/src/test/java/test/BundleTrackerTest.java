@@ -22,37 +22,32 @@ package test;
 import static com.google.common.truth.Truth.assertThat;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.service.log.LogService;
+import org.osgi.util.tracker.BundleTracker;
 
 import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 
 @RunWith(CosmosRunner.class)
-public class StartStopBundleTest {
+public class BundleTrackerTest {
     @Inject
-    private Provider<MyService> myService;
+    private BundleContext bundleContext;
 
     @Test
-    public void testActivatorCalled() throws Exception {
-        Bundle bundle = FrameworkUtil.getBundle(StartStopBundleTest.class);
-        assertThat(Activator.isActive()).isFalse();
+    public void test() throws Exception {
+        // Use a random bundle for the test.
+        Bundle bundle = FrameworkUtil.getBundle(LogService.class);
+        BundleTracker<Bundle> tracker = new BundleTracker<>(bundleContext, Bundle.ACTIVE, null);
+        tracker.open();
+        assertThat(tracker.getBundles()).asList().doesNotContain(bundle);
         bundle.start();
-        assertThat(Activator.isActive()).isTrue();
+        assertThat(tracker.getBundles()).asList().contains(bundle);
         bundle.stop();
-        assertThat(Activator.isActive()).isFalse();
-    }
-
-    @Test
-    public void testServicesAreUnregistered() throws Exception {
-        Bundle bundle = FrameworkUtil.getBundle(StartStopBundleTest.class);
-        assertThat(myService.get()).isNull();
-        bundle.start();
-        assertThat(myService.get()).isNotNull();
-        bundle.stop();
-        assertThat(myService.get()).isNull();
+        assertThat(tracker.getBundles()).asList().doesNotContain(bundle);
     }
 }

@@ -28,7 +28,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>service-tracker-test</artifactId>
+    <artifactId>tracker-test</artifactId>
 
     <dependencies>
         <dependency>

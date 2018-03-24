@@ -28,6 +28,7 @@ public class Activator implements BundleActivator {
     @Override
     public void start(BundleContext context) throws Exception {
         active = true;
+        context.registerService(MyService.class, new MyService(), null);
     }
 
     @Override
