@@ -69,6 +69,7 @@ public final class CosmosRuntime {
     private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
     private final List<ServiceListenerSpec> serviceListeners = new ArrayList<>();
     private final List<Service> services = new LinkedList<Service>();
+    private final Thread shutdownHook;
     private long nextServiceId = 1;
     
     /**
@@ -144,6 +145,13 @@ public final class CosmosRuntime {
         for (Bundle bundle : autostartBundles) {
             bundle.start();
         }
+        shutdownHook = new Thread() {
+            @Override
+            public void run() {
+                internalDispose();
+            }
+        };
+        Runtime.getRuntime().addShutdownHook(shutdownHook);
     }
 
     private void registerSAXParserFactory() {
@@ -328,6 +336,10 @@ public final class CosmosRuntime {
     }
 
     public void dispose() {
+        Runtime.getRuntime().removeShutdownHook(shutdownHook);
+    }
+
+    private void internalDispose() {
         for (BundleImpl bundle : bundlesBySymbolicName.values()) {
             try {
                 bundle.stop();
