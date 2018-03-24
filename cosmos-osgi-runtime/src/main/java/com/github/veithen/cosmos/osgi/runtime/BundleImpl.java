@@ -373,4 +373,10 @@ final class BundleImpl implements Bundle {
         // We don't have filesystem support.
         return null;
     }
+
+    void distributeBundleEvent(BundleEvent event) {
+        if (context != null) {
+            context.distributeBundleEvent(event);
+        }
+    }
 }

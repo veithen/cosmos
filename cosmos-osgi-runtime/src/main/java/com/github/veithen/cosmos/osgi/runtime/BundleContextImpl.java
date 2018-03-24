@@ -24,9 +24,12 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Dictionary;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.Filter;
@@ -41,6 +44,7 @@ import org.osgi.framework.ServiceRegistration;
 
 public class BundleContextImpl implements BundleContext {
     private final BundleImpl bundle;
+    private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
     
     public BundleContextImpl(BundleImpl bundle) {
         this.bundle = bundle;
@@ -83,11 +87,25 @@ public class BundleContextImpl implements BundleContext {
     }
 
     public void addBundleListener(BundleListener listener) {
-        bundle.getRuntime().addBundleListener(listener);
+        synchronized (bundleListeners) {
+            bundleListeners.add(listener);
+        }
     }
 
     public void removeBundleListener(BundleListener listener) {
-        throw new UnsupportedOperationException();
+        synchronized (bundleListeners) {
+            bundleListeners.remove(listener);
+        }
+    }
+
+    void distributeBundleEvent(BundleEvent event) {
+        BundleListener[] bundleListeners;
+        synchronized (this.bundleListeners) {
+            bundleListeners = this.bundleListeners.toArray(new BundleListener[this.bundleListeners.size()]);
+        }
+        for (BundleListener listener : bundleListeners) {
+            listener.bundleChanged(event);
+        }
     }
 
     public void addFrameworkListener(FrameworkListener listener) {

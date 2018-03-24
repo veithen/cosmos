@@ -65,7 +65,6 @@ public final class CosmosRuntime {
     private final Properties properties = new Properties();
     private final BundleImpl[] bundles;
     private final Map<String,BundleImpl> bundlesBySymbolicName = new HashMap<String,BundleImpl>();
-    private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
     private final List<ServiceListenerSpec> serviceListeners = new ArrayList<>();
     private final List<Service> services = new LinkedList<Service>();
     private long nextServiceId = 1;
@@ -205,10 +204,6 @@ public final class CosmosRuntime {
         return value;
     }
     
-    void addBundleListener(BundleListener listener) {
-        bundleListeners.add(listener);
-    }
-
     void addServiceListener(BundleImpl bundle, ServiceListener listener, Filter filter) {
         if (logger.isDebugEnabled()) {
             logger.debug("Bundle " + bundle.getSymbolicName() + " starts listening for services with filter " + filter);
@@ -322,8 +317,8 @@ public final class CosmosRuntime {
     
     void fireBundleEvent(BundleImpl bundleImpl, int type) {
         BundleEvent event = new BundleEvent(type, bundleImpl);
-        for (BundleListener listener : bundleListeners) {
-            listener.bundleChanged(event);
+        for (BundleImpl bundle : bundles) {
+            bundle.distributeBundleEvent(event);
         }
     }
 
