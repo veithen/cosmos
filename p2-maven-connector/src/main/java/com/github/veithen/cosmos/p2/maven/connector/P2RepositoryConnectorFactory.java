@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
@@ -41,6 +42,7 @@ import org.slf4j.LoggerFactory;
 import com.github.veithen.cosmos.osgi.runtime.CosmosRuntime;
 
 @Named("p2")
+@Singleton
 public final class P2RepositoryConnectorFactory implements RepositoryConnectorFactory {
     private static final Logger logger = LoggerFactory.getLogger(P2RepositoryConnectorFactory.class);
     
