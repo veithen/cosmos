@@ -81,7 +81,7 @@ final class BundleImpl implements Bundle {
         this.symbolicName = symbolicName;
         this.attrs = attrs;
         this.rootUrl = rootUrl;
-        if (rootUrl.getProtocol().equals("jar")) {
+        if (rootUrl != null && rootUrl.getProtocol().equals("jar")) {
             String path = rootUrl.getPath();
             try {
                 locationUrl = new URL(path.substring(0, path.lastIndexOf('!')));

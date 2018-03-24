@@ -25,7 +25,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -64,8 +63,8 @@ public final class CosmosRuntime {
     private static CosmosRuntime instance;
 
     private final Properties properties = new Properties();
+    private final BundleImpl[] bundles;
     private final Map<String,BundleImpl> bundlesBySymbolicName = new HashMap<String,BundleImpl>();
-    private final Map<Long,BundleImpl> bundlesById = new HashMap<Long,BundleImpl>();
     private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
     private final List<ServiceListenerSpec> serviceListeners = new ArrayList<>();
     private final List<Service> services = new LinkedList<Service>();
@@ -77,11 +76,13 @@ public final class CosmosRuntime {
     private final Map<String,BundleImpl> packageMap = new HashMap<String,BundleImpl>();
 
     private CosmosRuntime() throws BundleException {
+        final List<BundleImpl> bundles = new ArrayList<>();
         final Set<Bundle> autostartBundles = new HashSet<>();
         final Map<URL,Bundle> bundlesByUrl = new HashMap<URL,Bundle>();
+        // Add a system bundle
+        // TODO: this should implement org.osgi.framework.launch.Framework
+        bundles.add(new BundleImpl(this, 0, Constants.SYSTEM_BUNDLE_SYMBOLICNAME, new Attributes(), null));
         ResourceUtil.processResources("META-INF/MANIFEST.MF", new ResourceProcessor() {
-            private long bundleId = 1;
-
             @Override
             public void process(URL url, InputStream in) throws IOException, BundleException {
                 Manifest manifest = new Manifest(in);
@@ -102,10 +103,9 @@ public final class CosmosRuntime {
                     throw new BundleException("Unexpected exception", ex);
                 }
                 // There cannot be any bundle listeners yet, so no need to call BundleListeners
-                long id = bundleId++;
-                BundleImpl bundle = new BundleImpl(CosmosRuntime.this, id, symbolicName, attrs, rootUrl);
+                BundleImpl bundle = new BundleImpl(CosmosRuntime.this, bundles.size(), symbolicName, attrs, rootUrl);
+                bundles.add(bundle);
                 bundlesBySymbolicName.put(symbolicName, bundle);
-                bundlesById.put(id, bundle);
                 bundlesByUrl.put(bundle.getLocationUrl(), bundle);
                 String exportPackage = attrs.getValue("Export-Package");
                 if (exportPackage != null) {
@@ -125,6 +125,7 @@ public final class CosmosRuntime {
                 }
             }
         });
+        this.bundles = bundles.toArray(new BundleImpl[bundles.size()]);
         Patcher.injectBundles(bundlesByUrl);
         loadProperties("META-INF/cosmos.properties");
         if (logger.isDebugEnabled()) {
@@ -178,8 +179,7 @@ public final class CosmosRuntime {
     }
     
     Bundle[] getBundles() {
-        Collection<BundleImpl> c = bundlesBySymbolicName.values();
-        return c.toArray(new Bundle[c.size()]);
+        return bundles.clone();
     }
     
     Bundle getBundle(String symbolicName) {
@@ -191,7 +191,7 @@ public final class CosmosRuntime {
     }
     
     Bundle getBundle(long id) {
-        return bundlesById.get(id);
+        return id < bundles.length ? bundles[(int)id] : null;
     }
     
     String getProperty(String key) {
@@ -328,7 +328,7 @@ public final class CosmosRuntime {
     }
 
     public void dispose() {
-        for (BundleImpl bundle : bundlesBySymbolicName.values()) {
+        for (BundleImpl bundle : bundles) {
             try {
                 bundle.stop();
             } catch (BundleException ex) {
