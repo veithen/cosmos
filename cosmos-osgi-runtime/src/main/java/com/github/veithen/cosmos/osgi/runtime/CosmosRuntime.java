@@ -19,8 +19,10 @@
  */
 package com.github.veithen.cosmos.osgi.runtime;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -135,6 +137,22 @@ public final class CosmosRuntime {
         registerService(null, new String[] { Logger.class.getName() }, logger, null);
         // TODO: make this a ServiceFactory and use a per bundle SLF4J logger
         registerService(null, new String[] { LogService.class.getName() }, new LogServiceAdapter(LoggerFactory.getLogger("osgi")), null);
+        ResourceUtil.processResources("META-INF/cosmos-autostart-bundles.list", new ResourceProcessor() {
+            @Override
+            public void process(URL url, InputStream in) throws IOException, BundleException {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (!line.isEmpty() && !line.startsWith("#")) {
+                        Bundle bundle = getBundle(line);
+                        if (bundle == null) {
+                            throw new BundleException(String.format("Bundle %s listed in %s not found", line, url));
+                        }
+                        autostartBundles.add(bundle);
+                    }
+                }
+            }
+        });
         // Always auto-start the Declarative Services implementation if it's available
         Bundle scrBundle = getBundle("org.apache.felix.scr");
         if (scrBundle != null) {
