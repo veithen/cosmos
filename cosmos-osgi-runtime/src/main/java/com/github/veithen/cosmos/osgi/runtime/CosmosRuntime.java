@@ -153,10 +153,13 @@ public final class CosmosRuntime {
                 }
             }
         });
-        // Always auto-start the Declarative Services implementation if it's available
         Bundle scrBundle = getBundle("org.apache.felix.scr");
         if (scrBundle != null) {
-            autostartBundles.add(scrBundle);
+            // Always auto-start the Declarative Services implementation if it's available. Do this
+            // immediately so that declarative services are registered before other bundles start
+            // (Not all bundles are designed to handle services becoming available after they
+            // start).
+            scrBundle.start();
         }
         for (Bundle bundle : autostartBundles) {
             bundle.start();
