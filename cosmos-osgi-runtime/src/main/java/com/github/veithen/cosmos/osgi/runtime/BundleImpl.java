@@ -91,13 +91,18 @@ final class BundleImpl implements Bundle {
         } else {
             locationUrl = rootUrl;
         }
-        if ("lazy".equals(getHeaderValue(attrs, "Bundle-ActivationPolicy"))
+        if (id == 0) {
+            // The system bundle is always active.
+            state = BundleState.ACTIVE;
+        } else if ("lazy".equals(getHeaderValue(attrs, "Bundle-ActivationPolicy"))
                 || "true".equals(getHeaderValue(attrs, "Eclipse-LazyStart"))
                 || "true".equals(getHeaderValue(attrs, "Eclipse-AutoStart"))) {
             state = BundleState.LAZY_ACTIVATE;
-            context = new BundleContextImpl(this);
         } else {
             state = BundleState.LOADED;
+        }
+        if (state != BundleState.LOADED) {
+            context = new BundleContextImpl(this);
         }
         if (logger.isDebugEnabled()) {
             logger.debug("Loaded bundle " + symbolicName + " with initial state " + state);

@@ -81,7 +81,8 @@ public final class CosmosRuntime {
         final Map<URL,Bundle> bundlesByUrl = new HashMap<URL,Bundle>();
         // Add a system bundle
         // TODO: this should implement org.osgi.framework.launch.Framework
-        bundles.add(new BundleImpl(this, 0, Constants.SYSTEM_BUNDLE_SYMBOLICNAME, new Attributes(), null));
+        BundleImpl systemBundle = new BundleImpl(this, 0, Constants.SYSTEM_BUNDLE_SYMBOLICNAME, new Attributes(), null);
+        bundles.add(systemBundle);
         ResourceUtil.processResources("META-INF/MANIFEST.MF", new ResourceProcessor() {
             @Override
             public void process(URL url, InputStream in) throws IOException, BundleException {
@@ -132,11 +133,11 @@ public final class CosmosRuntime {
             loadProperties("META-INF/cosmos-debug.properties");
             logger.debug(String.format("Properties: %s", properties));
         }
-        registerSAXParserFactory();
-        registerDocumentBuilderFactory();
-        registerService(null, new String[] { Logger.class.getName() }, logger, null);
+        registerSAXParserFactory(systemBundle);
+        registerDocumentBuilderFactory(systemBundle);
+        systemBundle.getBundleContext().registerService(Logger.class, logger, null);
         // TODO: make this a ServiceFactory and use a per bundle SLF4J logger
-        registerService(null, new String[] { LogService.class.getName() }, new LogServiceAdapter(LoggerFactory.getLogger("osgi")), null);
+        systemBundle.getBundleContext().registerService(LogService.class, new LogServiceAdapter(LoggerFactory.getLogger("osgi")), null);
         ResourceUtil.processResources("META-INF/cosmos-autostart-bundles.list", new ResourceProcessor() {
             @Override
             public void process(URL url, InputStream in) throws IOException, BundleException {
@@ -166,18 +167,18 @@ public final class CosmosRuntime {
         }
     }
 
-    private void registerSAXParserFactory() {
+    private void registerSAXParserFactory(Bundle bundle) {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         Hashtable<String,Object> props = new Hashtable<String,Object>();
         new XMLParserActivator().setSAXProperties(factory, props);
-        registerService(null, new String[] { SAXParserFactory.class.getName() }, factory, props);
+        bundle.getBundleContext().registerService(SAXParserFactory.class, factory, props);
     }
     
-    private void registerDocumentBuilderFactory() {
+    private void registerDocumentBuilderFactory(Bundle bundle) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         Hashtable<String,Object> props = new Hashtable<String,Object>();
         new XMLParserActivator().setDOMProperties(factory, props);
-        registerService(null, new String[] { DocumentBuilderFactory.class.getName() }, factory, props);
+        bundle.getBundleContext().registerService(DocumentBuilderFactory.class, factory, props);
     }
     
     private void loadProperties(String resourceName) throws BundleException {
