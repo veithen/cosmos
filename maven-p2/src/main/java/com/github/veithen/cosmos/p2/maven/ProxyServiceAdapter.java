@@ -22,7 +22,6 @@ package com.github.veithen.cosmos.p2.maven;
 import java.net.URI;
 import java.util.Locale;
 
-import org.apache.maven.artifact.manager.WagonManager;
 import org.apache.maven.wagon.proxy.ProxyInfo;
 import org.eclipse.core.net.proxy.IProxyChangeListener;
 import org.eclipse.core.net.proxy.IProxyData;
@@ -30,10 +29,10 @@ import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.CoreException;
 
 public final class ProxyServiceAdapter implements IProxyService {
-    private final WagonManager wagonManager;
+    private final DefaultRepositoryManager repositoryManager;
 
-    public ProxyServiceAdapter(WagonManager wagonManager) {
-        this.wagonManager = wagonManager;
+    public ProxyServiceAdapter(DefaultRepositoryManager wagonManager) {
+        this.repositoryManager = wagonManager;
     }
 
     @Override
@@ -53,7 +52,7 @@ public final class ProxyServiceAdapter implements IProxyService {
 
     @Override
     public boolean isProxiesEnabled() {
-        return wagonManager.getProxy("http") != null || wagonManager.getProxy("https") != null;
+        return repositoryManager.getProxy("http") != null || repositoryManager.getProxy("https") != null;
     }
 
     @Override
@@ -64,7 +63,7 @@ public final class ProxyServiceAdapter implements IProxyService {
     @Override
     public IProxyData[] select(URI uri) {
         String protocol = uri.getScheme();
-        ProxyInfo info = wagonManager.getProxy(protocol);
+        ProxyInfo info = repositoryManager.getProxy(protocol);
         if (info != null) {
             // TODO: check non proxy hosts
             return new IProxyData[] { new ProxyDataAdapter(protocol.toUpperCase(Locale.ENGLISH), info) };
