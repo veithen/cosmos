@@ -29,13 +29,14 @@ import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
-final class Service<S> implements CosmosServiceReference<S>, ServiceRegistration<S> {
+final class Service<S> implements ServiceRegistration<S> {
     private final ServiceRegistry serviceRegistry;
     private final BundleImpl bundle;
     private final String[] classes;
     private final ServiceFactory<S> serviceFactory;
     private final Dictionary<String,?> properties;
     private final Map<BundleImpl,ServiceContext<S>> contexts = new HashMap<BundleImpl,ServiceContext<S>>();
+    private final ServiceReference<S> reference;
     
     Service(ServiceRegistry serviceRegistry, BundleImpl bundle, String[] classes, ServiceFactory<S> serviceFactory, Dictionary<String,?> properties) {
         this.serviceRegistry = serviceRegistry;
@@ -43,6 +44,12 @@ final class Service<S> implements CosmosServiceReference<S>, ServiceRegistration
         this.classes = classes;
         this.serviceFactory = serviceFactory;
         this.properties = properties;
+        reference = new ServiceReferenceImpl<S>(this) {
+            @Override
+            S getService(BundleImpl bundle) {
+                return Service.this.getService(bundle);
+            }
+        };
     }
     
     boolean matches(String clazz, Filter filter) {
@@ -65,7 +72,7 @@ final class Service<S> implements CosmosServiceReference<S>, ServiceRegistration
         return serviceFactory;
     }
 
-    public S getService(BundleImpl bundle) {
+    S getService(BundleImpl bundle) {
         ServiceContext<S> context = contexts.get(bundle);
         if (context == null) {
             context = new ServiceContext<S>(this, bundle);
@@ -74,32 +81,25 @@ final class Service<S> implements CosmosServiceReference<S>, ServiceRegistration
         return context.getService();
     }
 
-    public Object getProperty(String key) {
+    Object getProperty(String key) {
         return properties == null ? null : properties.get(key);
     }
 
-    public String[] getPropertyKeys() {
-        throw new UnsupportedOperationException();
-    }
-
-    public Bundle getBundle() {
+    Bundle getBundle() {
         return bundle;
     }
 
-    public Bundle[] getUsingBundles() {
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean isAssignableTo(Bundle bundle, String className) {
-        throw new UnsupportedOperationException();
-    }
-
-    public int compareTo(Object reference) {
-        throw new UnsupportedOperationException();
-    }
-
     public ServiceReference<S> getReference() {
-        return this;
+        return reference;
+    }
+
+    <T> ServiceReference<T> getReference(final Class<T> type) {
+        return new ServiceReferenceImpl<T>(this) {
+            @Override
+            T getService(BundleImpl bundle) {
+                return type.cast(Service.this.getService(bundle));
+            }
+        };
     }
 
     public void setProperties(Dictionary<String,?> properties) {

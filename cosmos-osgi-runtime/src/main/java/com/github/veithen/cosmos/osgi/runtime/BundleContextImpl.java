@@ -21,7 +21,6 @@ package com.github.veithen.cosmos.osgi.runtime;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.LinkedList;
@@ -140,19 +139,20 @@ public class BundleContextImpl implements BundleContext {
     }
 
     public ServiceReference<?> getServiceReference(String clazz) {
-        return serviceRegistry.getServiceReference(clazz, null);
+        return serviceRegistry.getServiceReference(clazz, null, Object.class);
     }
 
     public <S> ServiceReference<S> getServiceReference(Class<S> clazz) {
-        return (ServiceReference<S>)getServiceReference(clazz.getName());
+        return serviceRegistry.getServiceReference(clazz.getName(), null, clazz);
     }
 
     public ServiceReference<?>[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
-        return serviceRegistry.getServiceReferences(clazz, filter == null ? null : FrameworkUtil.createFilter(filter));
+        List<ServiceReference<Object>> references = serviceRegistry.getServiceReferences(clazz, filter == null ? null : FrameworkUtil.createFilter(filter), Object.class);
+        return references.toArray(new ServiceReference<?>[references.size()]);
     }
 
     public <S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz, String filter) throws InvalidSyntaxException {
-        return (Collection<ServiceReference<S>>)(Collection<?>)Arrays.asList(serviceRegistry.getServiceReferences(clazz.getName(), filter == null ? null : FrameworkUtil.createFilter(filter)));
+        return serviceRegistry.getServiceReferences(clazz.getName(), filter == null ? null : FrameworkUtil.createFilter(filter), clazz);
     }
 
     public ServiceReference<?>[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
@@ -161,7 +161,7 @@ public class BundleContextImpl implements BundleContext {
     }
 
     public <S> S getService(ServiceReference<S> reference) {
-        return ((CosmosServiceReference<S>)reference).getService(bundle);
+        return ((ServiceReferenceImpl<S>)reference).getService(bundle);
     }
 
     @Override

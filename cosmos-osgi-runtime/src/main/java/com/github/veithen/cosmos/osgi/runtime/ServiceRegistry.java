@@ -91,20 +91,20 @@ final class ServiceRegistry {
         }
     }
 
-    ServiceReference<?>[] getServiceReferences(String clazz, Filter filter) {
-        List<ServiceReference<?>> references = new ArrayList<ServiceReference<?>>();
+    <T> List<ServiceReference<T>> getServiceReferences(String clazz, Filter filter, Class<T> type) {
+        List<ServiceReference<T>> references = new ArrayList<ServiceReference<T>>();
         for (Service<?> service : services) {
             if (service.matches(clazz, filter)) {
-                references.add(service);
+                references.add(service.getReference(type));
             }
         }
-        return references.toArray(new ServiceReference<?>[references.size()]);
+        return references;
     }
 
-    ServiceReference<?> getServiceReference(String clazz, Filter filter) {
+    <T> ServiceReference<T> getServiceReference(String clazz, Filter filter, Class<T> type) {
         for (Service<?> service : services) {
             if (service.matches(clazz, filter)) {
-                return service;
+                return service.getReference(type);
             }
         }
         return null;
@@ -136,7 +136,7 @@ final class ServiceRegistry {
         }
         for (ServiceListenerSpec listener : serviceListeners) {
             if (service.matches(null, listener.getFilter())) {
-                listener.getListener().serviceChanged(new ServiceEvent(type, service));
+                listener.getListener().serviceChanged(new ServiceEvent(type, service.getReference()));
             }
         }
     }

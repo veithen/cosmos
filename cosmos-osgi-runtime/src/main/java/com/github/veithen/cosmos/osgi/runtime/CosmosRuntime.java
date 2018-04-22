@@ -215,9 +215,9 @@ public final class CosmosRuntime {
     }
     
     public <T> T getService(Class<T> clazz) {
-        ServiceReference<?> ref = serviceRegistry.getServiceReference(clazz.getName(), null);
+        ServiceReference<T> ref = serviceRegistry.getServiceReference(clazz.getName(), null, clazz);
         // TODO: need a system/framework bundle here
-        return ref == null ? null : clazz.cast(((Service)ref).getService(null));
+        return ref == null ? null : ((ServiceReferenceImpl<T>)ref).getService(null);
     }
     
     void fireBundleEvent(BundleImpl bundleImpl, int type) {
