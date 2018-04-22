@@ -71,7 +71,7 @@ final class BundleImpl implements Bundle {
     private final Attributes attrs;
     private final URL rootUrl;
     private final URL locationUrl;
-    private ServiceRegistry serviceRegistry;
+    private BundleContextFactory bundleContextFactory;
     private BundleState state;
     private BundleContextImpl context;
     private BundleActivator activator;
@@ -94,8 +94,8 @@ final class BundleImpl implements Bundle {
         }
     }
 
-    void initialize(ServiceRegistry serviceRegistry) throws BundleException {
-        this.serviceRegistry = serviceRegistry;
+    void initialize(BundleContextFactory bundleContextFactory) throws BundleException {
+        this.bundleContextFactory = bundleContextFactory;
         if (id == 0) {
             // The system bundle is always active.
             state = BundleState.ACTIVE;
@@ -107,7 +107,7 @@ final class BundleImpl implements Bundle {
             state = BundleState.LOADED;
         }
         if (state != BundleState.LOADED) {
-            context = new BundleContextImpl(this, serviceRegistry);
+            context = bundleContextFactory.createBundleContext(this);
         }
         if (logger.isDebugEnabled()) {
             logger.debug("Loaded bundle " + symbolicName + " with initial state " + state);
@@ -131,10 +131,6 @@ final class BundleImpl implements Bundle {
                 return elements[0].getValue();
             }
         }
-    }
-
-    CosmosRuntime getRuntime() {
-        return runtime;
     }
 
     public long getBundleId() {
@@ -236,7 +232,7 @@ final class BundleImpl implements Bundle {
         runtime.fireBundleEvent(this, BundleEvent.STARTING);
         // For bundles with lazy activation, the BundleContext has already been created
         if (context == null) {
-            context = new BundleContextImpl(this, serviceRegistry);
+            context = bundleContextFactory.createBundleContext(this);
         }
         String activatorClassName = attrs.getValue("Bundle-Activator");
         if (activatorClassName != null) {
@@ -275,7 +271,7 @@ final class BundleImpl implements Bundle {
                 throw new BundleException("Failed to stop bundle " + symbolicName, ex);
             }
         }
-        serviceRegistry.unregisterServices(this);
+        context.destroy();;
         // TODO: also unregister service and bundle listeners (or store them in the bundle context)
         context = null;
         state = BundleState.READY;

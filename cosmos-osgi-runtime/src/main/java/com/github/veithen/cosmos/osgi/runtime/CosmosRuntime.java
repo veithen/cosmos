@@ -115,8 +115,9 @@ public final class CosmosRuntime {
         });
         this.bundles = bundles.toArray(new BundleImpl[bundles.size()]);
         serviceRegistry = new ServiceRegistry();
+        BundleContextFactory bundleContextFactory = new BundleContextFactory(this, serviceRegistry);
         for (BundleImpl bundle : bundles) {
-            bundle.initialize(serviceRegistry);
+            bundle.initialize(bundleContextFactory);
         }
         Patcher.injectBundles(bundlesByUrl);
         loadProperties("META-INF/cosmos.properties");

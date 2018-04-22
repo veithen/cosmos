@@ -41,18 +41,20 @@ import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
-public class BundleContextImpl implements BundleContext {
+final class BundleContextImpl implements BundleContext {
     private final BundleImpl bundle;
+    private final CosmosRuntime runtime;
     private final ServiceRegistry serviceRegistry;
     private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
     
-    public BundleContextImpl(BundleImpl bundle, ServiceRegistry serviceRegistry) {
+    BundleContextImpl(BundleImpl bundle, CosmosRuntime runtime, ServiceRegistry serviceRegistry) {
         this.bundle = bundle;
+        this.runtime = runtime;
         this.serviceRegistry = serviceRegistry;
     }
 
     public String getProperty(String key) {
-        return bundle.getRuntime().getProperty(key);
+        return runtime.getProperty(key);
     }
 
     public Bundle getBundle() {
@@ -68,11 +70,11 @@ public class BundleContextImpl implements BundleContext {
     }
 
     public Bundle getBundle(long id) {
-        return bundle.getRuntime().getBundle(id);
+        return runtime.getBundle(id);
     }
 
     public Bundle[] getBundles() {
-        return bundle.getRuntime().getBundles();
+        return runtime.getBundles();
     }
 
     public void addServiceListener(ServiceListener listener, String filter) throws InvalidSyntaxException {
@@ -184,5 +186,9 @@ public class BundleContextImpl implements BundleContext {
 
     public Bundle getBundle(String location) {
         throw new UnsupportedOperationException();
+    }
+
+    void destroy() {
+        serviceRegistry.unregisterServices(bundle);
     }
 }
