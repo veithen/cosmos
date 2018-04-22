@@ -17,6 +17,7 @@
  * limitations under the License.
  * #L%
  */
+import org.eclipse.emf.ecore.resource.Resource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -26,6 +27,7 @@ import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 public class EclipseEmfEcoreTest {
     @Test
     public void test() {
-        // Do nothing
+        // TODO: check that this has the expected content
+        System.out.println(Resource.Factory.Registry.INSTANCE.getContentTypeToFactoryMap());
     }
 }
