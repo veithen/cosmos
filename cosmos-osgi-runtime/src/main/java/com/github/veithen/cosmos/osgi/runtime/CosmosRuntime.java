@@ -312,7 +312,6 @@ public final class CosmosRuntime {
     }
 
     ServiceReference<?> getServiceReference(String clazz, Filter filter) {
-        List<ServiceReference<?>> references = new ArrayList<ServiceReference<?>>();
         for (Service service : services) {
             if (service.matches(clazz, filter)) {
                 return service;
