@@ -17,6 +17,8 @@
  * limitations under the License.
  * #L%
  */
+package test;
+
 import static com.google.common.truth.Truth.assertThat;
 
 import org.eclipse.core.runtime.Platform;
@@ -35,5 +37,6 @@ public class EclipseCoreRuntimeTest {
         assertThat(Platform.isRunning()).isFalse();
         bundle.start();
         assertThat(Platform.isRunning()).isTrue();
+        assertThat(TestPlugin.getInstance().getStateLocation()).isNotNull();
     }
 }

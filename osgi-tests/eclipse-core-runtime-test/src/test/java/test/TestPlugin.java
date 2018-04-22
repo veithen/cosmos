@@ -17,22 +17,27 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.equinox.datalocation;
+package test;
 
-import java.net.URL;
+import org.eclipse.core.runtime.Plugin;
+import org.osgi.framework.BundleContext;
 
-import org.eclipse.osgi.service.datalocation.Location;
+public class TestPlugin extends Plugin {
+    private static TestPlugin instance;
 
-final class LocationImpl extends AbstractLocation {
-    private final URL defaultValue;
-
-    LocationImpl(Location parent, URL defaultValue, boolean readOnly) {
-        super(parent, readOnly);
-        this.defaultValue = defaultValue;
+    @Override
+    public void start(BundleContext context) throws Exception {
+        super.start(context);
+        instance = this;
     }
 
     @Override
-    public URL getDefault() {
-        return defaultValue;
+    public void stop(BundleContext context) throws Exception {
+        super.stop(context);
+        instance = null;
+    }
+
+    public static TestPlugin getInstance() {
+        return instance;
     }
 }

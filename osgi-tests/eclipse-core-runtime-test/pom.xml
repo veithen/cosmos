@@ -104,6 +104,28 @@
     </dependencies>
 
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                            <manifestLocation>${project.build.testOutputDirectory}/META-INF</manifestLocation>
+                            <instructions>
+                                <Bundle-Activator>test.TestPlugin</Bundle-Activator>
+                                <Cosmos-AutoStart>true</Cosmos-AutoStart>
+                            </instructions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         <extensions>
             <extension>
                 <groupId>com.github.veithen.cosmos</groupId>

@@ -95,7 +95,7 @@ public final class DebugOptionsImpl implements DebugOptions {
     @Override
     public void setFile(File newFile) {
         // TODO
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
     }
 
     @Override
