@@ -29,15 +29,15 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
 final class Service implements CosmosServiceReference<Object>, ServiceRegistration<Object> {
-    private final CosmosRuntime runtime;
+    private final ServiceRegistry serviceRegistry;
     private final BundleImpl bundle;
     private final String[] classes;
     private final Object serviceObject;
     private final Dictionary<String,?> properties;
     private final Map<BundleImpl,ServiceContext> contexts = new HashMap<BundleImpl,ServiceContext>();
     
-    Service(CosmosRuntime runtime, BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
-        this.runtime = runtime;
+    Service(ServiceRegistry serviceRegistry, BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
+        this.serviceRegistry = serviceRegistry;
         this.bundle = bundle;
         this.classes = classes;
         this.serviceObject = serviceObject;
@@ -106,6 +106,6 @@ final class Service implements CosmosServiceReference<Object>, ServiceRegistrati
     }
 
     public void unregister() {
-        runtime.unregisterService(this);
+        serviceRegistry.unregisterService(this);
     }
 }

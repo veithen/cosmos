@@ -26,14 +26,9 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -48,9 +43,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.framework.Filter;
-import org.osgi.framework.ServiceEvent;
-import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
 import org.osgi.util.xml.XMLParserActivator;
@@ -65,9 +57,7 @@ public final class CosmosRuntime {
     private final Properties properties = new Properties();
     private final BundleImpl[] bundles;
     private final Map<String,BundleImpl> bundlesBySymbolicName = new HashMap<String,BundleImpl>();
-    private final List<ServiceListenerSpec> serviceListeners = new ArrayList<>();
-    private final List<Service> services = new LinkedList<Service>();
-    private long nextServiceId = 1;
+    private final ServiceRegistry serviceRegistry = new ServiceRegistry();
     
     /**
      * Maps exported packages to their corresponding bundles.
@@ -80,7 +70,7 @@ public final class CosmosRuntime {
         final Map<URL,Bundle> bundlesByUrl = new HashMap<URL,Bundle>();
         // Add a system bundle
         // TODO: this should implement org.osgi.framework.launch.Framework
-        BundleImpl systemBundle = new BundleImpl(this, 0, Constants.SYSTEM_BUNDLE_SYMBOLICNAME, new Attributes(), null);
+        BundleImpl systemBundle = new BundleImpl(this, serviceRegistry, 0, Constants.SYSTEM_BUNDLE_SYMBOLICNAME, new Attributes(), null);
         bundles.add(systemBundle);
         ResourceUtil.processResources("META-INF/MANIFEST.MF", new ResourceProcessor() {
             @Override
@@ -103,7 +93,7 @@ public final class CosmosRuntime {
                     throw new BundleException("Unexpected exception", ex);
                 }
                 // There cannot be any bundle listeners yet, so no need to call BundleListeners
-                BundleImpl bundle = new BundleImpl(CosmosRuntime.this, bundles.size(), symbolicName, attrs, rootUrl);
+                BundleImpl bundle = new BundleImpl(CosmosRuntime.this, serviceRegistry, bundles.size(), symbolicName, attrs, rootUrl);
                 bundles.add(bundle);
                 bundlesBySymbolicName.put(symbolicName, bundle);
                 bundlesByUrl.put(bundle.getLocationUrl(), bundle);
@@ -224,104 +214,8 @@ public final class CosmosRuntime {
         return value;
     }
     
-    void addServiceListener(BundleImpl bundle, ServiceListener listener, Filter filter) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Bundle " + bundle.getSymbolicName() + " starts listening for services with filter " + filter);
-        }
-        synchronized (serviceListeners) {
-            serviceListeners.add(new ServiceListenerSpec(listener, filter));
-        }
-    }
-
-    void removeServiceListener(ServiceListener listener) {
-        synchronized (serviceListeners) {
-            for (Iterator<ServiceListenerSpec> it = serviceListeners.iterator(); it.hasNext(); ) {
-                if (it.next().getListener() == listener) {
-                    it.remove();
-                }
-            }
-        }
-    }
-
-    private void fireServiceChangedEvent(int type, Service service) {
-        ServiceListenerSpec[] serviceListeners;
-        synchronized (this.serviceListeners) {
-            serviceListeners = this.serviceListeners.toArray(new ServiceListenerSpec[this.serviceListeners.size()]);
-        }
-        for (ServiceListenerSpec listener : serviceListeners) {
-            if (service.matches(null, listener.getFilter())) {
-                listener.getListener().serviceChanged(new ServiceEvent(type, service));
-            }
-        }
-    }
-    
-    Service registerService(BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
-        long serviceId = nextServiceId++;
-        if (logger.isDebugEnabled()) {
-            logger.debug("Registering service " + serviceObject.getClass().getName() + " with types " + Arrays.asList(classes) + " and properties " + properties + "; id is " + serviceId);
-        }
-        Hashtable<String,Object> actualProperties = new Hashtable<String,Object>();
-        if (properties != null) {
-            for (Enumeration<String> keys = properties.keys(); keys.hasMoreElements(); ) {
-                String key = keys.nextElement();
-                actualProperties.put(key, properties.get(key));
-            }
-        }
-        actualProperties.put(Constants.OBJECTCLASS, classes);
-        actualProperties.put(Constants.SERVICE_ID, serviceId);
-        Service service = new Service(this, bundle, classes, serviceObject, actualProperties);
-        synchronized (services) {
-            services.add(service);
-        }
-        fireServiceChangedEvent(ServiceEvent.REGISTERED, service);
-        return service;
-    }
-
-    void unregisterService(Service service) {
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("Unregistering service %s", service.getProperty(Constants.SERVICE_ID)));
-        }
-        fireServiceChangedEvent(ServiceEvent.UNREGISTERING, service);
-        synchronized (services) {
-            services.remove(service);
-        }
-    }
-
-    void unregisterServices(BundleImpl bundle) {
-        List<Service> servicesToUnregister = new ArrayList<>();
-        synchronized (services) {
-            for (Service service : services) {
-                if (service.getBundle() == bundle) {
-                    servicesToUnregister.add(service);
-                }
-            }
-        }
-        for (Service service : servicesToUnregister) {
-            unregisterService(service);
-        }
-    }
-
-    ServiceReference<?>[] getServiceReferences(String clazz, Filter filter) {
-        List<ServiceReference<?>> references = new ArrayList<ServiceReference<?>>();
-        for (Service service : services) {
-            if (service.matches(clazz, filter)) {
-                references.add(service);
-            }
-        }
-        return references.toArray(new ServiceReference<?>[references.size()]);
-    }
-
-    ServiceReference<?> getServiceReference(String clazz, Filter filter) {
-        for (Service service : services) {
-            if (service.matches(clazz, filter)) {
-                return service;
-            }
-        }
-        return null;
-    }
-
     public <T> T getService(Class<T> clazz) {
-        ServiceReference<?> ref = getServiceReference(clazz.getName(), null);
+        ServiceReference<?> ref = serviceRegistry.getServiceReference(clazz.getName(), null);
         // TODO: need a system/framework bundle here
         return ref == null ? null : clazz.cast(((Service)ref).getService(null));
     }

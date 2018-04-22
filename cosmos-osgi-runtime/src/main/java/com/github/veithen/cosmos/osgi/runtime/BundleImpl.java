@@ -66,6 +66,7 @@ final class BundleImpl implements Bundle {
     };
     
     private final CosmosRuntime runtime;
+    private final ServiceRegistry serviceRegistry;
     private final long id;
     private final String symbolicName;
     private final Attributes attrs;
@@ -75,8 +76,9 @@ final class BundleImpl implements Bundle {
     private BundleContextImpl context;
     private BundleActivator activator;
 
-    public BundleImpl(CosmosRuntime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
+    public BundleImpl(CosmosRuntime runtime, ServiceRegistry serviceRegistry, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
         this.runtime = runtime;
+        this.serviceRegistry = serviceRegistry;
         this.id = id;
         this.symbolicName = symbolicName;
         this.attrs = attrs;
@@ -102,7 +104,7 @@ final class BundleImpl implements Bundle {
             state = BundleState.LOADED;
         }
         if (state != BundleState.LOADED) {
-            context = new BundleContextImpl(this);
+            context = new BundleContextImpl(this, serviceRegistry);
         }
         if (logger.isDebugEnabled()) {
             logger.debug("Loaded bundle " + symbolicName + " with initial state " + state);
@@ -231,7 +233,7 @@ final class BundleImpl implements Bundle {
         runtime.fireBundleEvent(this, BundleEvent.STARTING);
         // For bundles with lazy activation, the BundleContext has already been created
         if (context == null) {
-            context = new BundleContextImpl(this);
+            context = new BundleContextImpl(this, serviceRegistry);
         }
         String activatorClassName = attrs.getValue("Bundle-Activator");
         if (activatorClassName != null) {
@@ -270,7 +272,7 @@ final class BundleImpl implements Bundle {
                 throw new BundleException("Failed to stop bundle " + symbolicName, ex);
             }
         }
-        runtime.unregisterServices(this);
+        serviceRegistry.unregisterServices(this);
         // TODO: also unregister service and bundle listeners (or store them in the bundle context)
         context = null;
         state = BundleState.READY;

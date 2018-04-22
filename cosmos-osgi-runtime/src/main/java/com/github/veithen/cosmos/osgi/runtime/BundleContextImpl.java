@@ -44,10 +44,12 @@ import org.osgi.framework.ServiceRegistration;
 
 public class BundleContextImpl implements BundleContext {
     private final BundleImpl bundle;
+    private final ServiceRegistry serviceRegistry;
     private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
     
-    public BundleContextImpl(BundleImpl bundle) {
+    public BundleContextImpl(BundleImpl bundle, ServiceRegistry serviceRegistry) {
         this.bundle = bundle;
+        this.serviceRegistry = serviceRegistry;
     }
 
     public String getProperty(String key) {
@@ -75,15 +77,15 @@ public class BundleContextImpl implements BundleContext {
     }
 
     public void addServiceListener(ServiceListener listener, String filter) throws InvalidSyntaxException {
-        bundle.getRuntime().addServiceListener(bundle, listener, FrameworkUtil.createFilter(filter));
+        serviceRegistry.addServiceListener(bundle, listener, FrameworkUtil.createFilter(filter));
     }
 
     public void addServiceListener(ServiceListener listener) {
-        bundle.getRuntime().addServiceListener(bundle, listener, null);
+        serviceRegistry.addServiceListener(bundle, listener, null);
     }
 
     public void removeServiceListener(ServiceListener listener) {
-        bundle.getRuntime().removeServiceListener(listener);
+        serviceRegistry.removeServiceListener(listener);
     }
 
     public void addBundleListener(BundleListener listener) {
@@ -117,24 +119,24 @@ public class BundleContextImpl implements BundleContext {
     }
 
     public ServiceRegistration<?> registerService(String[] clazzes, Object service, Dictionary<String,?> properties) {
-        return bundle.getRuntime().registerService(bundle, clazzes, service, properties);
+        return serviceRegistry.registerService(bundle, clazzes, service, properties);
     }
 
     public ServiceRegistration<?> registerService(String clazz, Object service, Dictionary<String,?> properties) {
-        return bundle.getRuntime().registerService(bundle, new String[] { clazz }, service, properties);
+        return serviceRegistry.registerService(bundle, new String[] { clazz }, service, properties);
     }
 
     public <S> ServiceRegistration<S> registerService(Class<S> clazz, S service, Dictionary<String,?> properties) {
-        return (ServiceRegistration<S>)bundle.getRuntime().registerService(bundle, new String[] { clazz.getName() }, service, properties);
+        return (ServiceRegistration<S>)serviceRegistry.registerService(bundle, new String[] { clazz.getName() }, service, properties);
     }
 
     @Override
     public <S> ServiceRegistration<S> registerService(Class<S> clazz, ServiceFactory<S> factory, Dictionary<String,?> properties) {
-        return (ServiceRegistration<S>)bundle.getRuntime().registerService(bundle, new String[] { clazz.getName() }, factory, properties);
+        return (ServiceRegistration<S>)serviceRegistry.registerService(bundle, new String[] { clazz.getName() }, factory, properties);
     }
 
     public ServiceReference<?> getServiceReference(String clazz) {
-        return bundle.getRuntime().getServiceReference(clazz, null);
+        return serviceRegistry.getServiceReference(clazz, null);
     }
 
     public <S> ServiceReference<S> getServiceReference(Class<S> clazz) {
@@ -142,11 +144,11 @@ public class BundleContextImpl implements BundleContext {
     }
 
     public ServiceReference<?>[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
-        return bundle.getRuntime().getServiceReferences(clazz, filter == null ? null : FrameworkUtil.createFilter(filter));
+        return serviceRegistry.getServiceReferences(clazz, filter == null ? null : FrameworkUtil.createFilter(filter));
     }
 
     public <S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz, String filter) throws InvalidSyntaxException {
-        return (Collection<ServiceReference<S>>)(Collection<?>)Arrays.asList(bundle.getRuntime().getServiceReferences(clazz.getName(), filter == null ? null : FrameworkUtil.createFilter(filter)));
+        return (Collection<ServiceReference<S>>)(Collection<?>)Arrays.asList(serviceRegistry.getServiceReferences(clazz.getName(), filter == null ? null : FrameworkUtil.createFilter(filter)));
     }
 
     public ServiceReference<?>[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
