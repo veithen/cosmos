@@ -68,7 +68,6 @@ public final class CosmosRuntime {
 
     private CosmosRuntime() throws BundleException {
         final List<BundleImpl> bundles = new ArrayList<>();
-        final Set<Bundle> autostartBundles = new HashSet<>();
         final Map<URL,Bundle> bundlesByUrl = new HashMap<URL,Bundle>();
         // Add a system bundle
         // TODO: this should implement org.osgi.framework.launch.Framework
@@ -112,9 +111,6 @@ public final class CosmosRuntime {
                         packageMap.put(element.getValue(), bundle);
                     }
                 }
-                if ("true".equals(attrs.getValue("Cosmos-AutoStart"))) {
-                    autostartBundles.add(bundle);
-                }
             }
         });
         this.bundles = bundles.toArray(new BundleImpl[bundles.size()]);
@@ -134,6 +130,12 @@ public final class CosmosRuntime {
         InternalLoggerFactory internalLoggerFactory = new InternalLoggerFactoryImpl();
         systemBundle.getBundleContext().registerService(InternalLoggerFactory.class, internalLoggerFactory, null);
         systemBundle.getBundleContext().registerService(LogService.class, new LogServiceFactory(internalLoggerFactory), null);
+        final Set<Bundle> autostartBundles = new HashSet<>();
+        for (BundleImpl bundle : bundles) {
+            if ("true".equals(bundle.getHeaderValue("Cosmos-AutoStart"))) {
+                autostartBundles.add(bundle);
+            }
+        }
         ResourceUtil.processResources("META-INF/cosmos-autostart-bundles.list", new ResourceProcessor() {
             @Override
             public void process(URL url, InputStream in) throws IOException, BundleException {

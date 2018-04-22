@@ -99,9 +99,9 @@ final class BundleImpl implements Bundle {
         if (id == 0) {
             // The system bundle is always active.
             state = BundleState.ACTIVE;
-        } else if ("lazy".equals(getHeaderValue(attrs, "Bundle-ActivationPolicy"))
-                || "true".equals(getHeaderValue(attrs, "Eclipse-LazyStart"))
-                || "true".equals(getHeaderValue(attrs, "Eclipse-AutoStart"))) {
+        } else if ("lazy".equals(getHeaderValue("Bundle-ActivationPolicy"))
+                || "true".equals(getHeaderValue("Eclipse-LazyStart"))
+                || "true".equals(getHeaderValue("Eclipse-AutoStart"))) {
             state = BundleState.LAZY_ACTIVATE;
         } else {
             state = BundleState.LOADED;
@@ -114,7 +114,7 @@ final class BundleImpl implements Bundle {
         }
     }
     
-    private static String getHeaderValue(Attributes attrs, String name) throws BundleException {
+    String getHeaderValue(String name) throws BundleException {
         String value = attrs.getValue(name);
         if (value == null) {
             return null;
