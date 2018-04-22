@@ -24,10 +24,19 @@ import org.eclipse.equinox.log.Logger;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
-import org.slf4j.LoggerFactory;
+import org.osgi.service.component.annotations.Reference;
+
+import com.github.veithen.cosmos.osgi.runtime.internal.InternalLoggerFactory;
 
 @Component(service={ExtendedLogService.class}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class ExtendedLogServiceImpl implements ExtendedLogService {
+    private InternalLoggerFactory loggerFactory;
+
+    @Reference
+    void bindLoggerFactory(InternalLoggerFactory loggerFactory) {
+        this.loggerFactory = loggerFactory;
+    }
+
     @Override
     public void log(int level, String message) {
         throw new UnsupportedOperationException();
@@ -75,6 +84,6 @@ public final class ExtendedLogServiceImpl implements ExtendedLogService {
 
     @Override
     public Logger getLogger(Bundle bundle, String loggerName) {
-        return new LoggerAdapter(LoggerFactory.getLogger(loggerName));
+        return new LoggerAdapter(loggerFactory.getLogger(loggerName));
     }
 }

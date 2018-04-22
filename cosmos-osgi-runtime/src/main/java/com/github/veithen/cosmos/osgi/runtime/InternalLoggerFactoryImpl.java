@@ -19,35 +19,14 @@
  */
 package com.github.veithen.cosmos.osgi.runtime;
 
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogService;
+import org.slf4j.LoggerFactory;
 
 import com.github.veithen.cosmos.osgi.runtime.internal.InternalLogger;
+import com.github.veithen.cosmos.osgi.runtime.internal.InternalLoggerFactory;
 
-final class LogServiceAdapter implements LogService {
-    private final InternalLogger logger;
-
-    LogServiceAdapter(InternalLogger logger) {
-        this.logger = logger;
-    }
-
+final class InternalLoggerFactoryImpl implements InternalLoggerFactory {
     @Override
-    public void log(int level, String message) {
-        log(level, message, null);
-    }
-
-    @Override
-    public void log(int level, String message, Throwable exception) {
-        logger.log(level, message, exception);
-    }
-
-    @Override
-    public void log(ServiceReference sr, int level, String message) {
-        log(level, message);
-    }
-
-    @Override
-    public void log(ServiceReference sr, int level, String message, Throwable exception) {
-        log(level, message, exception);
+    public InternalLogger getLogger(String name) {
+        return new InternalLoggerImpl(LoggerFactory.getLogger(name));
     }
 }

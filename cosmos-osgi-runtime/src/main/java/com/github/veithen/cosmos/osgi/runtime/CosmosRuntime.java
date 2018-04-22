@@ -49,6 +49,8 @@ import org.osgi.util.xml.XMLParserActivator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.veithen.cosmos.osgi.runtime.internal.InternalLoggerFactory;
+
 public final class CosmosRuntime {
     private static final Logger logger = LoggerFactory.getLogger(CosmosRuntime.class);
 
@@ -125,8 +127,10 @@ public final class CosmosRuntime {
         registerSAXParserFactory(systemBundle);
         registerDocumentBuilderFactory(systemBundle);
         systemBundle.getBundleContext().registerService(Logger.class, logger, null);
+        InternalLoggerFactory internalLoggerFactory = new InternalLoggerFactoryImpl();
+        systemBundle.getBundleContext().registerService(InternalLoggerFactory.class, internalLoggerFactory, null);
         // TODO: make this a ServiceFactory and use a per bundle SLF4J logger
-        systemBundle.getBundleContext().registerService(LogService.class, new LogServiceAdapter(LoggerFactory.getLogger("osgi")), null);
+        systemBundle.getBundleContext().registerService(LogService.class, new LogServiceAdapter(internalLoggerFactory.getLogger("osgi")), null);
         ResourceUtil.processResources("META-INF/cosmos-autostart-bundles.list", new ResourceProcessor() {
             @Override
             public void process(URL url, InputStream in) throws IOException, BundleException {
