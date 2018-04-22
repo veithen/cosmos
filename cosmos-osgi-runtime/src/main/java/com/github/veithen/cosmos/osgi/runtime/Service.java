@@ -25,22 +25,23 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
-final class Service implements CosmosServiceReference<Object>, ServiceRegistration<Object> {
+final class Service<S> implements CosmosServiceReference<S>, ServiceRegistration<S> {
     private final ServiceRegistry serviceRegistry;
     private final BundleImpl bundle;
     private final String[] classes;
-    private final Object serviceObject;
+    private final ServiceFactory<S> serviceFactory;
     private final Dictionary<String,?> properties;
-    private final Map<BundleImpl,ServiceContext> contexts = new HashMap<BundleImpl,ServiceContext>();
+    private final Map<BundleImpl,ServiceContext<S>> contexts = new HashMap<BundleImpl,ServiceContext<S>>();
     
-    Service(ServiceRegistry serviceRegistry, BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
+    Service(ServiceRegistry serviceRegistry, BundleImpl bundle, String[] classes, ServiceFactory<S> serviceFactory, Dictionary<String,?> properties) {
         this.serviceRegistry = serviceRegistry;
         this.bundle = bundle;
         this.classes = classes;
-        this.serviceObject = serviceObject;
+        this.serviceFactory = serviceFactory;
         this.properties = properties;
     }
     
@@ -60,14 +61,14 @@ final class Service implements CosmosServiceReference<Object>, ServiceRegistrati
         return filter == null || filter.matchCase(properties);
     }
 
-    Object getServiceObject() {
-        return serviceObject;
+    ServiceFactory<S> getServiceFactory() {
+        return serviceFactory;
     }
 
-    public Object getService(BundleImpl bundle) {
-        ServiceContext context = contexts.get(bundle);
+    public S getService(BundleImpl bundle) {
+        ServiceContext<S> context = contexts.get(bundle);
         if (context == null) {
-            context = new ServiceContext(this, bundle);
+            context = new ServiceContext<S>(this, bundle);
             contexts.put(bundle, context);
         }
         return context.getService();
@@ -97,7 +98,7 @@ final class Service implements CosmosServiceReference<Object>, ServiceRegistrati
         throw new UnsupportedOperationException();
     }
 
-    public ServiceReference<Object> getReference() {
+    public ServiceReference<S> getReference() {
         return this;
     }
 

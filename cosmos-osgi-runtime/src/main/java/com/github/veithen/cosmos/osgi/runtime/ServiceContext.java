@@ -20,34 +20,28 @@
 package com.github.veithen.cosmos.osgi.runtime;
 
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class ServiceContext {
+final class ServiceContext<S> {
     private static final Logger logger = LoggerFactory.getLogger(ServiceContext.class);
 
-    private final Service service;
+    private final Service<S> service;
     private final BundleImpl bundle;
     private int refCount;
-    private Object serviceObject;
+    private S serviceObject;
     
-    ServiceContext(Service service, BundleImpl bundle) {
+    ServiceContext(Service<S> service, BundleImpl bundle) {
         this.service = service;
         this.bundle = bundle;
     }
     
-    Object getService() {
+    S getService() {
         if (bundle != null && logger.isDebugEnabled()) {
             logger.debug("Bundle " + bundle.getSymbolicName() + " is getting service " + service.getProperty(Constants.SERVICE_ID));
         }
-        Object serviceObject = this.serviceObject;
         if (serviceObject == null) {
-            serviceObject = service.getServiceObject();
-            if (serviceObject instanceof ServiceFactory) {
-                serviceObject = ((ServiceFactory<Object>)serviceObject).getService(bundle, service);
-            }
-            this.serviceObject = serviceObject;
+            serviceObject = service.getServiceFactory().getService(bundle, service);
         }
         refCount++;
         return serviceObject;

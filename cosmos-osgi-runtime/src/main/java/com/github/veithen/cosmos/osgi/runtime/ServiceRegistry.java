@@ -31,6 +31,7 @@ import java.util.List;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
@@ -39,14 +40,15 @@ import org.slf4j.LoggerFactory;
 final class ServiceRegistry {
     private static final Logger logger = LoggerFactory.getLogger(ServiceRegistry.class);
 
-    private final List<Service> services = new LinkedList<Service>();
+    private final List<Service<?>> services = new LinkedList<Service<?>>();
     private final List<ServiceListenerSpec> serviceListeners = new ArrayList<>();
     private long nextServiceId = 1;
 
-    Service registerService(BundleImpl bundle, String[] classes, Object serviceObject, Dictionary<String,?> properties) {
+    <S> Service<S> registerService(BundleImpl bundle, String[] classes, ServiceFactory<S> serviceFactory, Dictionary<String,?> properties) {
         long serviceId = nextServiceId++;
         if (logger.isDebugEnabled()) {
-            logger.debug("Registering service " + serviceObject.getClass().getName() + " with types " + Arrays.asList(classes) + " and properties " + properties + "; id is " + serviceId);
+            Class<?> clazz = serviceFactory instanceof SingletonServiceFactory ? ((SingletonServiceFactory<S>)serviceFactory).getService().getClass() : serviceFactory.getClass();
+            logger.debug("Registering service " + clazz.getName() + " with types " + Arrays.asList(classes) + " and properties " + properties + "; id is " + serviceId);
         }
         Hashtable<String,Object> actualProperties = new Hashtable<String,Object>();
         if (properties != null) {
@@ -57,7 +59,7 @@ final class ServiceRegistry {
         }
         actualProperties.put(Constants.OBJECTCLASS, classes);
         actualProperties.put(Constants.SERVICE_ID, serviceId);
-        Service service = new Service(this, bundle, classes, serviceObject, actualProperties);
+        Service<S> service = new Service<S>(this, bundle, classes, serviceFactory, actualProperties);
         synchronized (services) {
             services.add(service);
         }
@@ -65,7 +67,7 @@ final class ServiceRegistry {
         return service;
     }
 
-    void unregisterService(Service service) {
+    void unregisterService(Service<?> service) {
         if (logger.isDebugEnabled()) {
             logger.debug(String.format("Unregistering service %s", service.getProperty(Constants.SERVICE_ID)));
         }
@@ -76,22 +78,22 @@ final class ServiceRegistry {
     }
 
     void unregisterServices(BundleImpl bundle) {
-        List<Service> servicesToUnregister = new ArrayList<>();
+        List<Service<?>> servicesToUnregister = new ArrayList<>();
         synchronized (services) {
-            for (Service service : services) {
+            for (Service<?> service : services) {
                 if (service.getBundle() == bundle) {
                     servicesToUnregister.add(service);
                 }
             }
         }
-        for (Service service : servicesToUnregister) {
+        for (Service<?> service : servicesToUnregister) {
             unregisterService(service);
         }
     }
 
     ServiceReference<?>[] getServiceReferences(String clazz, Filter filter) {
         List<ServiceReference<?>> references = new ArrayList<ServiceReference<?>>();
-        for (Service service : services) {
+        for (Service<?> service : services) {
             if (service.matches(clazz, filter)) {
                 references.add(service);
             }
@@ -100,7 +102,7 @@ final class ServiceRegistry {
     }
 
     ServiceReference<?> getServiceReference(String clazz, Filter filter) {
-        for (Service service : services) {
+        for (Service<?> service : services) {
             if (service.matches(clazz, filter)) {
                 return service;
             }
@@ -127,7 +129,7 @@ final class ServiceRegistry {
         }
     }
 
-    private void fireServiceChangedEvent(int type, Service service) {
+    private void fireServiceChangedEvent(int type, Service<?> service) {
         ServiceListenerSpec[] serviceListeners;
         synchronized (this.serviceListeners) {
             serviceListeners = this.serviceListeners.toArray(new ServiceListenerSpec[this.serviceListeners.size()]);

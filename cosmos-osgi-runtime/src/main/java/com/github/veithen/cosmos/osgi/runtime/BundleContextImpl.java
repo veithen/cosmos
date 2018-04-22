@@ -119,20 +119,24 @@ public class BundleContextImpl implements BundleContext {
     }
 
     public ServiceRegistration<?> registerService(String[] clazzes, Object service, Dictionary<String,?> properties) {
-        return serviceRegistry.registerService(bundle, clazzes, service, properties);
+        if (service instanceof ServiceFactory<?>) {
+            return serviceRegistry.registerService(bundle, clazzes, (ServiceFactory<?>)service, properties);
+        } else {
+            return serviceRegistry.registerService(bundle, clazzes, new SingletonServiceFactory<Object>(service), properties);
+        }
     }
 
     public ServiceRegistration<?> registerService(String clazz, Object service, Dictionary<String,?> properties) {
-        return serviceRegistry.registerService(bundle, new String[] { clazz }, service, properties);
+        return registerService(new String[] { clazz }, service, properties);
     }
 
     public <S> ServiceRegistration<S> registerService(Class<S> clazz, S service, Dictionary<String,?> properties) {
-        return (ServiceRegistration<S>)serviceRegistry.registerService(bundle, new String[] { clazz.getName() }, service, properties);
+        return serviceRegistry.registerService(bundle, new String[] { clazz.getName() }, new SingletonServiceFactory<S>(service), properties);
     }
 
     @Override
     public <S> ServiceRegistration<S> registerService(Class<S> clazz, ServiceFactory<S> factory, Dictionary<String,?> properties) {
-        return (ServiceRegistration<S>)serviceRegistry.registerService(bundle, new String[] { clazz.getName() }, factory, properties);
+        return serviceRegistry.registerService(bundle, new String[] { clazz.getName() }, factory, properties);
     }
 
     public ServiceReference<?> getServiceReference(String clazz) {
