@@ -78,6 +78,7 @@ public final class TraceConfigurator {
     @Activate
     private void activate() {
         if (logger.isDebugEnabled()) {
+            debugOptions.setDebugEnabled(true);
             for (String option : optionsForTrace) {
                 debugOptions.setOption(option, "true");
             }

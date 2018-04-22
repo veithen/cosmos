@@ -30,6 +30,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(service={DebugOptions.class}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class DebugOptionsImpl implements DebugOptions {
     private final Map<String,String> options = new HashMap<String,String>();
+    private boolean debugEnabled;
     
     @Override
     public boolean getBooleanOption(String option, boolean defaultValue) {
@@ -81,15 +82,13 @@ public final class DebugOptionsImpl implements DebugOptions {
     }
 
     @Override
-    public boolean isDebugEnabled() {
-        // TODO
-        throw new UnsupportedOperationException();
+    public synchronized boolean isDebugEnabled() {
+        return debugEnabled;
     }
 
     @Override
-    public void setDebugEnabled(boolean value) {
-        // TODO
-        throw new UnsupportedOperationException();
+    public synchronized void setDebugEnabled(boolean value) {
+        this.debugEnabled = value;
     }
 
     @Override
