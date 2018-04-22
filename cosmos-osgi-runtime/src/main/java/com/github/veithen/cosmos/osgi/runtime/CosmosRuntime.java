@@ -36,6 +36,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.util.xml.XMLParserActivator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +65,7 @@ public final class CosmosRuntime {
         BundleImpl systemBundle = bundleManager.getBundle(0);
         registerSAXParserFactory(systemBundle);
         registerDocumentBuilderFactory(systemBundle);
+        systemBundle.getBundleContext().registerService(PackageAdmin.class, new PackageAdminImpl(bundleManager), null);
         systemBundle.getBundleContext().registerService(Logger.class, logger, null);
         InternalLoggerFactory internalLoggerFactory = new InternalLoggerFactoryImpl();
         systemBundle.getBundleContext().registerService(InternalLoggerFactory.class, internalLoggerFactory, null);

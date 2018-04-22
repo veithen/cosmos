@@ -17,7 +17,9 @@
  * limitations under the License.
  * #L%
  */
-import org.eclipse.emf.ecore.resource.Resource;
+import static com.google.common.truth.Truth.assertThat;
+
+import org.eclipse.emf.ecore.EPackage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,7 +29,6 @@ import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 public class EclipseEmfEcoreTest {
     @Test
     public void test() {
-        // TODO: check that this has the expected content
-        System.out.println(Resource.Factory.Registry.INSTANCE.getContentTypeToFactoryMap());
+        assertThat(EPackage.Registry.INSTANCE.getEPackage("http://www.eclipse.org/emf/2002/Ecore")).isNotNull();
     }
 }

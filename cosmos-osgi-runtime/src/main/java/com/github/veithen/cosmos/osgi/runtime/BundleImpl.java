@@ -163,7 +163,8 @@ final class BundleImpl implements Bundle {
     }
 
     public void start(int options) throws BundleException {
-        throw new UnsupportedOperationException();
+        // TODO: check if this is correct
+        start();
     }
 
     private void makeDependenciesReady() throws BundleException {
