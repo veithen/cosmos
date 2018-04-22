@@ -145,6 +145,11 @@
                 <artifactId>slf4j-simple</artifactId>
                 <version>1.7.25</version>
             </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-proxy</artifactId>
+                <version>9.2.24.v20180105</version>
+            </dependency>
 
             <!-- Eclipse Mars versions (Mars is the last release to support Java 1.7) -->
             <dependency>

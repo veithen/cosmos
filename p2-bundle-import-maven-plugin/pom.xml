@@ -64,6 +64,16 @@
             <artifactId>plexus-archiver</artifactId>
             <version>3.5</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.truth</groupId>
+            <artifactId>truth</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-proxy</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -81,6 +91,7 @@
                         <configuration>
                             <portNames>
                                 <portName>repo.httpPort</portName>
+                                <portName>proxy.httpPort</portName>
                             </portNames>
                         </configuration>
                     </execution>
@@ -102,6 +113,13 @@
                                 <bundle>src/test/bundles/javax.inject.source_1.0.0.v20091030.jar</bundle>
                                 <bundle>src/test/bundles/javax.inject_1.0.0.v20091030.jar</bundle>
                             </bundles>
+                            <artifacts>
+                                <artifact>
+                                    <groupId>org.codehaus.woodstox</groupId>
+                                    <artifactId>stax2-api</artifactId>
+                                    <version>4.0.0</version>
+                                </artifact>
+                            </artifacts>
                         </configuration>
                     </execution>
                 </executions>
@@ -120,6 +138,19 @@
                             <resourceBases>
                                 <resourceBase>${project.build.directory}/p2-repository</resourceBase>
                             </resourceBases>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>start-proxy</id>
+                        <goals>
+                            <goal>start-webapp</goal>
+                        </goals>
+                        <configuration>
+                            <port>${proxy.httpPort}</port>
+                            <resourceBases>
+                                <resourceBase>${project.basedir}/src/test/webapp/proxy</resourceBase>
+                            </resourceBases>
+                            <requestLog>${project.build.directory}/proxy.log</requestLog>
                         </configuration>
                     </execution>
                     <execution>
@@ -149,6 +180,9 @@
                         <goals>
                             <goal>run</goal>
                         </goals>
+                        <configuration>
+                            <addTestClassPath>true</addTestClassPath>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
