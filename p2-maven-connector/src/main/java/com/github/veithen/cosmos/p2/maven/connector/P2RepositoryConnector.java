@@ -31,6 +31,7 @@ import java.util.Map;
 
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.metadata.Metadata;
+import org.eclipse.aether.repository.Proxy;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.spi.connector.ArtifactDownload;
 import org.eclipse.aether.spi.connector.ArtifactUpload;
@@ -198,7 +199,8 @@ final class P2RepositoryConnector implements RepositoryConnector {
             Collection<? extends MetadataDownload> metadataDownloads) {
         ProxyHolder.Lease lease;
         try {
-            lease = ProxyHolder.withProxy(repository.getProxy());
+            Proxy proxy = repository.getProxy();
+            lease = ProxyHolder.withProxyDataProvider(proxy == null ? null : new AetherProxyDataProvider(proxy));
         } catch (InterruptedException ex) {
             if (artifactDownloads != null) {
                 for (ArtifactDownload artifactDownload : artifactDownloads) {

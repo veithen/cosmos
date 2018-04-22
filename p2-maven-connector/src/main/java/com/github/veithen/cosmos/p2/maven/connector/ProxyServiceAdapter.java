@@ -21,13 +21,14 @@ package com.github.veithen.cosmos.p2.maven.connector;
 
 import java.net.URI;
 
-import org.eclipse.aether.repository.Proxy;
 import org.eclipse.core.net.proxy.IProxyChangeListener;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.CoreException;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
+
+import com.github.veithen.cosmos.p2.maven.ProxyDataProvider;
 
 @Component(
         service=IProxyService.class,
@@ -41,7 +42,7 @@ public class ProxyServiceAdapter implements IProxyService {
 
     @Override
     public boolean isProxiesEnabled() {
-        return ProxyHolder.getCurrentProxy() != null;
+        return ProxyHolder.getCurrentProxyDataProvider() != null;
     }
 
     @Override
@@ -68,9 +69,10 @@ public class ProxyServiceAdapter implements IProxyService {
     public IProxyData[] select(URI uri) {
         String protocol = uri.getScheme();
         if (protocol.equals("http") || protocol.equals("https")) {
-            Proxy proxy = ProxyHolder.getCurrentProxy();
-            if (proxy != null) {
-                return new IProxyData[] { new ProxyDataAdapter(proxy) };
+            ProxyDataProvider proxyDataProvider = ProxyHolder.getCurrentProxyDataProvider();
+            IProxyData proxyData = proxyDataProvider.getProxyData(protocol);
+            if (proxyData != null) {
+                return new IProxyData[] { proxyData };
             }
         }
         return new IProxyData[0];

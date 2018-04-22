@@ -21,10 +21,12 @@ package com.github.veithen.cosmos.p2.maven.connector;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
-import org.eclipse.aether.repository.Proxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.veithen.cosmos.p2.maven.ProxyDataProvider;
 
 /**
  * Holds the currently configured proxy.
@@ -41,23 +43,23 @@ public final class ProxyHolder {
     private static final Logger logger = LoggerFactory.getLogger(ProxyHolder.class);
 
     private static final Object lock = new Object();
-    private static Proxy currentProxy;
+    private static ProxyDataProvider currentProxyDataProvider;
     private static List<Lease> leases = new LinkedList<>();
 
     private ProxyHolder() {}
 
-    public static Lease withProxy(Proxy proxy) throws InterruptedException {
+    public static Lease withProxyDataProvider(ProxyDataProvider proxyDataProvider) throws InterruptedException {
         synchronized (lock) {
             while (true) {
                 boolean proxySet = !leases.isEmpty();
-                if (!proxySet || currentProxy == proxy) {
+                if (!proxySet || Objects.equals(currentProxyDataProvider, proxyDataProvider)) {
                     if (proxySet) {
                         logger.debug("Proxy already set");
                     } else {
                         if (logger.isDebugEnabled()) {
-                            logger.debug(String.format("Setting proxy %s", proxy));
+                            logger.debug(String.format("Setting proxy %s", proxyDataProvider));
                         }
-                        currentProxy = proxy;
+                        currentProxyDataProvider = proxyDataProvider;
                     }
                     Lease lease = new Lease() {
                         @Override
@@ -68,7 +70,7 @@ public final class ProxyHolder {
                                 }
                                 if (leases.isEmpty()) {
                                     logger.debug("Unsetting proxy");
-                                    currentProxy = null;
+                                    currentProxyDataProvider = null;
                                 }
                                 lock.notifyAll();
                             }
@@ -83,9 +85,9 @@ public final class ProxyHolder {
         }
     }
     
-    public static Proxy getCurrentProxy() {
+    public static ProxyDataProvider getCurrentProxyDataProvider() {
         synchronized (lock) {
-            return currentProxy;
+            return currentProxyDataProvider;
         }
     }
 }
