@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.p2.maven.connector;
+package com.github.veithen.cosmos.p2.maven;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,8 +25,6 @@ import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.github.veithen.cosmos.p2.maven.ProxyDataProvider;
 
 /**
  * Holds the currently configured proxy.

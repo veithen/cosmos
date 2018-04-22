@@ -56,6 +56,7 @@ import org.w3c.dom.Element;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 import com.github.veithen.cosmos.p2.maven.ArtifactCoordinateMapper;
 import com.github.veithen.cosmos.p2.maven.P2Coordinate;
+import com.github.veithen.cosmos.p2.maven.ProxyHolder;
 
 final class P2RepositoryConnector implements RepositoryConnector {
     private static final Logger logger = LoggerFactory.getLogger(P2RepositoryConnector.class);

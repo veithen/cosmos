@@ -25,10 +25,10 @@ import org.eclipse.aether.repository.Authentication;
 import org.eclipse.aether.repository.Proxy;
 import org.eclipse.core.net.proxy.IProxyData;
 
-public final class ProxyDataAdapter implements IProxyData {
+final class AetherProxyDataAdapter implements IProxyData {
     private final Proxy proxy;
 
-    public ProxyDataAdapter(Proxy proxy) {
+    AetherProxyDataAdapter(Proxy proxy) {
         this.proxy = proxy;
     }
     

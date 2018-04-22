@@ -17,18 +17,18 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.p2.maven;
+package com.github.veithen.cosmos.p2.maven.plugin.importer;
 
-import org.apache.maven.wagon.proxy.ProxyInfo;
+import org.apache.maven.settings.Proxy;
 import org.eclipse.core.net.proxy.IProxyData;
 
-public final class ProxyDataAdapter implements IProxyData {
+final class MavenSessionProxyDataAdapter implements IProxyData {
     private final String type;
-    private final ProxyInfo info;
+    private final Proxy proxy;
 
-    public ProxyDataAdapter(String type, ProxyInfo info) {
+    public MavenSessionProxyDataAdapter(String type, Proxy proxy) {
         this.type = type;
-        this.info = info;
+        this.proxy = proxy;
     }
     
     @Override
@@ -38,47 +38,47 @@ public final class ProxyDataAdapter implements IProxyData {
 
     @Override
     public String getHost() {
-        return info.getHost();
+        return proxy.getHost();
     }
 
     @Override
     public void setHost(String host) {
-        info.setHost(host);
+        proxy.setHost(host);
     }
 
     @Override
     public int getPort() {
-        return info.getPort();
+        return proxy.getPort();
     }
 
     @Override
     public void setPort(int port) {
-        info.setPort(port);
+        proxy.setPort(port);
     }
 
     @Override
     public String getUserId() {
-        return info.getUserName();
+        return proxy.getUsername();
     }
 
     @Override
     public void setUserid(String userid) {
-        info.setUserName(userid);
+        proxy.setUsername(userid);
     }
 
     @Override
     public String getPassword() {
-        return info.getPassword();
+        return proxy.getPassword();
     }
 
     @Override
     public void setPassword(String password) {
-        info.setPassword(password);
+        proxy.setPassword(password);
     }
 
     @Override
     public boolean isRequiresAuthentication() {
-        return info.getUserName() != null;
+        return proxy.getUsername() != null;
     }
 
     @Override

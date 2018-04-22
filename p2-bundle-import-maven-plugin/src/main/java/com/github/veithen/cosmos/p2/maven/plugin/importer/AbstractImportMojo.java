@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.plugin.AbstractMojo;
@@ -33,9 +34,9 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.settings.crypto.SettingsDecrypter;
 import org.codehaus.plexus.util.FileUtils;
 import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.installation.InstallRequest;
 import org.eclipse.aether.installation.InstallationException;
@@ -49,6 +50,7 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 import com.github.veithen.cosmos.p2.maven.ArtifactCoordinateMapper;
 import com.github.veithen.cosmos.p2.maven.P2Coordinate;
+import com.github.veithen.cosmos.p2.maven.ProxyHolder;
 import com.github.veithen.cosmos.p2.maven.RepositoryManager;
 
 public abstract class AbstractImportMojo extends AbstractMojo {
@@ -58,8 +60,11 @@ public abstract class AbstractImportMojo extends AbstractMojo {
     @Component
     private RepositorySystem repositorySystem;
 
-    @Parameter(property="session.repositorySession", required=true, readonly=true)
-    private RepositorySystemSession session;
+    @Component
+    private SettingsDecrypter settingsDecrypter;
+    
+    @Parameter(property="session", required=true, readonly=true)
+    private MavenSession session;
 
     @Parameter(property="project.dependencyManagement")
     private DependencyManagement dependencyManagement;
@@ -96,7 +101,7 @@ public abstract class AbstractImportMojo extends AbstractMojo {
         P2Coordinate p2Coordinate = new P2Coordinate(transformBundleId(bundleId), Version.parseVersion(bundleVersion));
         Artifact artifact = ArtifactCoordinateMapper.createArtifact(p2Coordinate);
         try {
-            artifact = repositorySystem.resolveArtifact(session, new ArtifactRequest(artifact, null, null)).getArtifact();
+            artifact = repositorySystem.resolveArtifact(session.getRepositorySession(), new ArtifactRequest(artifact, null, null)).getArtifact();
         } catch (ArtifactResolutionException ex) {
             // Just continue.
         }
@@ -105,38 +110,48 @@ public abstract class AbstractImportMojo extends AbstractMojo {
         boolean deleteFile = false;
         try {
             if (file == null) {
-                IArtifactRepository repository;
+                ProxyHolder.Lease lease;
                 try {
-                    repository = repositoryManager.loadRepository(new URI(repositoryUri));
-                } catch (ProvisionException ex) {
-                    throw new MojoExecutionException(String.format("Failed to load repository: %s", ex.getMessage()), ex);
-                } catch (URISyntaxException ex) {
-                    throw new MojoExecutionException(String.format("Invalid repository URI %s", repositoryUri), ex);
+                    lease = ProxyHolder.withProxyDataProvider(new MavenSessionProxyDataProvider(session, settingsDecrypter));
+                } catch (InterruptedException ex) {
+                    throw new MojoExecutionException("Execution interrupted", ex);
                 }
-                IArtifactDescriptor[] descriptors = repository.getArtifactDescriptors(p2Coordinate.createIArtifactKey(repository));
-                if (descriptors.length == 0) {
-                    throw new MojoExecutionException(String.format("Bundle %s not found", bundleId));
-                }
-                if (outputLocation == null) {
+                try {
+                    IArtifactRepository repository;
                     try {
-                        file = File.createTempFile(p2Coordinate.getId(), ".jar");
-                    } catch (IOException ex) {
-                        throw new MojoExecutionException(String.format("Unable to create temporary file: %s", ex.getMessage()), ex);
+                        repository = repositoryManager.loadRepository(new URI(repositoryUri));
+                    } catch (ProvisionException ex) {
+                        throw new MojoExecutionException(String.format("Failed to load repository: %s", ex.getMessage()), ex);
+                    } catch (URISyntaxException ex) {
+                        throw new MojoExecutionException(String.format("Invalid repository URI %s", repositoryUri), ex);
                     }
-                    deleteFile = true;
-                } else {
-                    file = outputLocation;
-                }
-                try (OutputStream out = new FileOutputStream(file)) {
-                    // TODO: check status
-                    repository.getArtifact(descriptors[0], out, new SystemOutProgressMonitor());
-                } catch (IOException ex) {
-                    throw new MojoExecutionException(String.format("Unable to download artifact: %s", ex.getMessage()), ex);
-                }
-                try {
-                    repositorySystem.install(session, new InstallRequest().addArtifact(artifact.setFile(file)));
-                } catch (InstallationException ex) {
-                    throw new MojoExecutionException(String.format("Unable to install artifact: %s", ex.getMessage()), ex);
+                    IArtifactDescriptor[] descriptors = repository.getArtifactDescriptors(p2Coordinate.createIArtifactKey(repository));
+                    if (descriptors.length == 0) {
+                        throw new MojoExecutionException(String.format("Bundle %s not found", bundleId));
+                    }
+                    if (outputLocation == null) {
+                        try {
+                            file = File.createTempFile(p2Coordinate.getId(), ".jar");
+                        } catch (IOException ex) {
+                            throw new MojoExecutionException(String.format("Unable to create temporary file: %s", ex.getMessage()), ex);
+                        }
+                        deleteFile = true;
+                    } else {
+                        file = outputLocation;
+                    }
+                    try (OutputStream out = new FileOutputStream(file)) {
+                        // TODO: check status
+                        repository.getArtifact(descriptors[0], out, new SystemOutProgressMonitor());
+                    } catch (IOException ex) {
+                        throw new MojoExecutionException(String.format("Unable to download artifact: %s", ex.getMessage()), ex);
+                    }
+                    try {
+                        repositorySystem.install(session.getRepositorySession(), new InstallRequest().addArtifact(artifact.setFile(file)));
+                    } catch (InstallationException ex) {
+                        throw new MojoExecutionException(String.format("Unable to install artifact: %s", ex.getMessage()), ex);
+                    }
+                } finally {
+                    lease.close();
                 }
             } else if (outputLocation != null) {
                 try {

@@ -20,29 +20,27 @@
 package com.github.veithen.cosmos.p2.maven;
 
 import java.net.URI;
-import java.util.Locale;
 
-import org.apache.maven.wagon.proxy.ProxyInfo;
 import org.eclipse.core.net.proxy.IProxyChangeListener;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.CoreException;
+import org.osgi.framework.Constants;
+import org.osgi.service.component.annotations.Component;
 
-public final class ProxyServiceAdapter implements IProxyService {
-    private final DefaultRepositoryManager repositoryManager;
-
-    public ProxyServiceAdapter(DefaultRepositoryManager wagonManager) {
-        this.repositoryManager = wagonManager;
+@Component(
+        service=IProxyService.class,
+        property={Constants.SERVICE_RANKING + ":Integer=1"},
+        xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
+public class ProxyServiceAdapter implements IProxyService {
+    @Override
+    public void setProxiesEnabled(boolean enabled) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean isSystemProxiesEnabled() {
-        return false;
-    }
-
-    @Override
-    public void setSystemProxiesEnabled(boolean enabled) {
-        throw new UnsupportedOperationException("Proxy configuration is not mutable");
+    public boolean isProxiesEnabled() {
+        return ProxyHolder.getCurrentProxyDataProvider() != null;
     }
 
     @Override
@@ -51,69 +49,70 @@ public final class ProxyServiceAdapter implements IProxyService {
     }
 
     @Override
-    public boolean isProxiesEnabled() {
-        return repositoryManager.getProxy("http") != null || repositoryManager.getProxy("https") != null;
+    public void setSystemProxiesEnabled(boolean enabled) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setProxiesEnabled(boolean enabled) {
-        throw new UnsupportedOperationException("Proxy configuration is not mutable");
+    public boolean isSystemProxiesEnabled() {
+        return false;
+    }
+
+    @Override
+    public IProxyData[] getProxyData() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public IProxyData[] select(URI uri) {
         String protocol = uri.getScheme();
-        ProxyInfo info = repositoryManager.getProxy(protocol);
-        if (info != null) {
-            // TODO: check non proxy hosts
-            return new IProxyData[] { new ProxyDataAdapter(protocol.toUpperCase(Locale.ENGLISH), info) };
-        } else {
-            return new IProxyData[0];
+        if (protocol.equals("http") || protocol.equals("https")) {
+            ProxyDataProvider proxyDataProvider = ProxyHolder.getCurrentProxyDataProvider();
+            IProxyData proxyData = proxyDataProvider.getProxyData(protocol);
+            if (proxyData != null) {
+                return new IProxyData[] { proxyData };
+            }
         }
-    }
-
-    @Override
-    public IProxyData[] getProxyData() {
-        throw new UnsupportedOperationException("Not implemented");
+        return new IProxyData[0];
     }
 
     @Override
     public IProxyData[] getProxyDataForHost(String host) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public IProxyData getProxyData(String type) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public IProxyData getProxyDataForHost(String host, String type) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setProxyData(IProxyData[] proxies) throws CoreException {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String[] getNonProxiedHosts() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void setNonProxiedHosts(String[] hosts) throws CoreException {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void addProxyChangeListener(IProxyChangeListener listener) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void removeProxyChangeListener(IProxyChangeListener listener) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new UnsupportedOperationException();
     }
 }

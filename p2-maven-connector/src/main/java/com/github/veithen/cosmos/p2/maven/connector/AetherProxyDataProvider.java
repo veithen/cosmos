@@ -33,7 +33,7 @@ final class AetherProxyDataProvider implements ProxyDataProvider {
 
     @Override
     public IProxyData getProxyData(String protocol) {
-        return new ProxyDataAdapter(proxy);
+        return new AetherProxyDataAdapter(proxy);
     }
 
     @Override

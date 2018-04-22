@@ -28,7 +28,6 @@
     </parent>
 
     <artifactId>p2-maven-connector</artifactId>
-    <packaging>bundle</packaging>
 
     <url>https://github.com/veithen/cosmos</url>
 
@@ -55,11 +54,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.component.annotations</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.google.truth</groupId>
             <artifactId>truth</artifactId>
             <scope>test</scope>
@@ -83,19 +77,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
-                        <Export-Package />
-                        <Include-Resource>{maven-resources},META-INF/sisu/javax.inject.Named=${project.build.outputDirectory}/META-INF/sisu/javax.inject.Named</Include-Resource>
-                        <_dsannotations>*</_dsannotations>
-                    </instructions>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
