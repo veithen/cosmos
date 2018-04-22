@@ -102,4 +102,14 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>com.github.veithen.cosmos</groupId>
+                <artifactId>p2-maven-connector</artifactId>
+                <version>0.2</version>
+            </extension>
+        </extensions>
+    </build>
 </project>
