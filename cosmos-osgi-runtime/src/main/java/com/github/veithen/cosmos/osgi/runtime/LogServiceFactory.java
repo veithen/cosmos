@@ -20,14 +20,25 @@
 package com.github.veithen.cosmos.osgi.runtime;
 
 import org.osgi.framework.Bundle;
-import org.slf4j.LoggerFactory;
+import org.osgi.framework.ServiceFactory;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.log.LogService;
 
-import com.github.veithen.cosmos.osgi.runtime.internal.InternalLogger;
 import com.github.veithen.cosmos.osgi.runtime.internal.InternalLoggerFactory;
 
-final class InternalLoggerFactoryImpl implements InternalLoggerFactory {
+final class LogServiceFactory implements ServiceFactory<LogService> {
+    private final InternalLoggerFactory loggerFactory;
+    
+    LogServiceFactory(InternalLoggerFactory loggerFactory) {
+        this.loggerFactory = loggerFactory;
+    }
+
     @Override
-    public InternalLogger getLogger(Bundle bundle, String name) {
-        return new InternalLoggerImpl(LoggerFactory.getLogger(name), String.format("[%s] ", bundle.getSymbolicName()));
+    public LogService getService(Bundle bundle, ServiceRegistration<LogService> registration) {
+        return new LogServiceAdapter(loggerFactory.getLogger(bundle, "osgi"));
+    }
+
+    @Override
+    public void ungetService(Bundle bundle, ServiceRegistration<LogService> registration, LogService service) {
     }
 }

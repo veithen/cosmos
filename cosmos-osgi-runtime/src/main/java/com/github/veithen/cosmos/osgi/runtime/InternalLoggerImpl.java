@@ -26,25 +26,35 @@ import com.github.veithen.cosmos.osgi.runtime.internal.InternalLogger;
 
 final class InternalLoggerImpl implements InternalLogger {
     private final Logger logger;
+    private final String prefix;
 
-    InternalLoggerImpl(Logger logger) {
+    InternalLoggerImpl(Logger logger, String prefix) {
         this.logger = logger;
+        this.prefix = prefix;
     }
 
     @Override
     public void log(int level, String message, Throwable exception) {
         switch (level) {
             case LogService.LOG_DEBUG:
-                logger.debug(message, exception);
+                if (logger.isDebugEnabled()) {
+                    logger.debug(prefix + message, exception);
+                }
                 break;
             case LogService.LOG_INFO:
-                logger.info(message, exception);
+                if (logger.isInfoEnabled()) {
+                    logger.info(prefix + message, exception);
+                }
                 break;
             case LogService.LOG_WARNING:
-                logger.warn(message, exception);
+                if (logger.isWarnEnabled()) {
+                    logger.warn(prefix + message, exception);
+                }
                 break;
             case LogService.LOG_ERROR:
-                logger.error(message, exception);
+                if (logger.isErrorEnabled()) {
+                    logger.error(prefix + message, exception);
+                }
                 break;
         }
     }

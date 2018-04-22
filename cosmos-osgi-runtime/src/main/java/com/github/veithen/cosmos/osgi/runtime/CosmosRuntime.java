@@ -129,8 +129,7 @@ public final class CosmosRuntime {
         systemBundle.getBundleContext().registerService(Logger.class, logger, null);
         InternalLoggerFactory internalLoggerFactory = new InternalLoggerFactoryImpl();
         systemBundle.getBundleContext().registerService(InternalLoggerFactory.class, internalLoggerFactory, null);
-        // TODO: make this a ServiceFactory and use a per bundle SLF4J logger
-        systemBundle.getBundleContext().registerService(LogService.class, new LogServiceAdapter(internalLoggerFactory.getLogger("osgi")), null);
+        systemBundle.getBundleContext().registerService(LogService.class, new LogServiceFactory(internalLoggerFactory), null);
         ResourceUtil.processResources("META-INF/cosmos-autostart-bundles.list", new ResourceProcessor() {
             @Override
             public void process(URL url, InputStream in) throws IOException, BundleException {

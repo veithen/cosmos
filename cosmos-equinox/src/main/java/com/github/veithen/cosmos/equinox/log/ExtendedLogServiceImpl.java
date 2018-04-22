@@ -84,6 +84,6 @@ public final class ExtendedLogServiceImpl implements ExtendedLogService {
 
     @Override
     public Logger getLogger(Bundle bundle, String loggerName) {
-        return new LoggerAdapter(loggerFactory.getLogger(loggerName));
+        return new LoggerAdapter(loggerFactory.getLogger(bundle, loggerName));
     }
 }

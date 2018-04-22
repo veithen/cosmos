@@ -19,6 +19,8 @@
  */
 package com.github.veithen.cosmos.osgi.runtime.internal;
 
+import org.osgi.framework.Bundle;
+
 public interface InternalLoggerFactory {
-    InternalLogger getLogger(String name);
+    InternalLogger getLogger(Bundle bundle, String name);
 }
