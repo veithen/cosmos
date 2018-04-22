@@ -17,18 +17,10 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.osgi.runtime;
+package com.github.veithen.cosmos.osgi.runtime.internal;
 
 import org.osgi.framework.Bundle;
 
-import com.github.veithen.cosmos.osgi.runtime.internal.BundleLookup;
-
-final class FrameworkUtil {
-    private static BundleLookup bundleLookup;
-
-    private FrameworkUtil() {}
-
-    public static Bundle getBundle(Class<?> classFromBundle) {
-        return bundleLookup.getBundle(classFromBundle);
-    }
+public interface BundleLookup {
+    Bundle getBundle(Class<?> clazz);
 }

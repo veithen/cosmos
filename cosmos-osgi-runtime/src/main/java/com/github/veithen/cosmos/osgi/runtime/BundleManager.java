@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,9 @@ import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 
-final class BundleManager {
+import com.github.veithen.cosmos.osgi.runtime.internal.BundleLookup;
+
+final class BundleManager implements BundleLookup {
     private final BundleImpl[] bundles;
     private final Map<String,BundleImpl> bundlesBySymbolicName = new HashMap<String,BundleImpl>();
     private final Map<URL,Bundle> bundlesByUrl = new HashMap<URL,Bundle>();
@@ -98,7 +101,7 @@ final class BundleManager {
         for (BundleImpl bundle : bundles) {
             bundle.initialize(bundleContextFactory);
         }
-        Patcher.injectBundles(bundlesByUrl);
+        Patcher.injectBundleLookup(this);
     }
 
     BundleImpl[] getBundles() {
@@ -117,6 +120,12 @@ final class BundleManager {
         return id < bundles.length ? bundles[(int)id] : null;
     }
     
+    @Override
+    public Bundle getBundle(Class<?> clazz) {
+        CodeSource codeSource = clazz.getProtectionDomain().getCodeSource();
+        return codeSource == null ? null : bundlesByUrl.get(codeSource.getLocation());
+    }
+
     void fireBundleEvent(BundleImpl bundleImpl, int type) {
         BundleEvent event = new BundleEvent(type, bundleImpl);
         for (BundleImpl bundle : bundles) {

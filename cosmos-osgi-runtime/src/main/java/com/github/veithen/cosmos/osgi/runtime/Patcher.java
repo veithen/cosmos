@@ -24,15 +24,14 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.Map;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;
+
+import com.github.veithen.cosmos.osgi.runtime.internal.BundleLookup;
 
 final class Patcher {
     private static boolean patched;
@@ -64,11 +63,11 @@ final class Patcher {
         }
     }
 
-    static void injectBundles(Map<URL,Bundle> bundlesByUrl) throws BundleException {
+    static void injectBundleLookup(BundleLookup bundleLookup) throws BundleException {
         try {
-            Field field = FrameworkUtil.class.getDeclaredField("bundlesByUrl");
+            Field field = FrameworkUtil.class.getDeclaredField("bundleLookup");
             field.setAccessible(true);
-            field.set(null, bundlesByUrl);
+            field.set(null, bundleLookup);
         } catch (NoSuchFieldException | IllegalAccessException ex) {
             throw new BundleException("Failed to inject bundles into FrameworkUtil", ex);
         }

@@ -86,7 +86,7 @@ final class PackageAdminImpl implements PackageAdmin {
 
     @Override
     public Bundle getBundle(@SuppressWarnings("rawtypes") Class clazz) {
-        throw new UnsupportedOperationException();
+        return bundleManager.getBundle(clazz);
     }
 
     @Override
