@@ -52,7 +52,6 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.log.LogService;
 import org.osgi.util.xml.XMLParserActivator;
 import org.slf4j.Logger;
@@ -244,14 +243,6 @@ public final class CosmosRuntime {
         }
     }
 
-    public <T> ServiceRegistration<T> registerService(String[] classes, T serviceObject, Dictionary<String,?> properties) {
-        return registerService((Bundle)null, classes, serviceObject, properties);
-    }
-    
-    public <T> ServiceRegistration<T> registerService(Bundle bundle, String[] classes, T serviceObject, Dictionary<String,?> properties) {
-        return (ServiceRegistration<T>)registerService((BundleImpl)bundle, classes, serviceObject, properties);
-    }
-    
     private void fireServiceChangedEvent(int type, Service service) {
         ServiceListenerSpec[] serviceListeners;
         synchronized (this.serviceListeners) {
