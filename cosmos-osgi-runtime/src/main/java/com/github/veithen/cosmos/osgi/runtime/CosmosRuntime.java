@@ -59,7 +59,7 @@ public final class CosmosRuntime {
     private final Properties properties = new Properties();
     private final BundleImpl[] bundles;
     private final Map<String,BundleImpl> bundlesBySymbolicName = new HashMap<String,BundleImpl>();
-    private final ServiceRegistry serviceRegistry = new ServiceRegistry();
+    private final ServiceRegistry serviceRegistry;
     
     /**
      * Maps exported packages to their corresponding bundles.
@@ -72,7 +72,7 @@ public final class CosmosRuntime {
         final Map<URL,Bundle> bundlesByUrl = new HashMap<URL,Bundle>();
         // Add a system bundle
         // TODO: this should implement org.osgi.framework.launch.Framework
-        BundleImpl systemBundle = new BundleImpl(this, serviceRegistry, 0, Constants.SYSTEM_BUNDLE_SYMBOLICNAME, new Attributes(), null);
+        BundleImpl systemBundle = new BundleImpl(this, 0, Constants.SYSTEM_BUNDLE_SYMBOLICNAME, new Attributes(), null);
         bundles.add(systemBundle);
         ResourceUtil.processResources("META-INF/MANIFEST.MF", new ResourceProcessor() {
             @Override
@@ -95,7 +95,7 @@ public final class CosmosRuntime {
                     throw new BundleException("Unexpected exception", ex);
                 }
                 // There cannot be any bundle listeners yet, so no need to call BundleListeners
-                BundleImpl bundle = new BundleImpl(CosmosRuntime.this, serviceRegistry, bundles.size(), symbolicName, attrs, rootUrl);
+                BundleImpl bundle = new BundleImpl(CosmosRuntime.this, bundles.size(), symbolicName, attrs, rootUrl);
                 bundles.add(bundle);
                 bundlesBySymbolicName.put(symbolicName, bundle);
                 bundlesByUrl.put(bundle.getLocationUrl(), bundle);
@@ -118,6 +118,10 @@ public final class CosmosRuntime {
             }
         });
         this.bundles = bundles.toArray(new BundleImpl[bundles.size()]);
+        serviceRegistry = new ServiceRegistry();
+        for (BundleImpl bundle : bundles) {
+            bundle.initialize(serviceRegistry);
+        }
         Patcher.injectBundles(bundlesByUrl);
         loadProperties("META-INF/cosmos.properties");
         if (logger.isDebugEnabled()) {

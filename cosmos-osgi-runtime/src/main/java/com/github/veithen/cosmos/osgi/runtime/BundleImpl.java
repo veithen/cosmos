@@ -66,19 +66,18 @@ final class BundleImpl implements Bundle {
     };
     
     private final CosmosRuntime runtime;
-    private final ServiceRegistry serviceRegistry;
     private final long id;
     private final String symbolicName;
     private final Attributes attrs;
     private final URL rootUrl;
     private final URL locationUrl;
+    private ServiceRegistry serviceRegistry;
     private BundleState state;
     private BundleContextImpl context;
     private BundleActivator activator;
 
-    public BundleImpl(CosmosRuntime runtime, ServiceRegistry serviceRegistry, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
+    public BundleImpl(CosmosRuntime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
         this.runtime = runtime;
-        this.serviceRegistry = serviceRegistry;
         this.id = id;
         this.symbolicName = symbolicName;
         this.attrs = attrs;
@@ -93,6 +92,10 @@ final class BundleImpl implements Bundle {
         } else {
             locationUrl = rootUrl;
         }
+    }
+
+    void initialize(ServiceRegistry serviceRegistry) throws BundleException {
+        this.serviceRegistry = serviceRegistry;
         if (id == 0) {
             // The system bundle is always active.
             state = BundleState.ACTIVE;
