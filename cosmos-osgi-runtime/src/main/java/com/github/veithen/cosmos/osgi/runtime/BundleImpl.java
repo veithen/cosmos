@@ -65,7 +65,7 @@ final class BundleImpl implements Bundle {
         }
     };
     
-    private final CosmosRuntime runtime;
+    private final BundleManager bundleManager;
     private final long id;
     private final String symbolicName;
     private final Attributes attrs;
@@ -76,8 +76,8 @@ final class BundleImpl implements Bundle {
     private BundleContextImpl context;
     private BundleActivator activator;
 
-    public BundleImpl(CosmosRuntime runtime, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
-        this.runtime = runtime;
+    public BundleImpl(BundleManager bundleManager, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
+        this.bundleManager = bundleManager;
         this.id = id;
         this.symbolicName = symbolicName;
         this.attrs = attrs;
@@ -176,7 +176,7 @@ final class BundleImpl implements Bundle {
                 throw new BundleException("Unable to parse Require-Bundle header", BundleException.MANIFEST_ERROR, ex);
             }
             for (Element element : elements) {
-                BundleImpl bundle = (BundleImpl)runtime.getBundle(element.getValue());
+                BundleImpl bundle = (BundleImpl)bundleManager.getBundle(element.getValue());
                 if (bundle != null) {
                     bundle.makeReady(USED_BY_BUNDLE, this);
                 }
@@ -191,7 +191,7 @@ final class BundleImpl implements Bundle {
                 throw new BundleException("Unable to parse Import-Package header", BundleException.MANIFEST_ERROR, ex);
             }
             for (Element element : elements) {
-                BundleImpl bundle = runtime.getBundleByPackage(element.getValue());
+                BundleImpl bundle = bundleManager.getBundleByPackage(element.getValue());
                 // Note that a bundle can import a package from itself
                 if (bundle != null && bundle != this) {
                     bundle.makeReady(USED_BY_BUNDLE, this);
@@ -229,7 +229,7 @@ final class BundleImpl implements Bundle {
         if (state == BundleState.LOADED || state == BundleState.LAZY_ACTIVATE) {
             makeDependenciesReady();
         }
-        runtime.fireBundleEvent(this, BundleEvent.STARTING);
+        bundleManager.fireBundleEvent(this, BundleEvent.STARTING);
         // For bundles with lazy activation, the BundleContext has already been created
         if (context == null) {
             context = bundleContextFactory.createBundleContext(this);
@@ -251,7 +251,7 @@ final class BundleImpl implements Bundle {
         if (logger.isDebugEnabled()) {
             logger.debug("Bundle " + symbolicName + " started");
         }
-        runtime.fireBundleEvent(this, BundleEvent.STARTED);
+        bundleManager.fireBundleEvent(this, BundleEvent.STARTED);
     }
 
     public void stop(int options) throws BundleException {
@@ -263,7 +263,7 @@ final class BundleImpl implements Bundle {
             return;
         }
         logger.debug("Stopping bundle {} ...", symbolicName);
-        runtime.fireBundleEvent(this, BundleEvent.STOPPING);
+        bundleManager.fireBundleEvent(this, BundleEvent.STOPPING);
         if (state == BundleState.ACTIVE && activator != null) {
             try {
                 activator.stop(context);
@@ -275,7 +275,7 @@ final class BundleImpl implements Bundle {
         // TODO: also unregister service and bundle listeners (or store them in the bundle context)
         context = null;
         state = BundleState.READY;
-        runtime.fireBundleEvent(this, BundleEvent.STOPPED);
+        bundleManager.fireBundleEvent(this, BundleEvent.STOPPED);
         logger.debug("Bundle {} stopped", symbolicName);
     }
 

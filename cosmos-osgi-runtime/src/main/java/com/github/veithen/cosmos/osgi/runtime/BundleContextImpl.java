@@ -44,12 +44,14 @@ import org.osgi.framework.ServiceRegistration;
 final class BundleContextImpl implements BundleContext {
     private final BundleImpl bundle;
     private final CosmosRuntime runtime;
+    private final BundleManager bundleManager;
     private final ServiceRegistry serviceRegistry;
     private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
     
-    BundleContextImpl(BundleImpl bundle, CosmosRuntime runtime, ServiceRegistry serviceRegistry) {
+    BundleContextImpl(BundleImpl bundle, CosmosRuntime runtime, BundleManager bundleManager, ServiceRegistry serviceRegistry) {
         this.bundle = bundle;
         this.runtime = runtime;
+        this.bundleManager = bundleManager;
         this.serviceRegistry = serviceRegistry;
     }
 
@@ -70,11 +72,11 @@ final class BundleContextImpl implements BundleContext {
     }
 
     public Bundle getBundle(long id) {
-        return runtime.getBundle(id);
+        return bundleManager.getBundle(id);
     }
 
     public Bundle[] getBundles() {
-        return runtime.getBundles();
+        return bundleManager.getBundles();
     }
 
     public void addServiceListener(ServiceListener listener, String filter) throws InvalidSyntaxException {

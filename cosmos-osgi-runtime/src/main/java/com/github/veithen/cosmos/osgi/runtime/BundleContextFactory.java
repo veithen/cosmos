@@ -21,14 +21,16 @@ package com.github.veithen.cosmos.osgi.runtime;
 
 final class BundleContextFactory {
     private final CosmosRuntime runtime;
+    private final BundleManager bundleManager;
     private final ServiceRegistry serviceRegistry;
 
-    BundleContextFactory(CosmosRuntime runtime, ServiceRegistry serviceRegistry) {
+    BundleContextFactory(CosmosRuntime runtime, BundleManager bundleManager, ServiceRegistry serviceRegistry) {
         this.runtime = runtime;
+        this.bundleManager = bundleManager;
         this.serviceRegistry = serviceRegistry;
     }
 
     BundleContextImpl createBundleContext(BundleImpl bundle) {
-        return new BundleContextImpl(bundle, runtime, serviceRegistry);
+        return new BundleContextImpl(bundle, runtime, bundleManager, serviceRegistry);
     }
 }
