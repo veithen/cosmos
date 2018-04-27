@@ -53,7 +53,13 @@ public final class ArtifactCoordinateMapper {
         } else {
             return null;
         }
-        return new P2Coordinate(artifact.getGroupId(), id, Version.create(artifact.getVersion()));
+        Version version;
+        try {
+            version = Version.create(artifact.getVersion());
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
+        return new P2Coordinate(artifact.getGroupId(), id, version);
     }
 
     public static ArtifactKeyQuery createArtifactKeyQuery(String groupId, String artifactId) {

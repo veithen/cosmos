@@ -33,4 +33,10 @@ public class DefaultArtifactCoordinateMapperTest {
         assertThat(p2Coordinate.getId()).isEqualTo("mybundle");
         assertThat(p2Coordinate.getVersion()).isEqualTo(Version.createOSGi(2, 1, 0));
     }
+
+    @Test
+    public void testCreateP2CoordinateWithInvalidVersion() {
+        assertThat(ArtifactCoordinateMapper.createP2Coordinate(
+                new DefaultArtifact("osgi.bundle", "somebundle", "jar", "3.0-something"))).isNull();
+    }
 }
