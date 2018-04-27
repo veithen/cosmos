@@ -184,6 +184,11 @@
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.core.resources</artifactId>
+                <version>3.10.0.v20150423-0755</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.core.runtime</artifactId>
                 <version>3.11.0.v20150405-1723</version>
             </dependency>
@@ -214,12 +219,27 @@
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.emf.codegen</artifactId>
+                <version>2.11.0.v20150601-0402</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.emf.codegen.ecore</artifactId>
+                <version>2.11.0.v20150601-0402</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.emf.common</artifactId>
                 <version>2.11.0.v20150512-0501</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.emf.ecore</artifactId>
+                <version>2.11.0.v20150512-0501</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
                 <version>2.11.0.v20150512-0501</version>
             </dependency>
             <dependency>
@@ -319,6 +339,16 @@
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.core.filesystem</artifactId>
+                <version>1.5.0.v20150421-0713</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.jdt.core</artifactId>
+                <version>3.11.0.v_OTDT_r240_201506091717</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.osgi</artifactId>
                 <version>3.10.100.v20150529-1857</version>
             </dependency>
@@ -326,6 +356,11 @@
                 <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.osgi.compatibility.state</artifactId>
                 <version>1.0.100.v20150402-1551</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.text</artifactId>
+                <version>3.5.400.v20150505-1044</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
@@ -391,6 +426,8 @@
                     <projectName>Cosmos</projectName>
                     <licenseName>apache_v2</licenseName>
                     <extraExtensions>
+                        <ecore>xml</ecore>
+                        <genmodel>xml</genmodel>
                         <list>properties</list>
                     </extraExtensions>
                 </configuration>

@@ -17,6 +17,4 @@
 # limitations under the License.
 # #L%
 ###
-osgi.nl=en_US
-# TODO: determine this dynamically
-osgi.os=linux
+org.eclipse.emf.ecore.xmi

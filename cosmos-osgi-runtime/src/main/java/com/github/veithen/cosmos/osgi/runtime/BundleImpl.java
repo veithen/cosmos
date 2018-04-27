@@ -30,6 +30,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 import java.util.Vector;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
@@ -39,12 +41,15 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class BundleImpl implements Bundle {
+import com.github.veithen.cosmos.osgi.runtime.internal.InternalBundle;
+
+final class BundleImpl implements InternalBundle {
     private static final Logger logger = LoggerFactory.getLogger(BundleImpl.class);
 
     static abstract class Reason<T> {
@@ -75,6 +80,10 @@ final class BundleImpl implements Bundle {
     private BundleState state;
     private BundleContextImpl context;
     private BundleActivator activator;
+
+    private final Object resourceBundleLock = new Object();
+    private ResourceBundle resourceBundle;
+    private boolean resourceBundleLoaded;
 
     public BundleImpl(BundleManager bundleManager, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
         this.bundleManager = bundleManager;
@@ -318,7 +327,9 @@ final class BundleImpl implements Bundle {
             }
             return entries.elements();
         } else {
-            throw new UnsupportedOperationException();
+            // TODO
+            return new Vector<URL>().elements();
+//            throw new UnsupportedOperationException();
         }
     }
 
@@ -379,6 +390,30 @@ final class BundleImpl implements Bundle {
     public File getDataFile(String filename) {
         // We don't have filesystem support.
         return null;
+    }
+
+    @Override
+    public ResourceBundle getResourceBundle() {
+        synchronized (resourceBundleLock) {
+            if (!resourceBundleLoaded) {
+                try {
+                    String localization = getHeaderValue(Constants.BUNDLE_LOCALIZATION);
+                    if (localization == null) {
+                        localization = Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME;
+                    }
+                    URL entry = getEntry(localization + ".properties");
+                    if (entry != null) {
+                        try (InputStream in = entry.openStream()) {
+                            resourceBundle = new PropertyResourceBundle(in);
+                        }
+                    }
+                } catch (BundleException | IOException ex) {
+                    logger.warn(String.format("Failed to load bundle localization for bundle %s", symbolicName), ex);
+                }
+                resourceBundleLoaded = true;
+            }
+            return resourceBundle;
+        }
     }
 
     void distributeBundleEvent(BundleEvent event) {
