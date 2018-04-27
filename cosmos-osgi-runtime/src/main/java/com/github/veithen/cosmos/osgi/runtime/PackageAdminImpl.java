@@ -76,7 +76,7 @@ final class PackageAdminImpl implements PackageAdmin {
 
     @Override
     public Bundle[] getFragments(Bundle bundle) {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override

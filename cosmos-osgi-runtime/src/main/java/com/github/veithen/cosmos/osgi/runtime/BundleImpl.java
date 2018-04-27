@@ -23,15 +23,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.Vector;
 import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
 import java.util.jar.Attributes.Name;
+import java.util.jar.JarInputStream;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleEvent;
@@ -72,9 +77,44 @@ final class BundleImpl extends AbstractBundle {
     private BundleState state;
     private BundleActivator activator;
 
-    private final Object resourceBundleLock = new Object();
-    private ResourceBundle resourceBundle;
-    private boolean resourceBundleLoaded;
+    private final Lazy<Set<String>> entries = new Lazy<Set<String>>() {
+        @Override
+        Set<String> initialize() {
+            Set<String> entries = new HashSet<>();
+            try (JarInputStream in = new JarInputStream(locationUrl.openStream())) {
+                JarEntry entry;
+                while ((entry = in.getNextJarEntry()) != null) {
+                    entries.add(entry.getName());
+                }
+                return entries;
+            } catch (IOException ex) {
+                logger.warn(String.format("Failed to read entries for bundle %s", symbolicName), ex);
+                return Collections.emptySet();
+            }
+        }
+    };
+
+    private final Lazy<ResourceBundle> resourceBundle = new Lazy<ResourceBundle>() {
+        @Override
+        ResourceBundle initialize() {
+            try {
+                String localization = getHeaderValue(Constants.BUNDLE_LOCALIZATION);
+                if (localization == null) {
+                    localization = Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME;
+                }
+                URL entry = getEntry(localization + ".properties");
+                if (entry == null) {
+                    return null;
+                }
+                try (InputStream in = entry.openStream()) {
+                    return new PropertyResourceBundle(in);
+                }
+            } catch (BundleException | IOException ex) {
+                logger.warn(String.format("Failed to load bundle localization for bundle %s", symbolicName), ex);
+                return null;
+            }
+        }
+    };
 
     public BundleImpl(BundleManager bundleManager, long id, String symbolicName, Attributes attrs, URL rootUrl) throws BundleException {
         this.bundleManager = bundleManager;
@@ -277,10 +317,15 @@ final class BundleImpl extends AbstractBundle {
     }
 
     public URL getEntry(String path) {
-        // TODO: not correct; need to return null if entry doesn't exist
-        try {
-            return new URL(rootUrl, path);
-        } catch (MalformedURLException ex) {
+        if (path.equals("/")) {
+            return rootUrl;
+        } else if (entries.get().contains(path)) {
+            try {
+                return new URL(rootUrl, path);
+            } catch (MalformedURLException ex) {
+                return null;
+            }
+        } else {
             return null;
         }
     }
@@ -315,25 +360,6 @@ final class BundleImpl extends AbstractBundle {
 
     @Override
     public ResourceBundle getResourceBundle() {
-        synchronized (resourceBundleLock) {
-            if (!resourceBundleLoaded) {
-                try {
-                    String localization = getHeaderValue(Constants.BUNDLE_LOCALIZATION);
-                    if (localization == null) {
-                        localization = Constants.BUNDLE_LOCALIZATION_DEFAULT_BASENAME;
-                    }
-                    URL entry = getEntry(localization + ".properties");
-                    if (entry != null) {
-                        try (InputStream in = entry.openStream()) {
-                            resourceBundle = new PropertyResourceBundle(in);
-                        }
-                    }
-                } catch (BundleException | IOException ex) {
-                    logger.warn(String.format("Failed to load bundle localization for bundle %s", symbolicName), ex);
-                }
-                resourceBundleLoaded = true;
-            }
-            return resourceBundle;
-        }
+        return resourceBundle.get();
     }
 }
