@@ -19,16 +19,13 @@
  */
 package com.github.veithen.cosmos.osgi.runtime;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.cert.X509Certificate;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -36,20 +33,15 @@ import java.util.Vector;
 import java.util.jar.Attributes;
 import java.util.jar.Attributes.Name;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.veithen.cosmos.osgi.runtime.internal.InternalBundle;
-
-final class BundleImpl implements InternalBundle {
+final class BundleImpl extends AbstractBundle {
     private static final Logger logger = LoggerFactory.getLogger(BundleImpl.class);
 
     static abstract class Reason<T> {
@@ -78,7 +70,6 @@ final class BundleImpl implements InternalBundle {
     private final URL locationUrl;
     private BundleContextFactory bundleContextFactory;
     private BundleState state;
-    private BundleContextImpl context;
     private BundleActivator activator;
 
     private final Object resourceBundleLock = new Object();
@@ -91,7 +82,7 @@ final class BundleImpl implements InternalBundle {
         this.symbolicName = symbolicName;
         this.attrs = attrs;
         this.rootUrl = rootUrl;
-        if (rootUrl != null && rootUrl.getProtocol().equals("jar")) {
+        if (rootUrl.getProtocol().equals("jar")) {
             String path = rootUrl.getPath();
             try {
                 locationUrl = new URL(path.substring(0, path.lastIndexOf('!')));
@@ -105,24 +96,20 @@ final class BundleImpl implements InternalBundle {
 
     void initialize(BundleContextFactory bundleContextFactory) throws BundleException {
         this.bundleContextFactory = bundleContextFactory;
-        if (id == 0) {
-            // The system bundle is always active.
-            state = BundleState.ACTIVE;
-        } else if ("lazy".equals(getHeaderValue("Bundle-ActivationPolicy"))
+        if ("lazy".equals(getHeaderValue("Bundle-ActivationPolicy"))
                 || "true".equals(getHeaderValue("Eclipse-LazyStart"))
                 || "true".equals(getHeaderValue("Eclipse-AutoStart"))) {
             state = BundleState.LAZY_ACTIVATE;
+            context = bundleContextFactory.createBundleContext(this);
         } else {
             state = BundleState.LOADED;
-        }
-        if (state != BundleState.LOADED) {
-            context = bundleContextFactory.createBundleContext(this);
         }
         if (logger.isDebugEnabled()) {
             logger.debug("Loaded bundle " + symbolicName + " with initial state " + state);
         }
     }
-    
+
+    @Override
     String getHeaderValue(String name) throws BundleException {
         String value = attrs.getValue(name);
         if (value == null) {
@@ -289,22 +276,6 @@ final class BundleImpl implements InternalBundle {
         logger.debug("Bundle {} stopped", symbolicName);
     }
 
-    public int compareTo(Bundle o) {
-        throw new UnsupportedOperationException();
-    }
-
-    public void update(InputStream input) throws BundleException {
-        throw new UnsupportedOperationException();
-    }
-
-    public void update() throws BundleException {
-        throw new UnsupportedOperationException();
-    }
-
-    public void uninstall() throws BundleException {
-        throw new UnsupportedOperationException();
-    }
-
     public URL getEntry(String path) {
         // TODO: not correct; need to return null if entry doesn't exist
         try {
@@ -312,10 +283,6 @@ final class BundleImpl implements InternalBundle {
         } catch (MalformedURLException ex) {
             return null;
         }
-    }
-
-    public Enumeration<String> getEntryPaths(String path) {
-        throw new UnsupportedOperationException();
     }
 
     public Enumeration<URL> findEntries(String path, String filePattern, boolean recurse) {
@@ -341,55 +308,9 @@ final class BundleImpl implements InternalBundle {
         return locationUrl.toString();
     }
 
-    public ServiceReference<?>[] getRegisteredServices() {
-        throw new UnsupportedOperationException();
-    }
-
-    public ServiceReference<?>[] getServicesInUse() {
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean hasPermission(Object permission) {
-        throw new UnsupportedOperationException();
-    }
-
-    public URL getResource(String name) {
-        throw new UnsupportedOperationException();
-    }
-
-    public Class<?> loadClass(String name) throws ClassNotFoundException {
-        try {
-            makeReady(CLASS_LOADING_REQUEST, name);
-        } catch (BundleException ex) {
-            throw new ClassNotFoundException(name, ex);
-        }
-        return Class.forName(name);
-    }
-
-    public Enumeration<URL> getResources(String name) throws IOException {
-        throw new UnsupportedOperationException();
-    }
-
-    public long getLastModified() {
-        // We never modify bundles, so we may as well return 0 here
-        return 0;
-    }
-
-    public BundleContext getBundleContext() {
-        return context;
-    }
-
-    public Map<X509Certificate,List<X509Certificate>> getSignerCertificates(int signersType) {
-        throw new UnsupportedOperationException();
-    }
-
-    public <A> A adapt(Class<A> type) {
-        throw new UnsupportedOperationException();
-    }
-
-    public File getDataFile(String filename) {
-        // We don't have filesystem support.
-        return null;
+    @Override
+    void beforeLoadClass(String name) throws BundleException {
+        makeReady(CLASS_LOADING_REQUEST, name);
     }
 
     @Override
@@ -413,12 +334,6 @@ final class BundleImpl implements InternalBundle {
                 resourceBundleLoaded = true;
             }
             return resourceBundle;
-        }
-    }
-
-    void distributeBundleEvent(BundleEvent event) {
-        if (context != null) {
-            context.distributeBundleEvent(event);
         }
     }
 }

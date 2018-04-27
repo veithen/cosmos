@@ -34,14 +34,13 @@ import java.util.jar.Manifest;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.Constants;
 
 import com.github.veithen.cosmos.osgi.runtime.internal.BundleLookup;
 
 final class BundleManager implements BundleLookup {
-    private final BundleImpl[] bundles;
-    private final Map<String,BundleImpl> bundlesBySymbolicName = new HashMap<String,BundleImpl>();
-    private final Map<URL,Bundle> bundlesByUrl = new HashMap<URL,Bundle>();
+    private final AbstractBundle[] bundles;
+    private final Map<String,AbstractBundle> bundlesBySymbolicName = new HashMap<>();
+    private final Map<URL,Bundle> bundlesByUrl = new HashMap<>();
 
     /**
      * Maps exported packages to their corresponding bundles.
@@ -49,10 +48,9 @@ final class BundleManager implements BundleLookup {
     private final Map<String,BundleImpl> packageMap = new HashMap<String,BundleImpl>();
 
     BundleManager() throws BundleException {
-        final List<BundleImpl> bundles = new ArrayList<>();
+        final List<AbstractBundle> bundles = new ArrayList<>();
         // Add a system bundle
-        // TODO: this should implement org.osgi.framework.launch.Framework
-        BundleImpl systemBundle = new BundleImpl(this, 0, Constants.SYSTEM_BUNDLE_SYMBOLICNAME, new Attributes(), null);
+        FrameworkImpl systemBundle = new FrameworkImpl();
         bundles.add(systemBundle);
         ResourceUtil.processResources("META-INF/MANIFEST.MF", new ResourceProcessor() {
             @Override
@@ -94,17 +92,17 @@ final class BundleManager implements BundleLookup {
                 }
             }
         });
-        this.bundles = bundles.toArray(new BundleImpl[bundles.size()]);
+        this.bundles = bundles.toArray(new AbstractBundle[bundles.size()]);
     }
 
     void initialize(BundleContextFactory bundleContextFactory) throws BundleException {
-        for (BundleImpl bundle : bundles) {
+        for (AbstractBundle bundle : bundles) {
             bundle.initialize(bundleContextFactory);
         }
         Patcher.injectBundleLookup(this);
     }
 
-    BundleImpl[] getBundles() {
+    AbstractBundle[] getBundles() {
         return bundles.clone();
     }
     
@@ -116,7 +114,7 @@ final class BundleManager implements BundleLookup {
         return packageMap.get(pkg);
     }
     
-    BundleImpl getBundle(long id) {
+    AbstractBundle getBundle(long id) {
         return id < bundles.length ? bundles[(int)id] : null;
     }
     
@@ -128,7 +126,7 @@ final class BundleManager implements BundleLookup {
 
     void fireBundleEvent(BundleImpl bundleImpl, int type) {
         BundleEvent event = new BundleEvent(type, bundleImpl);
-        for (BundleImpl bundle : bundles) {
+        for (AbstractBundle bundle : bundles) {
             bundle.distributeBundleEvent(event);
         }
     }

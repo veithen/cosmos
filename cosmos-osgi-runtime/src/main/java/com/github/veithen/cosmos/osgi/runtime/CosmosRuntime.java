@@ -62,7 +62,7 @@ public final class CosmosRuntime {
             loadProperties("META-INF/cosmos-debug.properties");
             logger.debug(String.format("Properties: %s", properties));
         }
-        BundleImpl systemBundle = bundleManager.getBundle(0);
+        AbstractBundle systemBundle = bundleManager.getBundle(0);
         registerSAXParserFactory(systemBundle);
         registerDocumentBuilderFactory(systemBundle);
         systemBundle.getBundleContext().registerService(PackageAdmin.class, new PackageAdminImpl(bundleManager), null);
@@ -71,7 +71,7 @@ public final class CosmosRuntime {
         systemBundle.getBundleContext().registerService(InternalLoggerFactory.class, internalLoggerFactory, null);
         systemBundle.getBundleContext().registerService(LogService.class, new LogServiceFactory(internalLoggerFactory), null);
         final Set<Bundle> autostartBundles = new HashSet<>();
-        for (BundleImpl bundle : bundleManager.getBundles()) {
+        for (AbstractBundle bundle : bundleManager.getBundles()) {
             if ("true".equals(bundle.getHeaderValue("Cosmos-AutoStart"))) {
                 autostartBundles.add(bundle);
             }
@@ -154,7 +154,10 @@ public final class CosmosRuntime {
     }
     
     public void dispose() {
-        for (BundleImpl bundle : bundleManager.getBundles()) {
+        AbstractBundle[] bundles = bundleManager.getBundles();
+        // Skip the system bundle.
+        for (int i = 1; i < bundles.length; i++) {
+            AbstractBundle bundle = bundles[i];
             try {
                 bundle.stop();
             } catch (BundleException ex) {

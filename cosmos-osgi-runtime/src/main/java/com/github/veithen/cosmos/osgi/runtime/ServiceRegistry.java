@@ -44,7 +44,7 @@ final class ServiceRegistry {
     private final List<ServiceListenerSpec> serviceListeners = new ArrayList<>();
     private long nextServiceId = 1;
 
-    <S> Service<S> registerService(BundleImpl bundle, String[] classes, ServiceFactory<S> serviceFactory, Dictionary<String,?> properties) {
+    <S> Service<S> registerService(AbstractBundle bundle, String[] classes, ServiceFactory<S> serviceFactory, Dictionary<String,?> properties) {
         long serviceId = nextServiceId++;
         if (logger.isDebugEnabled()) {
             Class<?> clazz = serviceFactory instanceof SingletonServiceFactory ? ((SingletonServiceFactory<S>)serviceFactory).getService().getClass() : serviceFactory.getClass();
@@ -77,7 +77,7 @@ final class ServiceRegistry {
         }
     }
 
-    void unregisterServices(BundleImpl bundle) {
+    void unregisterServices(AbstractBundle bundle) {
         List<Service<?>> servicesToUnregister = new ArrayList<>();
         synchronized (services) {
             for (Service<?> service : services) {
@@ -110,7 +110,7 @@ final class ServiceRegistry {
         return null;
     }
 
-    void addServiceListener(BundleImpl bundle, ServiceListener listener, Filter filter) {
+    void addServiceListener(AbstractBundle bundle, ServiceListener listener, Filter filter) {
         if (logger.isDebugEnabled()) {
             logger.debug("Bundle " + bundle.getSymbolicName() + " starts listening for services with filter " + filter);
         }

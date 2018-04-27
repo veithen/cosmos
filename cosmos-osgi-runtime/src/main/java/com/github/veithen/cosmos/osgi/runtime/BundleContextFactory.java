@@ -30,7 +30,7 @@ final class BundleContextFactory {
         this.serviceRegistry = serviceRegistry;
     }
 
-    BundleContextImpl createBundleContext(BundleImpl bundle) {
+    BundleContextImpl createBundleContext(AbstractBundle bundle) {
         return new BundleContextImpl(bundle, runtime, bundleManager, serviceRegistry);
     }
 }

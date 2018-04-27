@@ -27,11 +27,11 @@ final class ServiceContext<S> {
     private static final Logger logger = LoggerFactory.getLogger(ServiceContext.class);
 
     private final Service<S> service;
-    private final BundleImpl bundle;
+    private final AbstractBundle bundle;
     private int refCount;
     private S serviceObject;
     
-    ServiceContext(Service<S> service, BundleImpl bundle) {
+    ServiceContext(Service<S> service, AbstractBundle bundle) {
         this.service = service;
         this.bundle = bundle;
     }

@@ -42,13 +42,13 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
 final class BundleContextImpl implements BundleContext {
-    private final BundleImpl bundle;
+    private final AbstractBundle bundle;
     private final CosmosRuntime runtime;
     private final BundleManager bundleManager;
     private final ServiceRegistry serviceRegistry;
     private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
     
-    BundleContextImpl(BundleImpl bundle, CosmosRuntime runtime, BundleManager bundleManager, ServiceRegistry serviceRegistry) {
+    BundleContextImpl(AbstractBundle bundle, CosmosRuntime runtime, BundleManager bundleManager, ServiceRegistry serviceRegistry) {
         this.bundle = bundle;
         this.runtime = runtime;
         this.bundleManager = bundleManager;

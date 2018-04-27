@@ -59,5 +59,5 @@ abstract class ServiceReferenceImpl<S> implements ServiceReference<S> {
         throw new UnsupportedOperationException();
     }
 
-    abstract S getService(BundleImpl bundle);
+    abstract S getService(AbstractBundle bundle);
 }

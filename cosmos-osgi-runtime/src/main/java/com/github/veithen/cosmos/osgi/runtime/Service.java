@@ -31,14 +31,14 @@ import org.osgi.framework.ServiceRegistration;
 
 final class Service<S> implements ServiceRegistration<S> {
     private final ServiceRegistry serviceRegistry;
-    private final BundleImpl bundle;
+    private final AbstractBundle bundle;
     private final String[] classes;
     private final ServiceFactory<S> serviceFactory;
     private final Dictionary<String,?> properties;
-    private final Map<BundleImpl,ServiceContext<S>> contexts = new HashMap<BundleImpl,ServiceContext<S>>();
+    private final Map<AbstractBundle,ServiceContext<S>> contexts = new HashMap<>();
     private final ServiceReference<S> reference;
     
-    Service(ServiceRegistry serviceRegistry, BundleImpl bundle, String[] classes, ServiceFactory<S> serviceFactory, Dictionary<String,?> properties) {
+    Service(ServiceRegistry serviceRegistry, AbstractBundle bundle, String[] classes, ServiceFactory<S> serviceFactory, Dictionary<String,?> properties) {
         this.serviceRegistry = serviceRegistry;
         this.bundle = bundle;
         this.classes = classes;
@@ -46,7 +46,7 @@ final class Service<S> implements ServiceRegistration<S> {
         this.properties = properties;
         reference = new ServiceReferenceImpl<S>(this) {
             @Override
-            S getService(BundleImpl bundle) {
+            S getService(AbstractBundle bundle) {
                 return Service.this.getService(bundle);
             }
         };
@@ -72,7 +72,7 @@ final class Service<S> implements ServiceRegistration<S> {
         return serviceFactory;
     }
 
-    S getService(BundleImpl bundle) {
+    S getService(AbstractBundle bundle) {
         ServiceContext<S> context = contexts.get(bundle);
         if (context == null) {
             context = new ServiceContext<S>(this, bundle);
@@ -96,7 +96,7 @@ final class Service<S> implements ServiceRegistration<S> {
     <T> ServiceReference<T> getReference(final Class<T> type) {
         return new ServiceReferenceImpl<T>(this) {
             @Override
-            T getService(BundleImpl bundle) {
+            T getService(AbstractBundle bundle) {
                 return type.cast(Service.this.getService(bundle));
             }
         };
