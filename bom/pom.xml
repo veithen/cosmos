@@ -34,6 +34,7 @@
     <url>https://github.com/veithen/cosmos</url>
 
     <modules>
+        <module>kepler</module>
         <module>mars</module>
     </modules>
 
