@@ -24,8 +24,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -155,9 +159,19 @@ public final class CosmosRuntime {
     
     public void dispose() {
         AbstractBundle[] bundles = bundleManager.getBundles();
-        // Skip the system bundle.
-        for (int i = 1; i < bundles.length; i++) {
-            AbstractBundle bundle = bundles[i];
+        List<BundleImpl> bundlesToStop = new ArrayList<>(bundles.length);
+        for (AbstractBundle bundle : bundles) {
+            if (bundle instanceof BundleImpl && bundle.getState() == Bundle.ACTIVE) {
+                bundlesToStop.add((BundleImpl)bundle);
+            }
+        }
+        Collections.sort(bundlesToStop, new Comparator<BundleImpl>() {
+            @Override
+            public int compare(BundleImpl o1, BundleImpl o2) {
+                return o2.getStartOrder() - o1.getStartOrder();
+            }
+        });
+        for (BundleImpl bundle : bundlesToStop) {
             try {
                 bundle.stop();
             } catch (BundleException ex) {

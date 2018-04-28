@@ -33,6 +33,7 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.Attributes.Name;
@@ -67,6 +68,8 @@ final class BundleImpl extends AbstractBundle {
         }
     };
     
+    private static final AtomicInteger nextStartOrder = new AtomicInteger();
+    
     private final BundleManager bundleManager;
     private final long id;
     private final String symbolicName;
@@ -76,6 +79,7 @@ final class BundleImpl extends AbstractBundle {
     private BundleContextFactory bundleContextFactory;
     private BundleState state;
     private BundleActivator activator;
+    private int startOrder = -1;
 
     private final Lazy<Set<String>> entries = new Lazy<Set<String>>() {
         @Override
@@ -266,6 +270,7 @@ final class BundleImpl extends AbstractBundle {
         if (state == BundleState.LOADED || state == BundleState.LAZY_ACTIVATE) {
             makeDependenciesReady();
         }
+        startOrder = nextStartOrder.getAndIncrement();
         bundleManager.fireBundleEvent(this, BundleEvent.STARTING);
         // For bundles with lazy activation, the BundleContext has already been created
         if (context == null) {
@@ -299,6 +304,7 @@ final class BundleImpl extends AbstractBundle {
         if (state == BundleState.LOADED || state == BundleState.READY) {
             return;
         }
+        startOrder = -1;
         logger.debug("Stopping bundle {} ...", symbolicName);
         bundleManager.fireBundleEvent(this, BundleEvent.STOPPING);
         if (state == BundleState.ACTIVE && activator != null) {
@@ -361,5 +367,9 @@ final class BundleImpl extends AbstractBundle {
     @Override
     public ResourceBundle getResourceBundle() {
         return resourceBundle.get();
+    }
+
+    int getStartOrder() {
+        return startOrder;
     }
 }
