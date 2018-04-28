@@ -308,7 +308,7 @@ final class BundleImpl extends AbstractBundle {
                 throw new BundleException("Failed to stop bundle " + symbolicName, ex);
             }
         }
-        context.destroy();;
+        context.destroy();
         // TODO: also unregister service and bundle listeners (or store them in the bundle context)
         context = null;
         state = BundleState.READY;
