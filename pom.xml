@@ -29,7 +29,7 @@
 
     <groupId>com.github.veithen.cosmos</groupId>
     <artifactId>cosmos</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3</version>
     <packaging>pom</packaging>
 
     <name>Cosmos Project</name>
@@ -61,7 +61,7 @@
         <url>https://github.com/veithen/cosmos/tree/master</url>
         <connection>scm:git:http://github.com/veithen/cosmos.git</connection>
         <developerConnection>scm:git:https://github.com/veithen/cosmos.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>0.3</tag>
     </scm>
 
     <properties>

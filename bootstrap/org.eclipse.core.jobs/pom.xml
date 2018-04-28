@@ -24,7 +24,7 @@
     <parent>
         <groupId>com.github.veithen.cosmos.bootstrap</groupId>
         <artifactId>bootstrap</artifactId>
-        <version>0.3-SNAPSHOT</version>
+        <version>0.3</version>
     </parent>
 
     <artifactId>org.eclipse.core.jobs</artifactId>
@@ -36,7 +36,7 @@
         <url>https://github.com/veithen/cosmos/tree/master</url>
         <connection>scm:git:http://github.com/veithen/cosmos.git</connection>
         <developerConnection>scm:git:https://github.com/veithen/cosmos.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>0.3</tag>
     </scm>
 
     <dependencies>
