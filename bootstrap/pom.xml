@@ -78,6 +78,14 @@
                 <artifactId>org.osgi.annotation</artifactId>
                 <version>6.0.0</version>
             </dependency>
+            <dependency>
+                <!-- Mars is the last release to support Java 1.7 -->
+                <groupId>com.github.veithen.cosmos.bom</groupId>
+                <artifactId>mars</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
