@@ -25,7 +25,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.codegen.ecore.generator.Generator;
 import org.eclipse.emf.codegen.ecore.genmodel.GenModel;
 import org.eclipse.emf.codegen.ecore.genmodel.generator.GenBaseGeneratorAdapter;
@@ -49,7 +48,8 @@ public class EclipseEmfEcoreCodegenTest {
         res.load(new HashMap<>());
         GenModel genmodel = (GenModel)res.getAllContents().next();
         genmodel.reconcile();
-        IProgressMonitor progressMonitor = new NullProgressMonitor();
+        Monitor monitor = new BasicMonitor.Printing(System.out);
+        IProgressMonitor progressMonitor = BasicMonitor.toIProgressMonitor(monitor);
         File outputDirectory = new File("target/out");
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
         IProject project = root.getProject("out");
@@ -62,7 +62,6 @@ public class EclipseEmfEcoreCodegenTest {
         gen.setInput(genmodel);
         genmodel.setCanGenerate(true);
         genmodel.setModelDirectory("/out");
-        Monitor monitor = new BasicMonitor.Printing(System.out);
         gen.generate(genmodel, GenBaseGeneratorAdapter.MODEL_PROJECT_TYPE, monitor);
     }
 }
