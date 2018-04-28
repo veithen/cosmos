@@ -24,7 +24,7 @@
     <parent>
         <groupId>com.github.veithen.cosmos.bootstrap</groupId>
         <artifactId>bootstrap</artifactId>
-        <version>0.3</version>
+        <version>0.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>org.eclipse.equinox.p2.artifact.repository</artifactId>
@@ -36,7 +36,7 @@
         <url>https://github.com/veithen/cosmos/tree/master</url>
         <connection>scm:git:http://github.com/veithen/cosmos.git</connection>
         <developerConnection>scm:git:https://github.com/veithen/cosmos.git</developerConnection>
-        <tag>0.3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <dependencies>
