@@ -401,7 +401,7 @@
                     <groupId>com.github.veithen.cosmos</groupId>
                     <artifactId>p2-bundle-import-maven-plugin</artifactId>
                     <!-- Note: we bootstrap the build using a previous Cosmos version -->
-                    <version>0.2</version>
+                    <version>0.3</version>
                     <configuration>
                         <repositoryUri>${eclipse.p2.repository}</repositoryUri>
                     </configuration>
