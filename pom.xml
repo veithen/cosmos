@@ -279,6 +279,11 @@
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.equinox.p2.engine</artifactId>
+                <version>2.4.0.v20150511-1532</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.equinox.p2.jarprocessor</artifactId>
                 <version>1.0.400.v20150430-1836</version>
             </dependency>
@@ -344,8 +349,18 @@
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.debug.core</artifactId>
+                <version>3.10.0.v20150303-1130</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.jdt.core</artifactId>
                 <version>3.11.0.v_OTDT_r240_201506091717</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.jdt.launching</artifactId>
+                <version>3.8.0.v20150527-0946</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>
@@ -356,6 +371,11 @@
                 <groupId>osgi.bundle</groupId>
                 <artifactId>org.eclipse.osgi.compatibility.state</artifactId>
                 <version>1.0.100.v20150402-1551</version>
+            </dependency>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.pde.core</artifactId>
+                <version>3.10.100.v20150522-0332</version>
             </dependency>
             <dependency>
                 <groupId>osgi.bundle</groupId>

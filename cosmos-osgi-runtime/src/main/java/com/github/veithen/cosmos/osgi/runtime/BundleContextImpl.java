@@ -152,7 +152,7 @@ final class BundleContextImpl implements BundleContext {
 
     public ServiceReference<?>[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
         List<ServiceReference<Object>> references = serviceRegistry.getServiceReferences(clazz, filter == null ? null : FrameworkUtil.createFilter(filter), Object.class);
-        return references.toArray(new ServiceReference<?>[references.size()]);
+        return references.isEmpty() ? null : references.toArray(new ServiceReference<?>[references.size()]);
     }
 
     public <S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz, String filter) throws InvalidSyntaxException {
