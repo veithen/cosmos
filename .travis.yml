@@ -2,7 +2,10 @@ dist: trusty
 language: java
 jdk:
   - openjdk8
-script: "mvn verify"
+script: "mvn -s travis-settings.xml deploy"
+env:
+  global:
+    - secure: "kGP0Mq/pBgh+jhPwWfa5MC7pyGOu79RaV5l8ZrDn12uR8RHAR6hHQE155MgRx0AqIreYPCbe2MCS39/CB5BQs2XlpIXJS6fzCFNfjhAddkhExqcW5MVhLQmGbjL5JF3QtYg4VHAgD+1NZJa/2i+0X05leuvi2u58VYwll86WQQ0="
 cache:
   directories:
   - $HOME/.m2
