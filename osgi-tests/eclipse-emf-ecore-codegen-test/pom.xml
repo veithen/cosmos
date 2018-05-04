@@ -63,6 +63,11 @@
         </dependency>
         <dependency>
             <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.core.filesystem</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
             <artifactId>org.eclipse.core.jobs</artifactId>
             <scope>test</scope>
         </dependency>
@@ -78,7 +83,7 @@
         </dependency>
         <dependency>
             <groupId>osgi.bundle</groupId>
-            <artifactId>org.eclipse.emf.common</artifactId>
+            <artifactId>org.eclipse.debug.core</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -89,6 +94,11 @@
         <dependency>
             <groupId>osgi.bundle</groupId>
             <artifactId>org.eclipse.emf.codegen.ecore</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>osgi.bundle</groupId>
+            <artifactId>org.eclipse.emf.common</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -134,16 +144,6 @@
         <dependency>
             <groupId>osgi.bundle</groupId>
             <artifactId>org.eclipse.equinox.registry</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
-            <artifactId>org.eclipse.core.filesystem</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
-            <artifactId>org.eclipse.debug.core</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
