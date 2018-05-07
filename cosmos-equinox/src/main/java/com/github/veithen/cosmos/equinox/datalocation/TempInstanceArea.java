@@ -22,6 +22,7 @@ package com.github.veithen.cosmos.equinox.datalocation;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
@@ -36,6 +37,22 @@ import org.slf4j.LoggerFactory;
 @Component(service={Location.class}, property={"type=osgi.instance.area"}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class TempInstanceArea extends AbstractLocation {
     private static final Logger logger = LoggerFactory.getLogger(TempInstanceArea.class);
+    
+    // Instantiate this eagerly so that running the shutdown hook doesn't trigger
+    // NoClassDefFoundError if the class loader is closed.
+    private static final FileVisitor<Path> deletingFileVisitor = new SimpleFileVisitor<Path>() {
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            Files.delete(file);
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+            Files.delete(dir);
+            return FileVisitResult.CONTINUE;
+        }
+    };
     
     private Path defaultDirectory;
     private URL defaultUrl;
@@ -75,19 +92,7 @@ public final class TempInstanceArea extends AbstractLocation {
 
     private void delete() {
         try {
-            Files.walkFileTree(defaultDirectory, new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    Files.delete(file);
-                    return FileVisitResult.CONTINUE;
-                }
-
-                @Override
-                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                    Files.delete(dir);
-                    return FileVisitResult.CONTINUE;
-                }
-            });
+            Files.walkFileTree(defaultDirectory, deletingFileVisitor);
         } catch (IOException ex) {
             logger.error(String.format("Failed to delete directory %s", defaultDirectory), ex);
         }
