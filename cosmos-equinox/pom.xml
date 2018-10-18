@@ -120,6 +120,7 @@
                             <goal>unpack-sources</goal>
                         </goals>
                         <configuration>
+                            <repositoryUri>http://download.eclipse.org/releases/photon/201806271001</repositoryUri>
                             <bundleId>org.eclipse.osgi</bundleId>
                             <excludes>
                                 <exclude>org/osgi/**/*.java</exclude>
