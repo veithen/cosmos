@@ -22,22 +22,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.veithen.cosmos</groupId>
-        <artifactId>cosmos</artifactId>
+        <groupId>com.github.veithen.cosmos.bom</groupId>
+        <artifactId>bom</artifactId>
         <version>0.4-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.github.veithen.cosmos.bom</groupId>
-    <artifactId>bom</artifactId>
+    <artifactId>photon</artifactId>
     <packaging>pom</packaging>
 
     <url>https://github.com/veithen/cosmos</url>
-
-    <modules>
-        <module>kepler</module>
-        <module>mars</module>
-        <module>photon</module>
-    </modules>
 
     <scm>
         <url>https://github.com/veithen/cosmos/tree/master</url>
@@ -45,4 +38,14 @@
         <developerConnection>scm:git:https://github.com/veithen/cosmos.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>osgi.bundle</groupId>
+                <artifactId>org.eclipse.osgi</artifactId>
+                <version>3.13.0.v20180409-1500</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

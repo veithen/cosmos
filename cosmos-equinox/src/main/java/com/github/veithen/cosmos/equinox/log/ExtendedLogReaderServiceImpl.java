@@ -25,6 +25,7 @@ import java.util.Enumeration;
 import org.eclipse.equinox.log.ExtendedLogReaderService;
 import org.eclipse.equinox.log.LogFilter;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 
 @Component(service={ExtendedLogReaderService.class}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
@@ -45,7 +46,7 @@ public final class ExtendedLogReaderServiceImpl implements ExtendedLogReaderServ
     }
 
     @Override
-    public Enumeration<?> getLog() {
+    public Enumeration<LogEntry> getLog() {
         return Collections.emptyEnumeration();
     }
 }

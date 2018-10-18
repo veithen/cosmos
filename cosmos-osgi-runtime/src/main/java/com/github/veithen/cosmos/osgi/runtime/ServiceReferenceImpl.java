@@ -19,6 +19,8 @@
  */
 package com.github.veithen.cosmos.osgi.runtime;
 
+import java.util.Dictionary;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 
@@ -56,6 +58,11 @@ abstract class ServiceReferenceImpl<S> implements ServiceReference<S> {
 
     @Override
     public final int compareTo(Object reference) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Dictionary<String, Object> getProperties() {
         throw new UnsupportedOperationException();
     }
 

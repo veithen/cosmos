@@ -32,8 +32,9 @@ public class FrameworkUtilTest {
         CosmosRuntime.getInstance();
         Bundle bundle = FrameworkUtil.getBundle(Bundle.class);
         assertThat(bundle).isNotNull();
-        assertThat(bundle.getSymbolicName()).isEqualTo("osgi.core");
+        assertThat(bundle.getSymbolicName()).isEqualTo("org.osgi.framework");
         Version version = bundle.getVersion();
-        assertThat(version.getMajor()).isEqualTo(6);
+        assertThat(version.getMajor()).isEqualTo(1);
+        assertThat(version.getMinor()).isEqualTo(9);
     }
 }

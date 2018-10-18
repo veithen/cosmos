@@ -44,7 +44,7 @@
         <dependencies>
             <dependency>
                 <groupId>com.github.veithen.cosmos.bom</groupId>
-                <artifactId>mars</artifactId>
+                <artifactId>photon</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -60,7 +60,41 @@
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.service.resolver</artifactId>
-            <version>1.0.1</version>
+            <version>1.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.log</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.permissionadmin</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.condpermadmin</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.resource</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.dto</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.startlevel</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.url</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.felix</groupId>
@@ -90,6 +124,25 @@
                             <excludes>
                                 <exclude>org/osgi/**/*.java</exclude>
                             </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-patch-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                        <configuration>
+                            <targetDirectory>${project.build.directory}/bundle-sources</targetDirectory>
+                            <patches>
+                                <patch>PackageAdminImpl.patch</patch>
+                            </patches>
+                            <strip>1</strip>
                         </configuration>
                     </execution>
                 </executions>

@@ -19,8 +19,10 @@
  */
 package com.github.veithen.cosmos.osgi.runtime;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 
 import com.github.veithen.cosmos.osgi.runtime.internal.InternalLogger;
 
@@ -42,12 +44,37 @@ final class LogServiceAdapter implements LogService {
     }
 
     @Override
-    public void log(ServiceReference sr, int level, String message) {
+    public void log(ServiceReference<?> sr, int level, String message) {
         log(level, message);
     }
 
     @Override
-    public void log(ServiceReference sr, int level, String message, Throwable exception) {
+    public void log(ServiceReference<?> sr, int level, String message, Throwable exception) {
         log(level, message, exception);
+    }
+
+    @Override
+    public Logger getLogger(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Logger getLogger(Class<?> clazz) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <L extends Logger> L getLogger(String name, Class<L> loggerType) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <L extends Logger> L getLogger(Class<?> clazz, Class<L> loggerType) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <L extends Logger> L getLogger(Bundle bundle, String name, Class<L> loggerType) {
+        throw new UnsupportedOperationException();
     }
 }

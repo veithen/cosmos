@@ -42,7 +42,7 @@
     <dependencies>
         <dependency>
             <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
+            <artifactId>org.osgi.framework</artifactId>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
@@ -52,6 +52,10 @@
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.util.xml</artifactId>
             <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.packageadmin</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

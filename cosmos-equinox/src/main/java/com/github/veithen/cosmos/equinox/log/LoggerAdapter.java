@@ -20,6 +20,7 @@
 package com.github.veithen.cosmos.equinox.log;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LoggerConsumer;
 
 import com.github.veithen.cosmos.osgi.runtime.internal.InternalLogger;
 
@@ -67,6 +68,176 @@ final class LoggerAdapter implements org.eclipse.equinox.log.Logger {
 
     @Override
     public String getName() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isTraceEnabled() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void trace(String message) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void trace(String format, Object arg) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void trace(String format, Object arg1, Object arg2) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void trace(String format, Object... arguments) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <E extends Exception> void trace(LoggerConsumer<E> consumer) throws E {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isDebugEnabled() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void debug(String message) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void debug(String format, Object arg) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void debug(String format, Object arg1, Object arg2) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void debug(String format, Object... arguments) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <E extends Exception> void debug(LoggerConsumer<E> consumer) throws E {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isInfoEnabled() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void info(String message) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void info(String format, Object arg) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void info(String format, Object... arguments) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <E extends Exception> void info(LoggerConsumer<E> consumer) throws E {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isWarnEnabled() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void warn(String message) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void warn(String format, Object arg) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void warn(String format, Object arg1, Object arg2) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void warn(String format, Object... arguments) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <E extends Exception> void warn(LoggerConsumer<E> consumer) throws E {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isErrorEnabled() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void error(String message) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void error(String format, Object arg) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void error(String format, Object arg1, Object arg2) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void error(String format, Object... arguments) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <E extends Exception> void error(LoggerConsumer<E> consumer) throws E {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void audit(String message) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void audit(String format, Object arg) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void audit(String format, Object arg1, Object arg2) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void audit(String format, Object... arguments) {
         throw new UnsupportedOperationException();
     }
 }
