@@ -2,11 +2,13 @@ dist: trusty
 language: java
 jdk:
   - openjdk8
+before_install: if [ -e $JAVA_HOME/lib/security/cacerts ]; then ln -sf /etc/ssl/certs/java/cacerts $JAVA_HOME/lib/security/cacerts; fi
 install: true
 script: '[ "$TRAVIS_REPO_SLUG" == veithen/cosmos ] && [ "$TRAVIS_BRANCH" == master ] && [ "$TRAVIS_PULL_REQUEST" == false ] && goal=deploy || goal=verify ; mvn -B -s .travis-settings.xml $goal'
+before_cache: "find $HOME/.m2 -name '*-SNAPSHOT' -a -type d -print0 | xargs -0 rm -rf"
 env:
   global:
     - secure: "kGP0Mq/pBgh+jhPwWfa5MC7pyGOu79RaV5l8ZrDn12uR8RHAR6hHQE155MgRx0AqIreYPCbe2MCS39/CB5BQs2XlpIXJS6fzCFNfjhAddkhExqcW5MVhLQmGbjL5JF3QtYg4VHAgD+1NZJa/2i+0X05leuvi2u58VYwll86WQQ0="
 cache:
   directories:
-  - $HOME/.m2
+    - $HOME/.m2
