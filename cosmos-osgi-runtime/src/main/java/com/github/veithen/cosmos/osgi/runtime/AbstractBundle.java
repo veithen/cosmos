@@ -76,7 +76,7 @@ abstract class AbstractBundle implements InternalBundle {
     }
 
     public final boolean hasPermission(Object permission) {
-        throw new UnsupportedOperationException();
+        return true;
     }
 
     public final URL getResource(String name) {

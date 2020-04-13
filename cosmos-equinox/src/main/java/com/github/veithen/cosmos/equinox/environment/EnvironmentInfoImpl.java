@@ -19,6 +19,8 @@
  */
 package com.github.veithen.cosmos.equinox.environment;
 
+import java.io.File;
+
 import org.eclipse.osgi.service.environment.EnvironmentInfo;
 import org.osgi.service.component.annotations.Component;
 
@@ -36,7 +38,9 @@ public class EnvironmentInfoImpl implements EnvironmentInfo {
 
     @Override
     public String[] getNonFrameworkArgs() {
-        return null;
+        // Prevent the Equinox framework from accessing files in ~/.eclipse.
+        // TODO: find a better way to do this
+        return new String[] {"-eclipse.keyring", new File(System.getProperty("java.io.tmpdir"), "secure_storage").toString()};
     }
 
     @Override

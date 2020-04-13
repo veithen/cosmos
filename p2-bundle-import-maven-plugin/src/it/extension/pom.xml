@@ -21,18 +21,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>@project.groupId@</groupId>
-        <artifactId>cosmos</artifactId>
-        <version>@project.version@</version>
-    </parent>
-
+    <groupId>test</groupId>
     <artifactId>javax.inject</artifactId>
+    <version>1</version>
     <packaging>imported-bundle</packaging>
 
     <properties>
-        <skipDeploy>true</skipDeploy>
-        <argLine>@argLine@</argLine>
         <bundleVersion>1.0.0.v20091030</bundleVersion>
     </properties>
 
@@ -46,15 +40,6 @@
                 <configuration>
                     <repositoryUri>http://localhost:@repo.httpPort@</repositoryUri>
                 </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
