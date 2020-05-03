@@ -43,7 +43,7 @@ public class ServiceTrackerTest {
         assertThat(tracker.getService()).isNull();
         MyServiceImpl service = new MyServiceImpl();
         ServiceRegistration<MyService> registration = bundleContext.registerService(MyService.class, service, null);
-        assertThat(tracker.getService()).isSameAs(service);
+        assertThat(tracker.getService()).isSameInstanceAs(service);
         registration.unregister();
         assertThat(tracker.getService()).isNull();
     }
