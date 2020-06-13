@@ -24,7 +24,7 @@
     <parent>
         <groupId>com.github.veithen.cosmos.bom</groupId>
         <artifactId>bom</artifactId>
-        <version>0.4-SNAPSHOT</version>
+        <version>0.4.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>kepler</artifactId>
