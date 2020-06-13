@@ -48,10 +48,9 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import com.github.veithen.cosmos.osgi.runtime.CosmosRuntime;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 import com.github.veithen.mojo.ArtifactProcessingMojo;
-import com.github.veithen.mojo.SkippableMojo;
 
 @Mojo(name="create-repository", requiresDependencyResolution=ResolutionScope.TEST)
-public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo, ArtifactProcessingMojo {
+public class CreateRepositoryMojo extends AbstractMojo implements ArtifactProcessingMojo {
     @Parameter(defaultValue="${project.build.directory}/p2-repository", required=true)
     private File outputDirectory;
 
@@ -61,8 +60,15 @@ public class CreateRepositoryMojo extends AbstractMojo implements SkippableMojo,
     @Parameter
     private File[] bundles;
 
+    @Parameter(defaultValue="false")
+    private boolean skip;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        if (skip) {
+            getLog().info("Skipping plugin execution");
+        }
+
         try {
             List<Artifact> artifacts = resolveArtifacts();
             URI repoURI = outputDirectory.toURI();
