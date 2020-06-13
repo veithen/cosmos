@@ -113,13 +113,15 @@
                                 <bundle>src/test/bundles/javax.inject.source_1.0.0.v20091030.jar</bundle>
                                 <bundle>src/test/bundles/javax.inject_1.0.0.v20091030.jar</bundle>
                             </bundles>
-                            <artifacts>
-                                <artifact>
-                                    <groupId>org.codehaus.woodstox</groupId>
-                                    <artifactId>stax2-api</artifactId>
-                                    <version>4.0.0</version>
-                                </artifact>
-                            </artifacts>
+                            <artifactSet>
+                                <artifacts>
+                                    <artifact>
+                                        <groupId>org.codehaus.woodstox</groupId>
+                                        <artifactId>stax2-api</artifactId>
+                                        <version>4.0.0</version>
+                                    </artifact>
+                                </artifacts>
+                            </artifactSet>
                         </configuration>
                     </execution>
                 </executions>
