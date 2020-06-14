@@ -51,8 +51,8 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import com.github.veithen.cosmos.osgi.runtime.CosmosRuntime;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
-import com.github.veithen.mojo.ArtifactSet;
-import com.github.veithen.mojo.ArtifactSetResolver;
+import com.github.veithen.maven.shared.artifactset.ArtifactSet;
+import com.github.veithen.maven.shared.artifactset.ArtifactSetResolver;
 
 @Mojo(name="create-repository", requiresDependencyResolution=ResolutionScope.TEST)
 public class CreateRepositoryMojo extends AbstractMojo {
