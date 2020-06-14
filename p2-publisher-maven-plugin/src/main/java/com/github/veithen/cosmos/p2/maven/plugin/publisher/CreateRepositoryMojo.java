@@ -27,12 +27,16 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Repository;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.project.MavenProject;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.publisher.IPublisherAction;
@@ -47,10 +51,23 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import com.github.veithen.cosmos.osgi.runtime.CosmosRuntime;
 import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
-import com.github.veithen.mojo.ArtifactProcessingMojo;
+import com.github.veithen.mojo.ArtifactSet;
+import com.github.veithen.mojo.ArtifactSetResolver;
 
 @Mojo(name="create-repository", requiresDependencyResolution=ResolutionScope.TEST)
-public class CreateRepositoryMojo extends AbstractMojo implements ArtifactProcessingMojo {
+public class CreateRepositoryMojo extends AbstractMojo {
+    @Parameter(property="project", readonly=true, required=true)
+    private MavenProject project;
+    
+    @Parameter(property="session", readonly=true, required=true)
+    private MavenSession session;
+    
+    @Parameter(required=true)
+    private ArtifactSet artifactSet;
+
+    @Parameter
+    private Repository[] repositories;
+
     @Parameter(defaultValue="${project.build.directory}/p2-repository", required=true)
     private File outputDirectory;
 
@@ -63,6 +80,9 @@ public class CreateRepositoryMojo extends AbstractMojo implements ArtifactProces
     @Parameter(defaultValue="false")
     private boolean skip;
 
+    @Component
+    private ArtifactSetResolver artifactSetResolver;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -70,7 +90,7 @@ public class CreateRepositoryMojo extends AbstractMojo implements ArtifactProces
         }
 
         try {
-            List<Artifact> artifacts = resolveArtifacts();
+            List<Artifact> artifacts = artifactSetResolver.resolveArtifactSet(project, session, artifactSet, repositories);
             URI repoURI = outputDirectory.toURI();
             IProvisioningAgent agent = CosmosRuntime.getInstance().getService(IProvisioningAgentProvider.class).createAgent(agentLocation.toURI());
             try {

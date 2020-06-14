@@ -40,13 +40,15 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.directory}/repo1</outputDirectory>
-                            <artifacts>
-                                <artifact>
-                                    <groupId>org.codehaus.woodstox</groupId>
-                                    <artifactId>stax2-api</artifactId>
-                                    <version>4.0.0</version>
-                                </artifact>
-                            </artifacts>
+                            <artifactSet>
+                                <artifacts>
+                                    <artifact>
+                                        <groupId>org.codehaus.woodstox</groupId>
+                                        <artifactId>stax2-api</artifactId>
+                                        <version>4.0.0</version>
+                                    </artifact>
+                                </artifacts>
+                            </artifactSet>
                         </configuration>
                     </execution>
                     <execution>
@@ -57,13 +59,15 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.directory}/repo2</outputDirectory>
-                            <artifacts>
-                                <artifact>
-                                    <groupId>com.fasterxml.woodstox</groupId>
-                                    <artifactId>woodstox-core</artifactId>
-                                    <version>5.0.3</version>
-                                </artifact>
-                            </artifacts>
+                            <artifactSet>
+                                <artifacts>
+                                    <artifact>
+                                        <groupId>com.fasterxml.woodstox</groupId>
+                                        <artifactId>woodstox-core</artifactId>
+                                        <version>5.0.3</version>
+                                    </artifact>
+                                </artifacts>
+                            </artifactSet>
                         </configuration>
                     </execution>
                 </executions>
