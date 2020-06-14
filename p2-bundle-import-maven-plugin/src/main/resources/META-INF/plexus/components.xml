@@ -30,6 +30,7 @@
                         <id>default</id>
                         <phases>
                             <generate-sources>com.github.veithen.cosmos:p2-bundle-import-maven-plugin:unpack-sources</generate-sources>
+                            <!-- TODO: We compile only to ensure all dependencies are declared. Instead we should analyze the already compiled code. -->
                             <compile>org.apache.maven.plugins:maven-compiler-plugin:3.7.0:compile</compile>
                             <package>
                                 com.github.veithen.cosmos:p2-bundle-import-maven-plugin:attach-bundle,
