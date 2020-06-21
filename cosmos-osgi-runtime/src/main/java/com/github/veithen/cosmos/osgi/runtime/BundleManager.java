@@ -25,6 +25,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,12 @@ import java.util.jar.Manifest;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.resource.Namespace;
+import org.osgi.resource.Requirement;
 
 import com.github.veithen.cosmos.osgi.runtime.internal.BundleLookup;
 
@@ -50,7 +58,7 @@ final class BundleManager implements BundleLookup {
     BundleManager() throws BundleException {
         final List<AbstractBundle> bundles = new ArrayList<>();
         // Add a system bundle
-        FrameworkImpl systemBundle = new FrameworkImpl();
+        FrameworkImpl systemBundle = new FrameworkImpl(this);
         bundles.add(systemBundle);
         ResourceUtil.processResources("META-INF/MANIFEST.MF", new ResourceProcessor() {
             @Override
@@ -129,5 +137,33 @@ final class BundleManager implements BundleLookup {
         for (AbstractBundle bundle : bundles) {
             bundle.distributeBundleEvent(event);
         }
+    }
+
+    Collection<BundleCapability> findProviders(Requirement requirement) {
+        String namespace = requirement.getNamespace();
+        Filter filter;
+        String filterSpec = requirement.getDirectives().get(Namespace.REQUIREMENT_FILTER_DIRECTIVE);
+        if (filterSpec == null) {
+            filter = null;
+        } else {
+            try {
+                filter = FrameworkUtil.createFilter(filterSpec);
+            } catch (InvalidSyntaxException ex) {
+                return Collections.emptyList();
+            }
+        }
+        List<BundleCapability> capabilities = new ArrayList<>();
+        for (AbstractBundle bundle : bundles) {
+            for (BundleCapability capability : bundle.getDeclaredCapabilities(namespace)) {
+                if (capability == null) {
+                    continue;
+                }
+                if (filter != null && !filter.matches(capability.getAttributes())) {
+                    continue;
+                }
+                capabilities.add(capability);
+            }
+        }
+        return capabilities;
     }
 }

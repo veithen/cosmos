@@ -23,57 +23,41 @@
 
     <parent>
         <groupId>com.github.veithen.cosmos</groupId>
-        <artifactId>cosmos</artifactId>
+        <artifactId>osgi-tests</artifactId>
         <version>0.4.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cosmos-osgi-runtime</artifactId>
-
-    <name>Cosmos OSGi Runtime</name>
-    <url>https://github.com/veithen/cosmos</url>
-
-    <scm>
-        <url>https://github.com/veithen/cosmos/tree/master</url>
-        <connection>scm:git:http://github.com/veithen/cosmos.git</connection>
-        <developerConnection>scm:git:https://github.com/veithen/cosmos.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
+    <artifactId>eclipse-core-resources-test</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.framework</artifactId>
+            <groupId>com.github.veithen.cosmos</groupId>
+            <artifactId>cosmos-equinox</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.log</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.util.xml</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.packageadmin</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.resource</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm-tree</artifactId>
-            <version>6.0</version>
+            <groupId>com.github.veithen.cosmos</groupId>
+            <artifactId>cosmos-testing</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.core.resources</artifactId>
+            <version>3.13.700</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.platform</groupId>
+                    <artifactId>org.eclipse.osgi</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

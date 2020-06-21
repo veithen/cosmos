@@ -35,6 +35,7 @@
     <modules>
         <module>bundle1</module>
         <module>bundle2</module>
+        <module>eclipse-core-resources-test</module>
         <module>eclipse-core-runtime-test</module>
         <module>eclipse-emf-ecore-autostart-test</module>
         <module>eclipse-emf-ecore-codegen-test</module>

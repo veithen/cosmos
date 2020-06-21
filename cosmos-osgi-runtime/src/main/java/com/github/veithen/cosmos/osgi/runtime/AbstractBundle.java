@@ -32,11 +32,13 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.BundleReference;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.wiring.BundleCapability;
 
 import com.github.veithen.cosmos.osgi.runtime.internal.InternalBundle;
 
-abstract class AbstractBundle implements InternalBundle {
+abstract class AbstractBundle implements InternalBundle, BundleReference {
     protected BundleContextImpl context;
 
     abstract void initialize(BundleContextFactory bundleContextFactory) throws BundleException;
@@ -97,8 +99,11 @@ abstract class AbstractBundle implements InternalBundle {
     }
 
     public final <A> A adapt(Class<A> type) {
-        // throw new UnsupportedOperationException();
-        return null;
+        if (type.isInstance(this)) {
+            return type.cast(this);
+        } else {
+            return null;
+        }
     }
 
     public final File getDataFile(String filename) {
@@ -121,5 +126,12 @@ abstract class AbstractBundle implements InternalBundle {
         if (context != null) {
             context.distributeBundleEvent(event);
         }
+    }
+
+    abstract List<BundleCapability> getDeclaredCapabilities(String namespace);
+
+    @Override
+    public final Bundle getBundle() {
+        return this;
     }
 }

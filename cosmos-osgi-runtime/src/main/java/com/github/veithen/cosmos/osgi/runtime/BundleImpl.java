@@ -26,8 +26,10 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -39,15 +41,23 @@ import java.util.jar.JarEntry;
 import java.util.jar.Attributes.Name;
 import java.util.jar.JarInputStream;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
+import org.osgi.framework.namespace.IdentityNamespace;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRequirement;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Requirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class BundleImpl extends AbstractBundle {
+final class BundleImpl extends AbstractBundle implements BundleRevision {
     private static final Logger logger = LoggerFactory.getLogger(BundleImpl.class);
 
     static abstract class Reason<T> {
@@ -70,12 +80,14 @@ final class BundleImpl extends AbstractBundle {
     
     private static final AtomicInteger nextStartOrder = new AtomicInteger();
     
+    private final Map<String,List<BundleCapability>> bundleCapabilities = new HashMap<>();
     private final BundleManager bundleManager;
     private final long id;
     private final String symbolicName;
     private final Attributes attrs;
     private final URL rootUrl;
     private final URL locationUrl;
+    private final Version version;
     private BundleContextFactory bundleContextFactory;
     private BundleState state;
     private BundleActivator activator;
@@ -136,6 +148,12 @@ final class BundleImpl extends AbstractBundle {
         } else {
             locationUrl = rootUrl;
         }
+        version = Version.parseVersion(attrs.getValue(Constants.BUNDLE_VERSION));
+        Map<String, Object> identityAttributes = new HashMap<>();
+        identityAttributes.put(IdentityNamespace.IDENTITY_NAMESPACE, symbolicName);
+        identityAttributes.put(IdentityNamespace.CAPABILITY_VERSION_ATTRIBUTE, version);
+        identityAttributes.put(IdentityNamespace.CAPABILITY_TYPE_ATTRIBUTE, IdentityNamespace.TYPE_BUNDLE);
+        bundleCapabilities.put(IdentityNamespace.IDENTITY_NAMESPACE, Collections.<BundleCapability>singletonList(new BundleCapabilityImpl(this, IdentityNamespace.IDENTITY_NAMESPACE, new HashMap<String,String>(), identityAttributes)));
     }
 
     void initialize(BundleContextFactory bundleContextFactory) throws BundleException {
@@ -182,7 +200,7 @@ final class BundleImpl extends AbstractBundle {
     }
 
     public Version getVersion() {
-        return Version.parseVersion(attrs.getValue("Bundle-Version"));
+        return version;
     }
 
     public int getState() {
@@ -371,5 +389,35 @@ final class BundleImpl extends AbstractBundle {
 
     int getStartOrder() {
         return startOrder;
+    }
+
+    @Override
+    public List<BundleCapability> getDeclaredCapabilities(String namespace) {
+        return bundleCapabilities.get(namespace);
+    }
+
+    @Override
+    public List<BundleRequirement> getDeclaredRequirements(String namespace) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getTypes() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public BundleWiring getWiring() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<Capability> getCapabilities(String namespace) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<Requirement> getRequirements(String namespace) {
+        throw new UnsupportedOperationException();
     }
 }
