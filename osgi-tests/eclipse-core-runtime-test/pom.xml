@@ -29,15 +29,40 @@
 
     <artifactId>eclipse-core-runtime-test</artifactId>
 
-    <repositories>
-        <repository>
-            <id>p2</id>
-            <layout>p2</layout>
-            <name>Eclipse P2 repository</name>
-            <url>${eclipse.p2.repository}</url>
-        </repository>
-    </repositories>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.equinox.common</artifactId>
+                <version>3.12.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.core.jobs</artifactId>
+                <version>3.10.800</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.equinox.registry</artifactId>
+                <version>3.8.800</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.equinox.preferences</artifactId>
+                <version>3.8.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.core.contenttype</artifactId>
+                <version>3.7.700</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.equinox.app</artifactId>
+                <version>1.4.500</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>com.github.veithen.cosmos</groupId>
@@ -57,39 +82,16 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
-            <artifactId>org.eclipse.core.contenttype</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
-            <artifactId>org.eclipse.core.jobs</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.core.runtime</artifactId>
+            <version>3.18.0</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
-            <artifactId>org.eclipse.equinox.app</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
-            <artifactId>org.eclipse.equinox.common</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
-            <artifactId>org.eclipse.equinox.preferences</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
-            <artifactId>org.eclipse.equinox.registry</artifactId>
-            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.platform</groupId>
+                    <artifactId>org.eclipse.osgi</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -126,12 +128,5 @@
                 </executions>
             </plugin>
         </plugins>
-        <extensions>
-            <extension>
-                <groupId>com.github.veithen.cosmos</groupId>
-                <artifactId>p2-maven-connector</artifactId>
-                <version>0.3</version>
-            </extension>
-        </extensions>
     </build>
 </project>

@@ -31,6 +31,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.FrameworkUtil;
@@ -187,6 +188,9 @@ final class BundleContextImpl implements BundleContext {
     }
 
     public Bundle getBundle(String location) {
+        if (Constants.SYSTEM_BUNDLE_LOCATION.equals(location)) {
+            return getBundle(Constants.SYSTEM_BUNDLE_ID);
+        }
         throw new UnsupportedOperationException();
     }
 

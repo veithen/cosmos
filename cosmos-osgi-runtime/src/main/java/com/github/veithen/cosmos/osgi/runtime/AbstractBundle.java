@@ -97,7 +97,8 @@ abstract class AbstractBundle implements InternalBundle {
     }
 
     public final <A> A adapt(Class<A> type) {
-        throw new UnsupportedOperationException();
+        // throw new UnsupportedOperationException();
+        return null;
     }
 
     public final File getDataFile(String filename) {
