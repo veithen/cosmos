@@ -67,7 +67,7 @@
     <properties>
         <github.repository>cosmos</github.repository>
         <javaVersion>1.7</javaVersion>
-        <maven.version>3.5.2</maven.version>
+        <maven.version>3.6.3</maven.version>
         <maven.resolver.version>1.6.1</maven.resolver.version>
         <eclipse.p2.repository>http://download.eclipse.org/releases/mars/201506241002</eclipse.p2.repository>
     </properties>
