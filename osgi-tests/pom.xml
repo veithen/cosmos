@@ -40,6 +40,7 @@
         <module>eclipse-emf-ecore-autostart-test</module>
         <module>eclipse-emf-ecore-codegen-test</module>
         <module>lazy-activation-test</module>
+        <module>misc-test</module>
         <module>start-stop-bundle-test</module>
         <module>tracker-test</module>
     </modules>

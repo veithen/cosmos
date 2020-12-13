@@ -58,7 +58,25 @@ abstract class ServiceReferenceImpl<S> implements ServiceReference<S> {
 
     @Override
     public final int compareTo(Object reference) {
-        throw new UnsupportedOperationException();
+        ServiceReferenceImpl<?> other = (ServiceReferenceImpl<?>)reference;
+        if (other.service == service) {
+            return 0;
+        }
+        int rankingCompare = Integer.compare(service.getRanking(), other.service.getRanking());
+        if (rankingCompare == 0) {
+            return Long.compare(other.service.getId(), service.getId());
+        }
+        return rankingCompare;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof ServiceReferenceImpl<?> && ((ServiceReferenceImpl<?>)obj).service == service;
+    }
+
+    @Override
+    public int hashCode() {
+        return System.identityHashCode(service);
     }
 
     @Override

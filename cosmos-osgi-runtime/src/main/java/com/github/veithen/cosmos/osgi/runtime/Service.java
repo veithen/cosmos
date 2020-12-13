@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
@@ -108,5 +109,15 @@ final class Service<S> implements ServiceRegistration<S> {
 
     public void unregister() {
         serviceRegistry.unregisterService(this);
+    }
+
+
+    long getId() {
+        return (Long)properties.get(Constants.SERVICE_ID);
+    }
+
+    int getRanking() {
+        Integer ranking = (Integer)properties.get(Constants.SERVICE_RANKING);
+        return ranking == null ? 0 : ranking;
     }
 }

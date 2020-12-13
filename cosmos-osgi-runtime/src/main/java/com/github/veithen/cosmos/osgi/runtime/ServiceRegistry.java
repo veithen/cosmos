@@ -102,12 +102,18 @@ final class ServiceRegistry {
     }
 
     <T> ServiceReference<T> getServiceReference(String clazz, Filter filter, Class<T> type) {
-        for (Service<?> service : services) {
-            if (service.matches(clazz, filter)) {
-                return service.getReference(type);
+        int ranking = 0;
+        Service<?> service = null;
+        for (Service<?> candidate : services) {
+            if (candidate.matches(clazz, filter)) {
+                int candidateRanking = candidate.getRanking();
+                if (service == null || candidateRanking > ranking) {
+                    ranking = candidateRanking;
+                    service = candidate;
+                }
             }
         }
-        return null;
+        return service == null ? null : service.getReference(type);
     }
 
     void addServiceListener(AbstractBundle bundle, ServiceListener listener, Filter filter) {
