@@ -132,6 +132,7 @@ final class BundleManager implements BundleLookup {
         return codeSource == null ? null : bundlesByUrl.get(codeSource.getLocation());
     }
 
+    // TODO: instead of passing the event type as argument, we should just use Bundle.getState()
     void fireBundleEvent(BundleImpl bundleImpl, int type) {
         BundleEvent event = new BundleEvent(type, bundleImpl);
         for (AbstractBundle bundle : bundles) {

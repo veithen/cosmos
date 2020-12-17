@@ -57,7 +57,12 @@ enum BundleState {
      * {@link #ACTIVE}.
      */
     READY(Bundle.RESOLVED),
-    
+
+    /**
+     * The bundle is starting, i.e. the bundle activator is about to be invoked.
+     */
+    STARTING(Bundle.STARTING),
+
     ACTIVE(Bundle.ACTIVE);
 
     private final int osgiState;

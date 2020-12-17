@@ -289,6 +289,7 @@ final class BundleImpl extends AbstractBundle implements BundleRevision {
             makeDependenciesReady();
         }
         startOrder = nextStartOrder.getAndIncrement();
+        state = BundleState.STARTING;
         bundleManager.fireBundleEvent(this, BundleEvent.STARTING);
         // For bundles with lazy activation, the BundleContext has already been created
         if (context == null) {

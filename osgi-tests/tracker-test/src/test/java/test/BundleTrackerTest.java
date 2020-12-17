@@ -21,15 +21,20 @@ package test;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.BundleTracker;
+import org.osgi.util.tracker.BundleTrackerCustomizer;
 
 import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 
@@ -39,7 +44,7 @@ public class BundleTrackerTest {
     private BundleContext bundleContext;
 
     @Test
-    public void test() throws Exception {
+    public void testBasic() throws Exception {
         // Use a random bundle for the test.
         Bundle bundle = FrameworkUtil.getBundle(LogService.class);
         BundleTracker<Bundle> tracker = new BundleTracker<>(bundleContext, Bundle.ACTIVE, null);
@@ -49,5 +54,39 @@ public class BundleTrackerTest {
         assertThat(tracker.getBundles()).asList().contains(bundle);
         bundle.stop();
         assertThat(tracker.getBundles()).asList().doesNotContain(bundle);
+    }
+
+    @Test
+    public void testLazyActivationWhileAdding() {
+        final List<Integer> states = new ArrayList<>();
+        BundleTracker<Bundle> tracker = new BundleTracker<>(bundleContext, Bundle.STARTING | Bundle.ACTIVE, new BundleTrackerCustomizer<Bundle>() {
+            @Override
+            public Bundle addingBundle(Bundle bundle, BundleEvent event) {
+                if (bundle.getSymbolicName().equals("bundle1")) {
+                    states.add(bundle.getState());
+                    try {
+                        // Load a class from the bundle to cause it to activate.
+                        bundle.loadClass("bundle1.Helper");
+                        return bundle;
+                    } catch (ClassNotFoundException ex) {
+                        // Ignore. Test will fail later.
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public void modifiedBundle(Bundle bundle, BundleEvent event, Bundle object) {
+            }
+
+            @Override
+            public void removedBundle(Bundle bundle, BundleEvent event, Bundle object) {
+            }
+        });
+        tracker.open();
+        // The customizer should have been called once, with the bundle in state STARTING.
+        assertThat(states).containsExactly(Bundle.STARTING);
+        assertThat(tracker.getTracked()).hasSize(1);
+        tracker.close();
     }
 }
