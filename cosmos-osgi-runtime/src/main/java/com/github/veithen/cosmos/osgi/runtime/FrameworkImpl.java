@@ -40,6 +40,8 @@ import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.resource.Requirement;
 
 final class FrameworkImpl extends AbstractBundle implements Framework, FrameworkWiring {
+    private static final Version VERSION = new Version(0, 0, 0);
+
     private final BundleManager bundleManager;
 
     FrameworkImpl(BundleManager bundleManager) {
@@ -61,7 +63,7 @@ final class FrameworkImpl extends AbstractBundle implements Framework, Framework
 
     @Override
     public Version getVersion() {
-        throw new UnsupportedOperationException();
+        return VERSION;
     }
 
     @Override

@@ -59,6 +59,7 @@ final class ServiceRegistry {
         }
         actualProperties.put(Constants.OBJECTCLASS, classes);
         actualProperties.put(Constants.SERVICE_ID, serviceId);
+        actualProperties.put(Constants.SERVICE_BUNDLEID, bundle.getBundleId());
         Service<S> service = new Service<S>(this, bundle, classes, serviceFactory, actualProperties);
         synchronized (services) {
             services.add(service);

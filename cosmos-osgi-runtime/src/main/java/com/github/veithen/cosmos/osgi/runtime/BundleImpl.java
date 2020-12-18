@@ -48,6 +48,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 import org.osgi.framework.namespace.IdentityNamespace;
+import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
@@ -57,7 +58,7 @@ import org.osgi.resource.Requirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class BundleImpl extends AbstractBundle implements BundleRevision {
+final class BundleImpl extends AbstractBundle implements BundleRevision, BundleStartLevel {
     private static final Logger logger = LoggerFactory.getLogger(BundleImpl.class);
 
     static abstract class Reason<T> {
@@ -88,6 +89,7 @@ final class BundleImpl extends AbstractBundle implements BundleRevision {
     private final URL rootUrl;
     private final URL locationUrl;
     private final Version version;
+    private final BundleWiringImpl wiring = new BundleWiringImpl();
     private BundleContextFactory bundleContextFactory;
     private BundleState state;
     private BundleActivator activator;
@@ -388,6 +390,15 @@ final class BundleImpl extends AbstractBundle implements BundleRevision {
         return resourceBundle.get();
     }
 
+    @Override
+    public <A> A adapt(Class<A> type) {
+        if (type == BundleWiring.class) {
+            return type.cast(wiring);
+        } else {
+            return super.adapt(type);
+        }
+    }
+
     int getStartOrder() {
         return startOrder;
     }
@@ -420,5 +431,25 @@ final class BundleImpl extends AbstractBundle implements BundleRevision {
     @Override
     public List<Requirement> getRequirements(String namespace) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int getStartLevel() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setStartLevel(int startlevel) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isPersistentlyStarted() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isActivationPolicyUsed() {
+        return true;
     }
 }

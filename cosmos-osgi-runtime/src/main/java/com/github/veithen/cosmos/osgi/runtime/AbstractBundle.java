@@ -98,7 +98,7 @@ abstract class AbstractBundle implements InternalBundle, BundleReference {
         throw new UnsupportedOperationException();
     }
 
-    public final <A> A adapt(Class<A> type) {
+    public <A> A adapt(Class<A> type) {
         if (type.isInstance(this)) {
             return type.cast(this);
         } else {
