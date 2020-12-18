@@ -40,7 +40,6 @@
         <module>org.eclipse.ecf.provider.filetransfer</module>
         <module>org.eclipse.ecf.provider.filetransfer.httpclient4</module>
         <module>org.eclipse.equinox.app</module>
-        <module>org.eclipse.equinox.concurrent</module>
         <module>org.eclipse.equinox.frameworkadmin</module>
         <module>org.eclipse.equinox.frameworkadmin.equinox</module>
         <module>org.eclipse.equinox.p2.artifact.repository</module>
