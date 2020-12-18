@@ -9,4 +9,6 @@ updates:
         versions: ">= 10.0"
       - dependency-name: "org.eclipse.platform:org.eclipse.equinox.p2.transport.ecf"
         versions: ">= 1.3.0"
+      - dependency-name: "org.eclipse.platform:org.eclipse.equinox.p2.repository"
+        versions: ">= 2.5.0"
     open-pull-requests-limit: 10
