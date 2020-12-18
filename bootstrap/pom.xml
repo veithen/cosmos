@@ -50,7 +50,6 @@
         <module>org.eclipse.equinox.p2.publisher.eclipse</module>
         <module>org.eclipse.equinox.p2.repository</module>
         <module>org.eclipse.equinox.p2.transport.ecf</module>
-        <module>org.eclipse.equinox.preferences</module>
         <module>org.eclipse.equinox.security</module>
         <module>org.eclipse.equinox.simpleconfigurator</module>
         <module>org.eclipse.equinox.simpleconfigurator.manipulator</module>
