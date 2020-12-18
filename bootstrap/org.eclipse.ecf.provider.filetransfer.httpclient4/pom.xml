@@ -56,14 +56,12 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.ecf</groupId>
             <artifactId>org.eclipse.ecf</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.ecf</groupId>
             <artifactId>org.eclipse.ecf.identity</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.veithen.cosmos.bootstrap</groupId>
