@@ -58,9 +58,12 @@
             <artifactId>org.eclipse.equinox.preferences</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.registry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.security</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
