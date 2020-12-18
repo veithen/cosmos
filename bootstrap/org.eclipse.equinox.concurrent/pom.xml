@@ -41,9 +41,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.common</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
