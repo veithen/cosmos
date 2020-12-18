@@ -39,13 +39,10 @@ import javax.xml.parsers.SAXParserFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.LogService;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.util.xml.XMLParserActivator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.github.veithen.cosmos.osgi.runtime.internal.InternalLoggerFactory;
 
 public final class CosmosRuntime {
     private static final Logger logger = LoggerFactory.getLogger(CosmosRuntime.class);
@@ -71,9 +68,6 @@ public final class CosmosRuntime {
         registerDocumentBuilderFactory(systemBundle);
         systemBundle.getBundleContext().registerService(PackageAdmin.class, new PackageAdminImpl(bundleManager), null);
         systemBundle.getBundleContext().registerService(Logger.class, logger, null);
-        InternalLoggerFactory internalLoggerFactory = new InternalLoggerFactoryImpl();
-        systemBundle.getBundleContext().registerService(InternalLoggerFactory.class, internalLoggerFactory, null);
-        systemBundle.getBundleContext().registerService(LogService.class, new LogServiceFactory(internalLoggerFactory), null);
         final Set<Bundle> autostartBundles = new HashSet<>();
         for (AbstractBundle bundle : bundleManager.getBundles()) {
             if ("true".equals(bundle.getHeaderValue("Cosmos-AutoStart"))) {

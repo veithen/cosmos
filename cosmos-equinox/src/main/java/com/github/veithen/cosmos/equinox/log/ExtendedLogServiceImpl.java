@@ -25,37 +25,36 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.log.LogService;
 import org.osgi.service.log.LoggerConsumer;
-
-import com.github.veithen.cosmos.osgi.runtime.internal.InternalLoggerFactory;
 
 @Component(service={ExtendedLogService.class}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class ExtendedLogServiceImpl implements ExtendedLogService {
-    private InternalLoggerFactory loggerFactory;
+    private LogService logService;
 
     @Reference
-    void bindLoggerFactory(InternalLoggerFactory loggerFactory) {
-        this.loggerFactory = loggerFactory;
+    void bindLogService(LogService logService) {
+        this.logService = logService;
     }
 
     @Override
     public void log(int level, String message) {
-        throw new UnsupportedOperationException();
+        logService.log(level, message);
     }
 
     @Override
     public void log(int level, String message, Throwable exception) {
-        throw new UnsupportedOperationException();
+        logService.log(level, message, exception);
     }
 
     @Override
     public void log(ServiceReference sr, int level, String message) {
-        throw new UnsupportedOperationException();
+        logService.log(sr, level, message);
     }
 
     @Override
     public void log(ServiceReference sr, int level, String message, Throwable exception) {
-        throw new UnsupportedOperationException();
+        logService.log(sr, level, message, exception);
     }
 
     @Override
@@ -85,7 +84,7 @@ public final class ExtendedLogServiceImpl implements ExtendedLogService {
 
     @Override
     public Logger getLogger(Bundle bundle, String loggerName) {
-        return new LoggerAdapter(loggerFactory.getLogger(bundle, loggerName));
+        return new LoggerAdapter(logService.getLogger(bundle, loggerName, org.osgi.service.log.Logger.class));
     }
 
     @Override

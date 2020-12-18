@@ -28,11 +28,11 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.objectweb.asm.ClassReader;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.FrameworkUtil;
-import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
 
@@ -46,7 +46,7 @@ public class BundleTrackerTest {
     @Test
     public void testBasic() throws Exception {
         // Use a random bundle for the test.
-        Bundle bundle = FrameworkUtil.getBundle(LogService.class);
+        Bundle bundle = FrameworkUtil.getBundle(ClassReader.class);
         BundleTracker<Bundle> tracker = new BundleTracker<>(bundleContext, Bundle.ACTIVE, null);
         tracker.open();
         assertThat(tracker.getBundles()).asList().doesNotContain(bundle);

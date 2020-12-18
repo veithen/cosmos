@@ -20,14 +20,14 @@
 package com.github.veithen.cosmos.equinox.log;
 
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.log.LogService;
+import org.osgi.service.log.Logger;
 import org.osgi.service.log.LoggerConsumer;
 
-import com.github.veithen.cosmos.osgi.runtime.internal.InternalLogger;
-
 final class LoggerAdapter implements org.eclipse.equinox.log.Logger {
-    private final InternalLogger logger;
+    private final Logger logger;
 
-    LoggerAdapter(InternalLogger logger) {
+    LoggerAdapter(Logger logger) {
         this.logger = logger;
     }
 
@@ -58,7 +58,12 @@ final class LoggerAdapter implements org.eclipse.equinox.log.Logger {
 
     @Override
     public void log(Object context, int level, String message, Throwable exception) {
-        logger.log(level, message, exception);
+        switch (level) {
+            case LogService.LOG_DEBUG: logger.debug(message, exception); break;
+            case LogService.LOG_INFO: logger.info(message, exception); break;
+            case LogService.LOG_WARNING: logger.warn(message, exception); break;
+            case LogService.LOG_ERROR: logger.error(message, exception); break;
+        }
     }
 
     @Override

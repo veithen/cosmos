@@ -55,6 +55,7 @@
         <module>p2-publisher-maven-plugin</module>
         <module>maven-p2</module>
         <module>cosmos-testing</module>
+        <module>cosmos-log-service</module>
     </modules>
 
     <scm>

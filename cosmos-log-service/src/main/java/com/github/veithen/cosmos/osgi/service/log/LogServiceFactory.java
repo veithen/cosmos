@@ -17,10 +17,20 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.osgi.runtime.internal;
+package com.github.veithen.cosmos.osgi.service.log;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceFactory;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.log.LogService;
 
-public interface InternalLoggerFactory {
-    InternalLogger getLogger(Bundle bundle, String name);
+final class LogServiceFactory implements ServiceFactory<LogService> {
+    @Override
+    public LogService getService(Bundle bundle, ServiceRegistration<LogService> registration) {
+        return new LogServiceImpl(bundle);
+    }
+
+    @Override
+    public void ungetService(Bundle bundle, ServiceRegistration<LogService> registration, LogService service) {
+    }
 }

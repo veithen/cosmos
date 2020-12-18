@@ -2,7 +2,7 @@
  * #%L
  * Cosmos
  * %%
- * Copyright (C) 2012 - 2018 Andreas Veithen
+ * Copyright (C) 2012 - 2020 Andreas Veithen
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,21 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.osgi.runtime;
+package com.github.veithen.cosmos.osgi.service.log;
 
-import org.osgi.framework.Bundle;
-import org.slf4j.LoggerFactory;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.log.LogService;
 
-import com.github.veithen.cosmos.osgi.runtime.internal.InternalLogger;
-import com.github.veithen.cosmos.osgi.runtime.internal.InternalLoggerFactory;
-
-final class InternalLoggerFactoryImpl implements InternalLoggerFactory {
+public class Activator implements BundleActivator {
     @Override
-    public InternalLogger getLogger(Bundle bundle, String name) {
-        return new InternalLoggerImpl(LoggerFactory.getLogger(name), String.format("[%s] ", bundle.getSymbolicName()));
+    public void start(BundleContext context) throws Exception {
+        context.registerService(
+                new String[] { org.osgi.service.log.LoggerFactory.class.getName(), LogService.class.getName() },
+                new LogServiceFactory(), null);
+    }
+
+    @Override
+    public void stop(BundleContext context) throws Exception {
     }
 }

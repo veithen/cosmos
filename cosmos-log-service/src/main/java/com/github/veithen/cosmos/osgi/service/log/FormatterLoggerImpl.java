@@ -2,7 +2,7 @@
  * #%L
  * Cosmos
  * %%
- * Copyright (C) 2012 - 2018 Andreas Veithen
+ * Copyright (C) 2012 - 2020 Andreas Veithen
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,19 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.osgi.runtime.internal;
+package com.github.veithen.cosmos.osgi.service.log;
 
-public interface InternalLogger {
-    void log(int level, String message, Throwable exception);
+import org.osgi.framework.Bundle;
+import org.osgi.service.log.FormatterLogger;
+import org.slf4j.Logger;
+
+final class FormatterLoggerImpl extends AbstractLogger implements FormatterLogger {
+    FormatterLoggerImpl(Bundle bundle, String name) {
+        super(bundle, name);
+    }
+
+    @Override
+    protected void formatAndLog(Logger logger, LogLevel level, String prefix, String format, Object[] arguments, Throwable t) {
+        level.log(logger, prefix + String.format(format, arguments), t);
+    }
 }
