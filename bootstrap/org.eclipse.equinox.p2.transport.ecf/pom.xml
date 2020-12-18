@@ -63,14 +63,12 @@
             <artifactId>org.eclipse.ecf.identity</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.ecf</groupId>
             <artifactId>org.eclipse.ecf.filetransfer</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.ecf</groupId>
             <artifactId>org.eclipse.ecf.provider.filetransfer</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.veithen.cosmos.bootstrap</groupId>

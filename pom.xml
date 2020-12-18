@@ -216,6 +216,16 @@
                 <artifactId>org.eclipse.ecf.identity</artifactId>
                 <version>3.9.401</version>
             </dependency>
+            <dependency>
+                <groupId>org.eclipse.ecf</groupId>
+                <artifactId>org.eclipse.ecf.filetransfer</artifactId>
+                <version>5.1.101</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.ecf</groupId>
+                <artifactId>org.eclipse.ecf.provider.filetransfer</artifactId>
+                <version>3.2.601</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

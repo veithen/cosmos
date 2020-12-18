@@ -34,9 +34,6 @@
     <url>https://github.com/veithen/cosmos</url>
 
     <modules>
-        <module>org.eclipse.ecf.filetransfer</module>
-        <module>org.eclipse.ecf.provider.filetransfer</module>
-        <module>org.eclipse.ecf.provider.filetransfer.httpclient4</module>
         <module>org.eclipse.equinox.frameworkadmin</module>
         <module>org.eclipse.equinox.frameworkadmin.equinox</module>
         <module>org.eclipse.equinox.p2.artifact.repository</module>
