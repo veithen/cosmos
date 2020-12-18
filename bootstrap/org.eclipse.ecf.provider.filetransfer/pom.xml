@@ -72,9 +72,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.core.net</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

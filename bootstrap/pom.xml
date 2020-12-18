@@ -34,7 +34,6 @@
     <url>https://github.com/veithen/cosmos</url>
 
     <modules>
-        <module>org.eclipse.core.net</module>
         <module>org.eclipse.ecf.filetransfer</module>
         <module>org.eclipse.ecf.provider.filetransfer</module>
         <module>org.eclipse.ecf.provider.filetransfer.httpclient4</module>
