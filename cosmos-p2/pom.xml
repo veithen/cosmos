@@ -90,39 +90,47 @@
             <artifactId>org.eclipse.equinox.common</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.p2.artifact.repository</artifactId>
-            <version>${project.version}</version>
+            <version>1.1.500</version>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.p2.core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.p2.jarprocessor</artifactId>
-            <version>${project.version}</version>
+            <version>1.0.500</version>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.p2.metadata</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.p2.metadata.repository</artifactId>
+            <version>1.2.300</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.p2.publisher</artifactId>
-            <version>${project.version}</version>
+            <version>1.4.100</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.platform</groupId>
+                    <artifactId>org.eclipse.osgi</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.p2.repository</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.p2.transport.ecf</artifactId>
-            <version>${project.version}</version>
+            <version>1.1.201</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.platform</groupId>
@@ -137,14 +145,19 @@
             <artifactId>org.eclipse.equinox.security</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
-            <artifactId>org.tukaani.xz</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.tukaani</groupId>
+            <artifactId>xz</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.osgi.compatibility.state</artifactId>
-            <version>${project.version}</version>
+            <version>1.0.200</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.platform</groupId>
+                    <artifactId>org.eclipse.osgi</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>

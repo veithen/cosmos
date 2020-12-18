@@ -64,9 +64,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos.bootstrap</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.p2.publisher.eclipse</artifactId>
-            <version>${project.version}</version>
+            <version>1.2.100</version>
         </dependency>
     </dependencies>
 

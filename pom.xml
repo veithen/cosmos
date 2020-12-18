@@ -49,7 +49,6 @@
         <module>osgi-tests</module>
         <module>cosmos-p2</module>
         <module>p2-maven-connector</module>
-        <module>bootstrap</module>
         <module>cosmos-equinox</module>
         <module>p2-bundle-import-maven-plugin</module>
         <module>p2-publisher-maven-plugin</module>
@@ -225,6 +224,26 @@
                 <groupId>org.eclipse.ecf</groupId>
                 <artifactId>org.eclipse.ecf.provider.filetransfer</artifactId>
                 <version>3.2.601</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.equinox.p2.core</artifactId>
+                <version>2.4.100</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.equinox.p2.metadata</artifactId>
+                <version>2.3.100</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.equinox.p2.repository</artifactId>
+                <version>2.3.200</version>
+            </dependency>
+            <dependency>
+                <groupId>org.tukaani</groupId>
+                <artifactId>xz</artifactId>
+                <version>1.8</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
