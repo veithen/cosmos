@@ -115,7 +115,7 @@
         <dependency>
             <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.p2.publisher</artifactId>
-            <version>1.4.100</version>
+            <version>1.5.400</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.eclipse.platform</groupId>
