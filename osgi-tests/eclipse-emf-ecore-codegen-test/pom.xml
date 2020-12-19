@@ -119,21 +119,6 @@
         </dependency>
         <dependency>
             <groupId>osgi.bundle</groupId>
-            <artifactId>org.eclipse.equinox.p2.core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
-            <artifactId>org.eclipse.equinox.p2.engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
-            <artifactId>org.eclipse.equinox.p2.metadata</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi.bundle</groupId>
             <artifactId>org.eclipse.equinox.registry</artifactId>
             <scope>test</scope>
         </dependency>
