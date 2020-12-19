@@ -52,11 +52,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.github.veithen.cosmos.bom</groupId>
-                <artifactId>mars</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.core.commands</artifactId>
+                <version>3.9.800</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.platform</groupId>
@@ -81,6 +79,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.core.resources</artifactId>
+                <version>3.13.900</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.platform</groupId>
                 <artifactId>org.eclipse.core.runtime</artifactId>
                 <version>3.20.0</version>
                 <exclusions>
@@ -89,6 +92,21 @@
                         <artifactId>org.eclipse.osgi</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.core.variables</artifactId>
+                <version>3.4.800</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.emf</groupId>
+                <artifactId>org.eclipse.emf.common</artifactId>
+                <version>2.21.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.emf</groupId>
+                <artifactId>org.eclipse.emf.ecore</artifactId>
+                <version>2.23.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

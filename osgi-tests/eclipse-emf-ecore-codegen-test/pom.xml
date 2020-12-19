@@ -48,98 +48,122 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.core.contenttype</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.core.filesystem</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.core.jobs</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.core.resources</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.core.runtime</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.debug.core</artifactId>
+            <version>3.17.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.codegen</artifactId>
+            <version>2.11.0-v20150806-0404</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.codegen.ecore</artifactId>
+            <version>2.11.0-v20150806-0404</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.common</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.ecore</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
+            <version>2.16.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.app</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.common</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.preferences</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.registry</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.jdt</groupId>
             <artifactId>org.eclipse.jdt.core</artifactId>
+            <version>3.12.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.jdt</groupId>
             <artifactId>org.eclipse.jdt.launching</artifactId>
+            <version>3.8.101</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.platform</groupId>
+                    <artifactId>org.eclipse.osgi</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jdt</groupId>
+                    <artifactId>org.eclipse.jdt.debug</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.pde</groupId>
             <artifactId>org.eclipse.pde.core</artifactId>
+            <version>3.14.100</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.text</artifactId>
+            <version>3.10.400</version>
             <scope>test</scope>
         </dependency>
         <dependency>

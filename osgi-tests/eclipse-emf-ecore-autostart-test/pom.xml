@@ -48,47 +48,47 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.core.contenttype</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.core.jobs</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.core.runtime</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.common</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.emf</groupId>
             <artifactId>org.eclipse.emf.ecore</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.app</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.common</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.preferences</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>osgi.bundle</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.registry</artifactId>
             <scope>test</scope>
         </dependency>
