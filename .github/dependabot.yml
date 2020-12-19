@@ -13,4 +13,6 @@ updates:
         versions: ">= 2.5.0"
       - dependency-name: "org.eclipse.platform:org.eclipse.debug.core"
         versions: ">= 3.17.0"
+      - dependency-name: "org.eclipse.jdt:org.eclipse.jdt.launching"
+        versions: ">= 3.18.0"
     open-pull-requests-limit: 10
