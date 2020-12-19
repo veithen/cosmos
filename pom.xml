@@ -69,7 +69,6 @@
         <javaVersion>1.8</javaVersion>
         <maven.version>3.6.3</maven.version>
         <maven.resolver.version>1.6.1</maven.resolver.version>
-        <eclipse.p2.repository>http://download.eclipse.org/releases/mars/201506241002</eclipse.p2.repository>
     </properties>
 
     <dependencyManagement>
@@ -275,15 +274,6 @@
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-component-metadata</artifactId>
                     <version>2.1.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>com.github.veithen.cosmos</groupId>
-                    <artifactId>p2-bundle-import-maven-plugin</artifactId>
-                    <!-- Note: we bootstrap the build using a previous Cosmos version -->
-                    <version>0.3</version>
-                    <configuration>
-                        <repositoryUri>${eclipse.p2.repository}</repositoryUri>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>com.github.veithen.daemon</groupId>
