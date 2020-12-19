@@ -58,8 +58,9 @@ public final class DebugOptionsImpl implements DebugOptions {
 
     @Override
     public Map<String,String> getOptions() {
-        // TODO
-        throw new UnsupportedOperationException();
+        synchronized (options) {
+            return new HashMap<String,String>(options);
+        }
     }
 
     @Override
