@@ -29,15 +29,6 @@
 
     <artifactId>eclipse-core-runtime-test</artifactId>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.eclipse.platform</groupId>
-                <artifactId>org.eclipse.core.contenttype</artifactId>
-                <version>3.7.800</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>com.github.veithen.cosmos</groupId>
@@ -59,14 +50,7 @@
         <dependency>
             <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.core.runtime</artifactId>
-            <version>3.20.0</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.platform</groupId>
-                    <artifactId>org.eclipse.osgi</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

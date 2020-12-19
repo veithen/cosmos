@@ -52,12 +52,6 @@
             <artifactId>org.eclipse.core.resources</artifactId>
             <version>3.13.900</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.platform</groupId>
-                    <artifactId>org.eclipse.osgi</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
