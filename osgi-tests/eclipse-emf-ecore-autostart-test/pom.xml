@@ -103,23 +103,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>p2</id>
-            <layout>p2</layout>
-            <name>Eclipse P2 repository</name>
-            <url>${eclipse.p2.repository}</url>
-        </repository>
-    </repositories>
-
-    <build>
-        <extensions>
-            <extension>
-                <groupId>com.github.veithen.cosmos</groupId>
-                <artifactId>p2-maven-connector</artifactId>
-                <version>0.3</version>
-            </extension>
-        </extensions>
-    </build>
 </project>
