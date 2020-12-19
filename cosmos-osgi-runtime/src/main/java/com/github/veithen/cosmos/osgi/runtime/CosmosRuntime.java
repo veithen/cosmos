@@ -27,11 +27,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
@@ -43,6 +41,24 @@ import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.util.xml.XMLParserActivator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+class AutoStartDirective {
+    private final Bundle bundle;
+    private final int order;
+
+    AutoStartDirective(Bundle bundle, int order) {
+        this.bundle = bundle;
+        this.order = order;
+    }
+
+    Bundle getBundle() {
+        return bundle;
+    }
+
+    int getOrder() {
+        return order;
+    }
+}
 
 public final class CosmosRuntime {
     private static final Logger logger = LoggerFactory.getLogger(CosmosRuntime.class);
@@ -68,10 +84,11 @@ public final class CosmosRuntime {
         registerDocumentBuilderFactory(systemBundle);
         systemBundle.getBundleContext().registerService(PackageAdmin.class, new PackageAdminImpl(bundleManager), null);
         systemBundle.getBundleContext().registerService(Logger.class, logger, null);
-        final Set<Bundle> autostartBundles = new HashSet<>();
+        final List<AutoStartDirective> autoStartDirectives = new ArrayList<>();
         for (AbstractBundle bundle : bundleManager.getBundles()) {
-            if ("true".equals(bundle.getHeaderValue("Cosmos-AutoStart"))) {
-                autostartBundles.add(bundle);
+            String value = bundle.getHeaderValue("Cosmos-AutoStart");
+            if (value != null) {
+                autoStartDirectives.add(new AutoStartDirective(bundle, value.equals("true") ? 0 : Integer.parseInt(value)));
             }
         }
         ResourceUtil.processResources("META-INF/cosmos-autostart-bundles.list", new ResourceProcessor() {
@@ -81,25 +98,24 @@ public final class CosmosRuntime {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     if (!line.isEmpty() && !line.startsWith("#")) {
+                        int order = 0;
+                        int idx = line.indexOf('=');
+                        if (idx != -1) {
+                            order = Integer.parseInt(line.substring(idx+1));
+                            line = line.substring(0, idx);
+                        }
                         Bundle bundle = bundleManager.getBundle(line);
                         if (bundle == null) {
                             throw new BundleException(String.format("Bundle %s listed in %s not found", line, url));
                         }
-                        autostartBundles.add(bundle);
+                        autoStartDirectives.add(new AutoStartDirective(bundle, order));
                     }
                 }
             }
         });
-        Bundle scrBundle = bundleManager.getBundle("org.apache.felix.scr");
-        if (scrBundle != null) {
-            // Always auto-start the Declarative Services implementation if it's available. Do this
-            // immediately so that declarative services are registered before other bundles start
-            // (Not all bundles are designed to handle services becoming available after they
-            // start).
-            scrBundle.start();
-        }
-        for (Bundle bundle : autostartBundles) {
-            bundle.start();
+        Collections.sort(autoStartDirectives, (d1, d2) -> Integer.compare(d1.getOrder(), d2.getOrder()));
+        for (AutoStartDirective autoStartDirective : autoStartDirectives) {
+            autoStartDirective.getBundle().start();
         }
     }
 
