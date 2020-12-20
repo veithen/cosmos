@@ -39,6 +39,7 @@
         <module>eclipse-core-runtime-test</module>
         <module>eclipse-emf-ecore-autostart-test</module>
         <module>eclipse-emf-ecore-codegen-test</module>
+        <module>eclipse-p2-test</module>
         <module>lazy-activation-test</module>
         <module>misc-test</module>
         <module>start-stop-bundle-test</module>
