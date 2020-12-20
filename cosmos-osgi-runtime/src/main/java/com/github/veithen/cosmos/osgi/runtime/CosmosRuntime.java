@@ -144,7 +144,6 @@ public final class CosmosRuntime {
     
     public static synchronized CosmosRuntime getInstance() throws BundleException {
         if (instance == null) {
-            Patcher.patch();
             instance = new CosmosRuntime();
         }
         return instance;

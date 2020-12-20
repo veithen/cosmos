@@ -107,7 +107,7 @@ final class BundleManager implements BundleLookup {
         for (AbstractBundle bundle : bundles) {
             bundle.initialize(bundleContextFactory);
         }
-        Patcher.injectBundleLookup(this);
+        FrameworkUtilHelperImpl.setBundleLookup(this);
     }
 
     AbstractBundle[] getBundles() {

@@ -2,7 +2,7 @@
  * #%L
  * Cosmos
  * %%
- * Copyright (C) 2012 - 2018 Andreas Veithen
+ * Copyright (C) 2012 - 2020 Andreas Veithen
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +19,21 @@
  */
 package com.github.veithen.cosmos.osgi.runtime;
 
+import java.util.Optional;
+
 import org.osgi.framework.Bundle;
+import org.osgi.framework.connect.FrameworkUtilHelper;
 
 import com.github.veithen.cosmos.osgi.runtime.internal.BundleLookup;
 
-final class FrameworkUtil {
+public final class FrameworkUtilHelperImpl implements FrameworkUtilHelper {
     private static BundleLookup bundleLookup;
 
-    private FrameworkUtil() {}
-
-    public static Bundle getBundle(Class<?> classFromBundle) {
-        return bundleLookup.getBundle(classFromBundle);
+    static void setBundleLookup(BundleLookup bundleLookup) {
+        FrameworkUtilHelperImpl.bundleLookup = bundleLookup;
+    }
+    @Override
+    public Optional<Bundle> getBundle(Class<?> classFromBundle) {
+        return Optional.ofNullable(bundleLookup.getBundle(classFromBundle));
     }
 }
