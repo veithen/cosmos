@@ -1,0 +1,15 @@
+diff -U2 -r bundle-sources.org/org/eclipse/osgi/internal/hookregistry/HookRegistry.java bundle-sources/org/eclipse/osgi/internal/hookregistry/HookRegistry.java
+--- bundle-sources.org/org/eclipse/osgi/internal/hookregistry/HookRegistry.java	2020-12-20 15:53:53.000000000 +0000
++++ bundle-sources/org/eclipse/osgi/internal/hookregistry/HookRegistry.java	2020-12-20 15:54:10.000000000 +0000
+@@ -24,5 +24,4 @@
+ import java.util.Properties;
+ import org.eclipse.osgi.framework.log.FrameworkLogEntry;
+-import org.eclipse.osgi.internal.cds.CDSHookConfigurator;
+ import org.eclipse.osgi.internal.connect.ConnectHookConfigurator;
+ import org.eclipse.osgi.internal.framework.EquinoxConfiguration;
+@@ -115,5 +114,4 @@
+ 			addClassLoaderHook(new WeavingHookConfigurator(container));
+ 			configurators.add(SignedBundleHook.class.getName());
+-			configurators.add(CDSHookConfigurator.class.getName());
+ 			loadConfigurators(configurators, errors);
+ 			// set to read-only

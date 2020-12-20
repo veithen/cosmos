@@ -35,6 +35,6 @@ public class FrameworkUtilTest {
         assertThat(bundle.getSymbolicName()).isEqualTo("org.osgi.framework");
         Version version = bundle.getVersion();
         assertThat(version.getMajor()).isEqualTo(1);
-        assertThat(version.getMinor()).isEqualTo(9);
+        assertThat(version.getMinor()).isEqualTo(10);
     }
 }

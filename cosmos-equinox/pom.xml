@@ -101,6 +101,11 @@
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.condition</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
             <artifactId>org.osgi.service.component.annotations</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -119,11 +124,12 @@
                             <goal>unpack-sources</goal>
                         </goals>
                         <configuration>
-                            <repositoryUri>http://download.eclipse.org/releases/photon/201806271001</repositoryUri>
+                            <repositoryUri>http://download.eclipse.org/eclipse/updates/4.17/R-4.17-202009021800</repositoryUri>
                             <bundleId>org.eclipse.osgi</bundleId>
-                            <bundleVersion>3.13.0.v20180409-1500</bundleVersion>
+                            <bundleVersion>3.16.0.v20200828-0759</bundleVersion>
                             <excludes>
                                 <exclude>org/osgi/**/*.java</exclude>
+                                <exclude>org/eclipse/osgi/internal/cds/**/*.java</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -141,6 +147,7 @@
                         <configuration>
                             <targetDirectory>${project.build.directory}/bundle-sources</targetDirectory>
                             <patches>
+                                <patch>HookRegistry.patch</patch>
                                 <patch>PackageAdminImpl.patch</patch>
                             </patches>
                             <strip>1</strip>

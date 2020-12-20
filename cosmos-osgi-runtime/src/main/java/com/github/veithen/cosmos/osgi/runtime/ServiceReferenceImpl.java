@@ -84,5 +84,10 @@ abstract class ServiceReferenceImpl<S> implements ServiceReference<S> {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public <A> A adapt(Class<A> type) {
+        return null;
+    }
+
     abstract S getService(AbstractBundle bundle);
 }
