@@ -44,7 +44,6 @@
     </licenses>
 
     <modules>
-        <module>bom</module>
         <module>cosmos-osgi-runtime</module>
         <module>osgi-tests</module>
         <module>cosmos-p2</module>
