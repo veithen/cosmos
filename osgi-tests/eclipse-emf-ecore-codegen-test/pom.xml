@@ -139,10 +139,6 @@
             <scope>test</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.eclipse.platform</groupId>
-                    <artifactId>org.eclipse.osgi</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>org.eclipse.jdt</groupId>
                     <artifactId>org.eclipse.jdt.debug</artifactId>
                 </exclusion>
