@@ -74,9 +74,9 @@ public final class CosmosRuntime {
         serviceRegistry = new ServiceRegistry();
         BundleContextFactory bundleContextFactory = new BundleContextFactory(this, bundleManager, serviceRegistry);
         bundleManager.initialize(bundleContextFactory);
-        loadProperties("META-INF/cosmos.properties");
+        loadProperties("META-INF/cosmos/framework.properties");
         if (logger.isDebugEnabled()) {
-            loadProperties("META-INF/cosmos-debug.properties");
+            loadProperties("META-INF/cosmos/framework-debug.properties");
             logger.debug(String.format("Properties: %s", properties));
         }
         AbstractBundle systemBundle = bundleManager.getBundle(0);
@@ -91,7 +91,7 @@ public final class CosmosRuntime {
                 autoStartDirectives.add(new AutoStartDirective(bundle, value.equals("true") ? 0 : Integer.parseInt(value)));
             }
         }
-        ResourceUtil.processResources("META-INF/cosmos-autostart-bundles.list", new ResourceProcessor() {
+        ResourceUtil.processResources("META-INF/cosmos/autostart-bundles.list", new ResourceProcessor() {
             @Override
             public void process(URL url, InputStream in) throws IOException, BundleException {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
