@@ -25,7 +25,7 @@ import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.junit.Test;
 
-public class DefaultArtifactCoordinateMapperTest {
+public class ArtifactCoordinateMapperTest {
     @Test
     public void testCreateIArtifactKey() {
         P2Coordinate p2Coordinate = ArtifactCoordinateMapper.createP2Coordinate(new DefaultArtifact("osgi.bundle", "mybundle", "jar", "2.1.0"));
