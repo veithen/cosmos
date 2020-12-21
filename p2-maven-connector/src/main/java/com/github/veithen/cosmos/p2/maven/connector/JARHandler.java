@@ -29,8 +29,6 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
-
 final class JARHandler extends ArtifactHandler {
     private static final Logger logger = LoggerFactory.getLogger(JARHandler.class);
 

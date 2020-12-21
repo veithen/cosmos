@@ -17,11 +17,11 @@
  * limitations under the License.
  * #L%
  */
-package com.github.veithen.cosmos.p2;
+package com.github.veithen.cosmos.p2.maven.connector;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class SystemOutProgressMonitor implements IProgressMonitor {
+final class SystemOutProgressMonitor implements IProgressMonitor {
     private boolean canceled;
     
     public void beginTask(String name, int totalWork) {

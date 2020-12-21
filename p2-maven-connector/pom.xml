@@ -40,6 +40,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.veithen.cosmos</groupId>
+            <artifactId>cosmos-equinox</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <scope>provided</scope>
@@ -49,15 +54,113 @@
             <artifactId>maven-resolver-spi</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.veithen.cosmos</groupId>
-            <artifactId>cosmos-p2</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.core.jobs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.core.net</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.ecf</groupId>
+            <artifactId>org.eclipse.ecf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.ecf</groupId>
+            <artifactId>org.eclipse.ecf.filetransfer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.ecf</groupId>
+            <artifactId>org.eclipse.ecf.identity</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.ecf</groupId>
+            <artifactId>org.eclipse.ecf.provider.filetransfer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.ecf</groupId>
+            <artifactId>org.eclipse.ecf.provider.filetransfer.httpclient45</artifactId>
+            <version>1.0.301</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.14</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.p2.artifact.repository</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.p2.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.p2.jarprocessor</artifactId>
+            <version>1.1.700</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.p2.metadata</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.p2.metadata.repository</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.p2.publisher</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.p2.repository</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.p2.transport.ecf</artifactId>
+            <version>1.2.400</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.preferences</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.registry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.tukaani</groupId>
+            <artifactId>xz</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.osgi.compatibility.state</artifactId>
         </dependency>
         <dependency><!-- Maven supports SLF4J, so use it. -->
             <groupId>org.slf4j</groupId>

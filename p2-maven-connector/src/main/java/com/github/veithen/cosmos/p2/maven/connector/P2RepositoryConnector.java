@@ -53,7 +53,6 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.github.veithen.cosmos.p2.SystemOutProgressMonitor;
 import com.github.veithen.cosmos.p2.maven.ArtifactCoordinateMapper;
 import com.github.veithen.cosmos.p2.maven.P2Coordinate;
 import com.github.veithen.cosmos.p2.maven.ProxyHolder;
