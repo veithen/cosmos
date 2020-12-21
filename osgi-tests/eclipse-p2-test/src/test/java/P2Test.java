@@ -39,7 +39,6 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
-import org.eclipse.osgi.service.debug.DebugOptions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -48,16 +47,10 @@ import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 @RunWith(CosmosRunner.class)
 public class P2Test {
     @Inject
-    private Provider<DebugOptions> debugOptions;
-
-    @Inject
     private Provider<IProvisioningAgentProvider> agentProvider;
 
     @Test
     public void test() throws Exception {
-        debugOptions.get().setDebugEnabled(true);
-        debugOptions.get().setOption("org.eclipse.equinox.p2.core/debug", "true");
-        debugOptions.get().setOption("org.eclipse.equinox.p2.core/publisher", "true");
         IProvisioningAgent agent = agentProvider.get().createAgent(new File("target/p2-agent").toURI());
         try {
             IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
