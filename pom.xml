@@ -61,8 +61,6 @@
     <properties>
         <github.repository>cosmos</github.repository>
         <javaVersion>1.8</javaVersion>
-        <maven.version>3.6.3</maven.version>
-        <maven.resolver.version>1.6.1</maven.resolver.version>
     </properties>
 
     <dependencyManagement>
@@ -103,44 +101,9 @@
                 <version>1.0.1</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.maven</groupId>
-                <artifactId>maven-plugin-api</artifactId>
-                <version>${maven.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.maven</groupId>
-                <artifactId>maven-core</artifactId>
-                <version>${maven.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.maven.resolver</groupId>
-                <artifactId>maven-resolver-api</artifactId>
-                <version>${maven.resolver.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.maven.resolver</groupId>
-                <artifactId>maven-resolver-spi</artifactId>
-                <version>${maven.resolver.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.maven.plugin-tools</groupId>
-                <artifactId>maven-plugin-annotations</artifactId>
-                <version>3.6.0</version>
-            </dependency>
-            <dependency><!-- This replaces org.codehaus.plexus:plexus-container-default -->
-                <groupId>org.eclipse.sisu</groupId>
-                <artifactId>org.eclipse.sisu.plexus</artifactId>
-                <version>0.3.4</version>
-            </dependency>
-            <dependency>
                 <groupId>javax.inject</groupId>
                 <artifactId>javax.inject</artifactId>
                 <version>1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.plexus</groupId>
-                <artifactId>plexus-utils</artifactId>
-                <version>3.3.0</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -151,11 +114,6 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
                 <version>1.7.30</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-proxy</artifactId>
-                <version>9.2.24.v20180105</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.platform</groupId>
@@ -282,26 +240,6 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>5.1.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>3.2.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.plexus</groupId>
-                    <artifactId>plexus-component-metadata</artifactId>
-                    <version>2.1.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>com.github.veithen.daemon</groupId>
-                    <artifactId>daemon-maven-plugin</artifactId>
-                    <version>0.1.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.eclipse.sisu</groupId>
-                    <artifactId>sisu-maven-plugin</artifactId>
-                    <version>0.3.4</version>
                 </plugin>
             </plugins>
         </pluginManagement>
