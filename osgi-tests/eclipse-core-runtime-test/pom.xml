@@ -81,7 +81,6 @@
                             <instructions>
                                 <Bundle-Activator>test.TestPlugin</Bundle-Activator>
                                 <Cosmos-AutoStart>true</Cosmos-AutoStart>
-                                <Import-Package>org.eclipse.core.runtime</Import-Package>
                             </instructions>
                         </configuration>
                     </execution>

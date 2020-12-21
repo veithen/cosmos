@@ -53,7 +53,7 @@ final class BundleManager implements BundleLookup {
     /**
      * Maps exported packages to their corresponding bundles.
      */
-    private final Map<String,BundleImpl> packageMap = new HashMap<String,BundleImpl>();
+    private final Map<String,List<BundleImpl>> packageMap = new HashMap<>();
 
     BundleManager() throws BundleException {
         final List<AbstractBundle> bundles = new ArrayList<>();
@@ -94,8 +94,7 @@ final class BundleManager implements BundleLookup {
                         throw new BundleException("Unable to parse Export-Package header", BundleException.MANIFEST_ERROR, ex);
                     }
                     for (Element element : elements) {
-                        // TODO: what if the same package is exported by multiple bundles??
-                        packageMap.put(element.getValue(), bundle);
+                        packageMap.computeIfAbsent(element.getValue(), k -> new ArrayList<>()).add(bundle);
                     }
                 }
             }
@@ -118,7 +117,7 @@ final class BundleManager implements BundleLookup {
         return bundlesBySymbolicName.get(symbolicName);
     }
     
-    BundleImpl getBundleByPackage(String pkg) {
+    List<BundleImpl> getBundlesByPackage(String pkg) {
         return packageMap.get(pkg);
     }
     

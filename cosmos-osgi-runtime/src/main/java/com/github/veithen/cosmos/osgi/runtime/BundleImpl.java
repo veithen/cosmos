@@ -250,10 +250,14 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
                 throw new BundleException("Unable to parse Import-Package header", BundleException.MANIFEST_ERROR, ex);
             }
             for (Element element : elements) {
-                BundleImpl bundle = bundleManager.getBundleByPackage(element.getValue());
-                // Note that a bundle can import a package from itself
-                if (bundle != null && bundle != this) {
-                    bundle.makeReady(USED_BY_BUNDLE, this);
+                List<BundleImpl> bundles = bundleManager.getBundlesByPackage(element.getValue());
+                if (bundles != null) {
+                    for (BundleImpl bundle : bundles) {
+                        // Note that a bundle can import a package from itself
+                        if (bundle != this) {
+                            bundle.makeReady(USED_BY_BUNDLE, this);
+                        }
+                    }
                 }
             }
         }

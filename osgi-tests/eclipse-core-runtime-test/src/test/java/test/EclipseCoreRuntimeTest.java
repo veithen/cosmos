@@ -24,8 +24,6 @@ import static com.google.common.truth.Truth.assertThat;
 import org.eclipse.core.runtime.Platform;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 
 import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 
@@ -33,9 +31,6 @@ import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 public class EclipseCoreRuntimeTest {
     @Test
     public void test() throws Exception {
-        Bundle bundle = FrameworkUtil.getBundle(Platform.class);
-        assertThat(Platform.isRunning()).isFalse();
-        bundle.start();
         assertThat(Platform.isRunning()).isTrue();
         assertThat(TestPlugin.getInstance().getStateLocation()).isNotNull();
     }
