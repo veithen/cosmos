@@ -27,7 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
@@ -42,18 +42,25 @@ import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
-final class BundleContextImpl implements BundleContext {
+import com.github.veithen.cosmos.osgi.runtime.internal.InternalBundleContext;
+
+final class BundleContextImpl implements InternalBundleContext {
     private final AbstractBundle bundle;
     private final CosmosRuntime runtime;
     private final BundleManager bundleManager;
     private final ServiceRegistry serviceRegistry;
     private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
+    private BundleActivator activator;
     
     BundleContextImpl(AbstractBundle bundle, CosmosRuntime runtime, BundleManager bundleManager, ServiceRegistry serviceRegistry) {
         this.bundle = bundle;
         this.runtime = runtime;
         this.bundleManager = bundleManager;
         this.serviceRegistry = serviceRegistry;
+    }
+
+    void setActivator(BundleActivator activator) {
+        this.activator = activator;
     }
 
     public String getProperty(String key) {
@@ -192,6 +199,11 @@ final class BundleContextImpl implements BundleContext {
             return getBundle(Constants.SYSTEM_BUNDLE_ID);
         }
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public BundleActivator getActivator() {
+        return activator;
     }
 
     void destroy() {

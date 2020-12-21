@@ -41,7 +41,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.Attributes.Name;
 import java.util.jar.JarInputStream;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
@@ -92,7 +91,6 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
     private final BundleWiringImpl wiring = new BundleWiringImpl();
     private BundleContextFactory bundleContextFactory;
     private BundleState state;
-    private BundleActivator activator;
     private int startOrder = -1;
 
     private final Lazy<Set<String>> entries = new Lazy<Set<String>>() {
@@ -297,6 +295,7 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
         if (context == null) {
             context = bundleContextFactory.createBundleContext(this);
         }
+        BundleActivator activator = null;
         String activatorClassName = attrs.getValue("Bundle-Activator");
         if (activatorClassName != null) {
             try {
@@ -304,6 +303,9 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
             } catch (Exception ex) {
                 throw new BundleException("Failed to instantiate bundle activator " + activatorClassName, ex);
             }
+        }
+        context.setActivator(activator);
+        if (activator != null) {
             try {
                 activator.start(context);
             } catch (Exception ex) {
@@ -328,6 +330,7 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
         startOrder = -1;
         logger.debug("Stopping bundle {} ...", symbolicName);
         bundleManager.fireBundleEvent(this, BundleEvent.STOPPING);
+        BundleActivator activator = context.getActivator();
         if (state == BundleState.ACTIVE && activator != null) {
             try {
                 activator.stop(context);
