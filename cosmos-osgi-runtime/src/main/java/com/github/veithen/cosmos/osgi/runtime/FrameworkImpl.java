@@ -88,7 +88,7 @@ final class FrameworkImpl extends AbstractBundle implements Framework, Framework
 
     @Override
     public Dictionary<String, String> getHeaders(String locale) {
-        throw new UnsupportedOperationException();
+        return new Hashtable<>();
     }
 
     @Override

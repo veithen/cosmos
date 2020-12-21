@@ -136,7 +136,7 @@ final class ServiceRegistry {
         }
     }
 
-    private void fireServiceChangedEvent(int type, Service<?> service) {
+    void fireServiceChangedEvent(int type, Service<?> service) {
         ServiceListenerSpec[] serviceListeners;
         synchronized (this.serviceListeners) {
             serviceListeners = this.serviceListeners.toArray(new ServiceListenerSpec[this.serviceListeners.size()]);

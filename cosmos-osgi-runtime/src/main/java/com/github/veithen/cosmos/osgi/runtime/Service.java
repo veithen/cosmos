@@ -19,27 +19,39 @@
  */
 package com.github.veithen.cosmos.osgi.runtime;
 
+import java.util.Arrays;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class Service<S> implements ServiceRegistration<S> {
+    private static final Logger logger = LoggerFactory.getLogger(Service.class);
+
+    private static final Set<String> nonUpdateableProperties = new HashSet<>(Arrays.asList(
+            Constants.OBJECTCLASS, Constants.SERVICE_BUNDLEID, Constants.SERVICE_ID, Constants.SERVICE_SCOPE));
+
     private final ServiceRegistry serviceRegistry;
     private final AbstractBundle bundle;
     private final String[] classes;
     private final ServiceFactory<S> serviceFactory;
-    private final Dictionary<String,?> properties;
+    private final Dictionary<String,Object> properties;
     private final Map<AbstractBundle,ServiceContext<S>> contexts = new HashMap<>();
     private final ServiceReference<S> reference;
     
-    Service(ServiceRegistry serviceRegistry, AbstractBundle bundle, String[] classes, ServiceFactory<S> serviceFactory, Dictionary<String,?> properties) {
+    Service(ServiceRegistry serviceRegistry, AbstractBundle bundle, String[] classes, ServiceFactory<S> serviceFactory, Dictionary<String,Object> properties) {
         this.serviceRegistry = serviceRegistry;
         this.bundle = bundle;
         this.classes = classes;
@@ -54,19 +66,21 @@ final class Service<S> implements ServiceRegistration<S> {
     }
     
     boolean matches(String clazz, Filter filter) {
-        if (clazz != null) {
-            boolean classMatches = false;
-            for (String c : classes) {
-                if (c.equals(clazz)) {
-                    classMatches = true;
-                    break;
+        synchronized (properties) {
+            if (clazz != null) {
+                boolean classMatches = false;
+                for (String c : classes) {
+                    if (c.equals(clazz)) {
+                        classMatches = true;
+                        break;
+                    }
+                }
+                if (!classMatches) {
+                    return false;
                 }
             }
-            if (!classMatches) {
-                return false;
-            }
+            return filter == null || filter.matchCase(properties);
         }
-        return filter == null || filter.matchCase(properties);
     }
 
     ServiceFactory<S> getServiceFactory() {
@@ -83,7 +97,9 @@ final class Service<S> implements ServiceRegistration<S> {
     }
 
     Object getProperty(String key) {
-        return properties == null ? null : properties.get(key);
+        synchronized (properties) {
+            return properties == null ? null : properties.get(key);
+        }
     }
 
     Bundle getBundle() {
@@ -103,8 +119,19 @@ final class Service<S> implements ServiceRegistration<S> {
         };
     }
 
-    public void setProperties(Dictionary<String,?> properties) {
-        throw new UnsupportedOperationException();
+    public void setProperties(Dictionary<String,?> newProperties) {
+        synchronized (properties) {
+            for (Enumeration<String> keys = newProperties.keys(); keys.hasMoreElements(); ) {
+                String key = keys.nextElement();
+                if (!nonUpdateableProperties.contains(key)) {
+                    properties.put(key, newProperties.get(key));
+                }
+            }
+            if (logger.isDebugEnabled()) {
+                logger.debug("Updated properties of service {}; new properties: {}", getId(), properties);
+            }
+        }
+        serviceRegistry.fireServiceChangedEvent(ServiceEvent.MODIFIED, this);
     }
 
     public void unregister() {
@@ -113,11 +140,15 @@ final class Service<S> implements ServiceRegistration<S> {
 
 
     long getId() {
-        return (Long)properties.get(Constants.SERVICE_ID);
+        synchronized (properties) {
+            return (Long)properties.get(Constants.SERVICE_ID);
+        }
     }
 
     int getRanking() {
-        Integer ranking = (Integer)properties.get(Constants.SERVICE_RANKING);
-        return ranking == null ? 0 : ranking;
+        synchronized (properties) {
+            Integer ranking = (Integer)properties.get(Constants.SERVICE_RANKING);
+            return ranking == null ? 0 : ranking;
+        }
     }
 }
