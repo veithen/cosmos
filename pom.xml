@@ -46,7 +46,6 @@
     <modules>
         <module>cosmos-osgi-runtime</module>
         <module>osgi-tests</module>
-        <module>p2-maven-connector</module>
         <module>cosmos-equinox</module>
         <module>cosmos-testing</module>
         <module>cosmos-log-service</module>
