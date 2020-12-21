@@ -49,7 +49,6 @@
         <module>cosmos-p2</module>
         <module>p2-maven-connector</module>
         <module>cosmos-equinox</module>
-        <module>maven-p2</module>
         <module>cosmos-testing</module>
         <module>cosmos-log-service</module>
     </modules>
