@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +28,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
 import org.osgi.service.log.LoggerConsumer;
 
-@Component(service={ExtendedLogService.class}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
+@Component(
+        service = {ExtendedLogService.class},
+        xmlns = "http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class ExtendedLogServiceImpl implements ExtendedLogService {
     private LogService logService;
 
@@ -84,7 +86,8 @@ public final class ExtendedLogServiceImpl implements ExtendedLogService {
 
     @Override
     public Logger getLogger(Bundle bundle, String loggerName) {
-        return new LoggerAdapter(logService.getLogger(bundle, loggerName, org.osgi.service.log.Logger.class));
+        return new LoggerAdapter(
+                logService.getLogger(bundle, loggerName, org.osgi.service.log.Logger.class));
     }
 
     @Override
@@ -98,14 +101,14 @@ public final class ExtendedLogServiceImpl implements ExtendedLogService {
     }
 
     @Override
-    public <L extends org.osgi.service.log.Logger> L getLogger(Class<?> clazz,
-            Class<L> loggerType) {
+    public <L extends org.osgi.service.log.Logger> L getLogger(
+            Class<?> clazz, Class<L> loggerType) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <L extends org.osgi.service.log.Logger> L getLogger(Bundle bundle, String name,
-            Class<L> loggerType) {
+    public <L extends org.osgi.service.log.Logger> L getLogger(
+            Bundle bundle, String name, Class<L> loggerType) {
         throw new UnsupportedOperationException();
     }
 

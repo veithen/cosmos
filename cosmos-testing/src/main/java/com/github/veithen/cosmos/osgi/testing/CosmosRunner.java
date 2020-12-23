@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,13 +55,17 @@ public class CosmosRunner extends BlockJUnit4ClassRunner {
                     if (type == BundleContext.class) {
                         value = FrameworkUtil.getBundle(testClass).getBundleContext();
                     } else if (type == Provider.class) {
-                        final Class<?> serviceClass = (Class<?>)((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0];
-                        value = new Provider<Object>() {
-                            @Override
-                            public Object get() {
-                                return runtime.getService(serviceClass);
-                            }
-                        };
+                        final Class<?> serviceClass =
+                                (Class<?>)
+                                        ((ParameterizedType) field.getGenericType())
+                                                .getActualTypeArguments()[0];
+                        value =
+                                new Provider<Object>() {
+                                    @Override
+                                    public Object get() {
+                                        return runtime.getService(serviceClass);
+                                    }
+                                };
                     } else {
                         value = runtime.getService(type);
                     }

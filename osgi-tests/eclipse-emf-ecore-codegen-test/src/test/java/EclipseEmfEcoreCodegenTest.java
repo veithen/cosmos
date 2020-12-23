@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,9 +44,12 @@ public class EclipseEmfEcoreCodegenTest {
     @Test
     public void test() throws Exception {
         ResourceSet set = new ResourceSetImpl();
-        Resource res = set.getResource(URI.createFileURI(new File("src/test/ecore/My.genmodel").getAbsolutePath()), true);
+        Resource res =
+                set.getResource(
+                        URI.createFileURI(new File("src/test/ecore/My.genmodel").getAbsolutePath()),
+                        true);
         res.load(new HashMap<>());
-        GenModel genmodel = (GenModel)res.getAllContents().next();
+        GenModel genmodel = (GenModel) res.getAllContents().next();
         genmodel.reconcile();
         Monitor monitor = new BasicMonitor.Printing(System.out);
         IProgressMonitor progressMonitor = BasicMonitor.toIProgressMonitor(monitor);

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,35 +41,41 @@ abstract class AbstractLogger implements Logger {
     }
 
     private void log(LogLevel level, String message) {
-        level.log(logger, prefix + message, (Throwable)null);
+        level.log(logger, prefix + message, (Throwable) null);
     }
 
-    protected abstract void formatAndLog(org.slf4j.Logger logger, LogLevel level, String prefix, String format, Object[] arguments, Throwable t);
+    protected abstract void formatAndLog(
+            org.slf4j.Logger logger,
+            LogLevel level,
+            String prefix,
+            String format,
+            Object[] arguments,
+            Throwable t);
 
     private void internalLog(LogLevel level, String format, Object... arguments) {
         int removeArgs = 0;
         ServiceReference<?> sr = null;
         Throwable t = null;
         if (arguments.length > 0) {
-            Object arg = arguments[arguments.length-1];
+            Object arg = arguments[arguments.length - 1];
             if (arg instanceof Throwable) {
                 removeArgs++;
-                t = (Throwable)arg;
+                t = (Throwable) arg;
                 if (arguments.length > 1) {
-                    arg = arguments[arguments.length-2];
+                    arg = arguments[arguments.length - 2];
                     if (arg instanceof ServiceReference<?>) {
                         removeArgs++;
-                        sr = (ServiceReference<?>)arg;
+                        sr = (ServiceReference<?>) arg;
                     }
                 }
             } else if (arg instanceof ServiceReference<?>) {
                 removeArgs++;
-                sr = (ServiceReference<?>)arg;
+                sr = (ServiceReference<?>) arg;
                 if (arguments.length > 1) {
-                    arg = arguments[arguments.length-2];
+                    arg = arguments[arguments.length - 2];
                     if (arg instanceof Throwable) {
                         removeArgs++;
-                        t = (Throwable)arg;
+                        t = (Throwable) arg;
                     }
                 }
             }
@@ -82,7 +88,7 @@ abstract class AbstractLogger implements Logger {
             level.log(logger, prefix + format, t);
         } else {
             if (removeArgs > 0) {
-                Object[] newArguments = new Object[arguments.length-removeArgs];
+                Object[] newArguments = new Object[arguments.length - removeArgs];
                 System.arraycopy(arguments, 0, newArguments, 0, newArguments.length);
                 arguments = newArguments;
             }

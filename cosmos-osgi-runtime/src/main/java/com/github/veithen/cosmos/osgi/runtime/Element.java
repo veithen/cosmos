@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,22 +28,23 @@ import org.osgi.framework.BundleException;
 
 final class Element {
     private String[] values;
-    private Map<String,String> attributes;
-    private Map<String,String> directives;
+    private Map<String, String> attributes;
+    private Map<String, String> directives;
 
-    private Element(String[] values, Map<String,String> attributes, Map<String,String> directives) {
+    private Element(
+            String[] values, Map<String, String> attributes, Map<String, String> directives) {
         this.values = values;
         this.attributes = attributes;
         this.directives = directives;
     }
-    
+
     static Element[] parseHeaderValue(String value) throws ParseException {
         Tokenizer tokenizer = new Tokenizer(value);
         List<Element> elements = new ArrayList<Element>();
         while (true) {
             List<String> values = new ArrayList<String>();
-            Map<String,String> attributes = new HashMap<String,String>();
-            Map<String,String> directives = new HashMap<String,String>();
+            Map<String, String> attributes = new HashMap<String, String>();
+            Map<String, String> directives = new HashMap<String, String>();
             while (true) {
                 String token = tokenizer.getToken(";,=:");
                 int c = tokenizer.getChar();
@@ -64,7 +65,11 @@ final class Element {
                         values.add(token);
                 }
                 if (c != ';') {
-                    elements.add(new Element(values.toArray(new String[values.size()]), attributes, directives));
+                    elements.add(
+                            new Element(
+                                    values.toArray(new String[values.size()]),
+                                    attributes,
+                                    directives));
                     if (c == -1) {
                         return elements.toArray(new Element[elements.size()]);
                     } else {
@@ -74,7 +79,7 @@ final class Element {
             }
         }
     }
-    
+
     public String toString() {
         StringBuilder buffer = new StringBuilder();
         for (String value : values) {
@@ -83,7 +88,7 @@ final class Element {
             }
             buffer.append(value);
         }
-        for (Map.Entry<String,String> attribute : attributes.entrySet()) {
+        for (Map.Entry<String, String> attribute : attributes.entrySet()) {
             if (buffer.length() > 0) {
                 buffer.append("; ");
             }
@@ -91,7 +96,7 @@ final class Element {
             buffer.append("=");
             buffer.append(attribute.getValue());
         }
-        for (Map.Entry<String,String> directive : directives.entrySet()) {
+        for (Map.Entry<String, String> directive : directives.entrySet()) {
             if (buffer.length() > 0) {
                 buffer.append("; ");
             }
@@ -109,11 +114,11 @@ final class Element {
             throw new BundleException("Expected only a single header value");
         }
     }
-    
+
     boolean hasAttributes() {
         return !attributes.isEmpty();
     }
-    
+
     boolean hasDirectives() {
         return !directives.isEmpty();
     }

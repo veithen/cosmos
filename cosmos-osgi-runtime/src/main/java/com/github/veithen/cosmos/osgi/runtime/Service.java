@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,31 +40,42 @@ import org.slf4j.LoggerFactory;
 final class Service<S> implements ServiceRegistration<S> {
     private static final Logger logger = LoggerFactory.getLogger(Service.class);
 
-    private static final Set<String> nonUpdateableProperties = new HashSet<>(Arrays.asList(
-            Constants.OBJECTCLASS, Constants.SERVICE_BUNDLEID, Constants.SERVICE_ID, Constants.SERVICE_SCOPE));
+    private static final Set<String> nonUpdateableProperties =
+            new HashSet<>(
+                    Arrays.asList(
+                            Constants.OBJECTCLASS,
+                            Constants.SERVICE_BUNDLEID,
+                            Constants.SERVICE_ID,
+                            Constants.SERVICE_SCOPE));
 
     private final ServiceRegistry serviceRegistry;
     private final AbstractBundle bundle;
     private final String[] classes;
     private final ServiceFactory<S> serviceFactory;
-    private final Dictionary<String,Object> properties;
-    private final Map<AbstractBundle,ServiceContext<S>> contexts = new HashMap<>();
+    private final Dictionary<String, Object> properties;
+    private final Map<AbstractBundle, ServiceContext<S>> contexts = new HashMap<>();
     private final ServiceReference<S> reference;
-    
-    Service(ServiceRegistry serviceRegistry, AbstractBundle bundle, String[] classes, ServiceFactory<S> serviceFactory, Dictionary<String,Object> properties) {
+
+    Service(
+            ServiceRegistry serviceRegistry,
+            AbstractBundle bundle,
+            String[] classes,
+            ServiceFactory<S> serviceFactory,
+            Dictionary<String, Object> properties) {
         this.serviceRegistry = serviceRegistry;
         this.bundle = bundle;
         this.classes = classes;
         this.serviceFactory = serviceFactory;
         this.properties = properties;
-        reference = new ServiceReferenceImpl<S>(this) {
-            @Override
-            S getService(AbstractBundle bundle) {
-                return Service.this.getService(bundle);
-            }
-        };
+        reference =
+                new ServiceReferenceImpl<S>(this) {
+                    @Override
+                    S getService(AbstractBundle bundle) {
+                        return Service.this.getService(bundle);
+                    }
+                };
     }
-    
+
     boolean matches(String clazz, Filter filter) {
         synchronized (properties) {
             if (clazz != null) {
@@ -119,7 +130,7 @@ final class Service<S> implements ServiceRegistration<S> {
         };
     }
 
-    public void setProperties(Dictionary<String,?> newProperties) {
+    public void setProperties(Dictionary<String, ?> newProperties) {
         synchronized (properties) {
             for (Enumeration<String> keys = newProperties.keys(); keys.hasMoreElements(); ) {
                 String key = keys.nextElement();
@@ -128,7 +139,10 @@ final class Service<S> implements ServiceRegistration<S> {
                 }
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("Updated properties of service {}; new properties: {}", getId(), properties);
+                logger.debug(
+                        "Updated properties of service {}; new properties: {}",
+                        getId(),
+                        properties);
             }
         }
         serviceRegistry.fireServiceChangedEvent(ServiceEvent.MODIFIED, this);
@@ -138,16 +152,15 @@ final class Service<S> implements ServiceRegistration<S> {
         serviceRegistry.unregisterService(this);
     }
 
-
     long getId() {
         synchronized (properties) {
-            return (Long)properties.get(Constants.SERVICE_ID);
+            return (Long) properties.get(Constants.SERVICE_ID);
         }
     }
 
     int getRanking() {
         synchronized (properties) {
-            Integer ranking = (Integer)properties.get(Constants.SERVICE_RANKING);
+            Integer ranking = (Integer) properties.get(Constants.SERVICE_RANKING);
             return ranking == null ? 0 : ranking;
         }
     }

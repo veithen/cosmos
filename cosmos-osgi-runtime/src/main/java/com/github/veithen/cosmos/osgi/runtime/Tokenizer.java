@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +21,7 @@ package com.github.veithen.cosmos.osgi.runtime;
 
 final class Tokenizer {
     private static final String whitespace = " \t\n\r";
-    
+
     private final String s;
     private int index;
 
@@ -30,7 +30,9 @@ final class Tokenizer {
     }
 
     private void skipWhiteSpace() {
-        for (int len = s.length(); index < len && whitespace.indexOf(s.charAt(index)) != -1; index++) {
+        for (int len = s.length();
+                index < len && whitespace.indexOf(s.charAt(index)) != -1;
+                index++) {
             // Just loop
         }
     }
@@ -38,12 +40,14 @@ final class Tokenizer {
     String getToken(String terminals) {
         skipWhiteSpace();
         int begin = index;
-        for (int len = s.length(); index < len && terminals.indexOf(s.charAt(index)) == -1; index++) {
+        for (int len = s.length();
+                index < len && terminals.indexOf(s.charAt(index)) == -1;
+                index++) {
             // Just loop
         }
         int end = index;
         skipWhiteSpace();
-        for (; end > begin && whitespace.indexOf(s.charAt(end-1)) != -1; end--) {
+        for (; end > begin && whitespace.indexOf(s.charAt(end - 1)) != -1; end--) {
             // Just loop
         }
         return s.substring(begin, end);
@@ -98,7 +102,7 @@ final class Tokenizer {
             return false;
         }
     }
-    
+
     boolean hasMoreTokens() {
         return index < s.length();
     }

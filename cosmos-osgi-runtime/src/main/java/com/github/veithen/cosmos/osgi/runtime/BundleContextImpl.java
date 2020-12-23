@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,8 +51,12 @@ final class BundleContextImpl implements InternalBundleContext {
     private final ServiceRegistry serviceRegistry;
     private final List<BundleListener> bundleListeners = new LinkedList<BundleListener>();
     private BundleActivator activator;
-    
-    BundleContextImpl(AbstractBundle bundle, CosmosRuntime runtime, BundleManager bundleManager, ServiceRegistry serviceRegistry) {
+
+    BundleContextImpl(
+            AbstractBundle bundle,
+            CosmosRuntime runtime,
+            BundleManager bundleManager,
+            ServiceRegistry serviceRegistry) {
         this.bundle = bundle;
         this.runtime = runtime;
         this.bundleManager = bundleManager;
@@ -87,7 +91,8 @@ final class BundleContextImpl implements InternalBundleContext {
         return bundleManager.getBundles();
     }
 
-    public void addServiceListener(ServiceListener listener, String filter) throws InvalidSyntaxException {
+    public void addServiceListener(ServiceListener listener, String filter)
+            throws InvalidSyntaxException {
         serviceRegistry.addServiceListener(bundle, listener, FrameworkUtil.createFilter(filter));
     }
 
@@ -114,7 +119,8 @@ final class BundleContextImpl implements InternalBundleContext {
     void distributeBundleEvent(BundleEvent event) {
         BundleListener[] bundleListeners;
         synchronized (this.bundleListeners) {
-            bundleListeners = this.bundleListeners.toArray(new BundleListener[this.bundleListeners.size()]);
+            bundleListeners =
+                    this.bundleListeners.toArray(new BundleListener[this.bundleListeners.size()]);
         }
         for (BundleListener listener : bundleListeners) {
             listener.bundleChanged(event);
@@ -129,25 +135,36 @@ final class BundleContextImpl implements InternalBundleContext {
         throw new UnsupportedOperationException();
     }
 
-    public ServiceRegistration<?> registerService(String[] clazzes, Object service, Dictionary<String,?> properties) {
+    public ServiceRegistration<?> registerService(
+            String[] clazzes, Object service, Dictionary<String, ?> properties) {
         if (service instanceof ServiceFactory<?>) {
-            return serviceRegistry.registerService(bundle, clazzes, (ServiceFactory<?>)service, properties);
+            return serviceRegistry.registerService(
+                    bundle, clazzes, (ServiceFactory<?>) service, properties);
         } else {
-            return serviceRegistry.registerService(bundle, clazzes, new SingletonServiceFactory<Object>(service), properties);
+            return serviceRegistry.registerService(
+                    bundle, clazzes, new SingletonServiceFactory<Object>(service), properties);
         }
     }
 
-    public ServiceRegistration<?> registerService(String clazz, Object service, Dictionary<String,?> properties) {
-        return registerService(new String[] { clazz }, service, properties);
+    public ServiceRegistration<?> registerService(
+            String clazz, Object service, Dictionary<String, ?> properties) {
+        return registerService(new String[] {clazz}, service, properties);
     }
 
-    public <S> ServiceRegistration<S> registerService(Class<S> clazz, S service, Dictionary<String,?> properties) {
-        return serviceRegistry.registerService(bundle, new String[] { clazz.getName() }, new SingletonServiceFactory<S>(service), properties);
+    public <S> ServiceRegistration<S> registerService(
+            Class<S> clazz, S service, Dictionary<String, ?> properties) {
+        return serviceRegistry.registerService(
+                bundle,
+                new String[] {clazz.getName()},
+                new SingletonServiceFactory<S>(service),
+                properties);
     }
 
     @Override
-    public <S> ServiceRegistration<S> registerService(Class<S> clazz, ServiceFactory<S> factory, Dictionary<String,?> properties) {
-        return serviceRegistry.registerService(bundle, new String[] { clazz.getName() }, factory, properties);
+    public <S> ServiceRegistration<S> registerService(
+            Class<S> clazz, ServiceFactory<S> factory, Dictionary<String, ?> properties) {
+        return serviceRegistry.registerService(
+                bundle, new String[] {clazz.getName()}, factory, properties);
     }
 
     public ServiceReference<?> getServiceReference(String clazz) {
@@ -158,22 +175,33 @@ final class BundleContextImpl implements InternalBundleContext {
         return serviceRegistry.getServiceReference(clazz.getName(), null, clazz);
     }
 
-    public ServiceReference<?>[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
-        List<ServiceReference<Object>> references = serviceRegistry.getServiceReferences(clazz, filter == null ? null : FrameworkUtil.createFilter(filter), Object.class);
-        return references.isEmpty() ? null : references.toArray(new ServiceReference<?>[references.size()]);
+    public ServiceReference<?>[] getServiceReferences(String clazz, String filter)
+            throws InvalidSyntaxException {
+        List<ServiceReference<Object>> references =
+                serviceRegistry.getServiceReferences(
+                        clazz,
+                        filter == null ? null : FrameworkUtil.createFilter(filter),
+                        Object.class);
+        return references.isEmpty()
+                ? null
+                : references.toArray(new ServiceReference<?>[references.size()]);
     }
 
-    public <S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz, String filter) throws InvalidSyntaxException {
-        return serviceRegistry.getServiceReferences(clazz.getName(), filter == null ? null : FrameworkUtil.createFilter(filter), clazz);
+    public <S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz, String filter)
+            throws InvalidSyntaxException {
+        return serviceRegistry.getServiceReferences(
+                clazz.getName(), filter == null ? null : FrameworkUtil.createFilter(filter), clazz);
     }
 
-    public ServiceReference<?>[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
-        // Since we don't have per bundle class loaders, getAllServiceReferences is the same as getServiceReferences.
+    public ServiceReference<?>[] getAllServiceReferences(String clazz, String filter)
+            throws InvalidSyntaxException {
+        // Since we don't have per bundle class loaders, getAllServiceReferences is the same as
+        // getServiceReferences.
         return getServiceReferences(clazz, filter);
     }
 
     public <S> S getService(ServiceReference<S> reference) {
-        return ((ServiceReferenceImpl<S>)reference).getService(bundle);
+        return ((ServiceReferenceImpl<S>) reference).getService(bundle);
     }
 
     @Override
@@ -182,7 +210,7 @@ final class BundleContextImpl implements InternalBundleContext {
     }
 
     public boolean ungetService(ServiceReference<?> reference) {
-//        throw new UnsupportedOperationException();
+        //        throw new UnsupportedOperationException();
         return true;
     }
 

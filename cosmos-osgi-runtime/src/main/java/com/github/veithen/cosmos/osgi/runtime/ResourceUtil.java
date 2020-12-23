@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,12 +29,14 @@ import org.osgi.framework.BundleException;
 final class ResourceUtil {
     private ResourceUtil() {}
 
-    static void processResources(String resourceName, ResourceProcessor processor) throws BundleException {
+    static void processResources(String resourceName, ResourceProcessor processor)
+            throws BundleException {
         Enumeration<URL> e;
         try {
             e = CosmosRuntime.class.getClassLoader().getResources(resourceName);
         } catch (IOException ex) {
-            throw new BundleException(String.format("Failed to load %s resources", resourceName), ex);
+            throw new BundleException(
+                    String.format("Failed to load %s resources", resourceName), ex);
         }
         while (e.hasMoreElements()) {
             URL url = e.nextElement();

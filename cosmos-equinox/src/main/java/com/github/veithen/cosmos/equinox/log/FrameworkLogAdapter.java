@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,13 +30,14 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Component(service={FrameworkLog.class}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
+@Component(
+        service = {FrameworkLog.class},
+        xmlns = "http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class FrameworkLogAdapter implements FrameworkLog {
     private static final Logger logger = LoggerFactory.getLogger(FrameworkLog.class);
 
     @Override
-    public void log(FrameworkEvent frameworkEvent) {
-    }
+    public void log(FrameworkEvent frameworkEvent) {}
 
     @Override
     public void log(FrameworkLogEntry logEntry) {
@@ -57,12 +58,10 @@ public final class FrameworkLogAdapter implements FrameworkLog {
     }
 
     @Override
-    public void setWriter(Writer newWriter, boolean append) {
-    }
+    public void setWriter(Writer newWriter, boolean append) {}
 
     @Override
-    public void setFile(File newFile, boolean append) throws IOException {
-    }
+    public void setFile(File newFile, boolean append) throws IOException {}
 
     @Override
     public File getFile() {
@@ -70,10 +69,8 @@ public final class FrameworkLogAdapter implements FrameworkLog {
     }
 
     @Override
-    public void setConsoleLog(boolean consoleLog) {
-    }
+    public void setConsoleLog(boolean consoleLog) {}
 
     @Override
-    public void close() {
-    }
+    public void close() {}
 }

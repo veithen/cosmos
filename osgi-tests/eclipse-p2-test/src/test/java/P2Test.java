@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,30 +46,55 @@ import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 
 @RunWith(CosmosRunner.class)
 public class P2Test {
-    @Inject
-    private Provider<IProvisioningAgentProvider> agentProvider;
+    @Inject private Provider<IProvisioningAgentProvider> agentProvider;
 
     @Test
     public void test() throws Exception {
-        IProvisioningAgent agent = agentProvider.get().createAgent(new File("target/p2-agent").toURI());
+        IProvisioningAgent agent =
+                agentProvider.get().createAgent(new File("target/p2-agent").toURI());
         try {
-            IArtifactRepositoryManager artifactRepositoryManager = (IArtifactRepositoryManager)agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
-            IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
+            IArtifactRepositoryManager artifactRepositoryManager =
+                    (IArtifactRepositoryManager)
+                            agent.getService(IArtifactRepositoryManager.SERVICE_NAME);
+            IMetadataRepositoryManager metadataRepositoryManager =
+                    (IMetadataRepositoryManager)
+                            agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
             URI repoURI = new File("target/p2-repository").toURI();
-            IArtifactRepository artifactRepository = artifactRepositoryManager.createRepository(repoURI, "Artifact Repository", IArtifactRepositoryManager.TYPE_SIMPLE_REPOSITORY, Collections.<String,String>emptyMap());
-            IMetadataRepository metadataRepository = metadataRepositoryManager.createRepository(repoURI, "Metadata Repository", IMetadataRepositoryManager.TYPE_SIMPLE_REPOSITORY, Collections.<String,String>emptyMap());
+            IArtifactRepository artifactRepository =
+                    artifactRepositoryManager.createRepository(
+                            repoURI,
+                            "Artifact Repository",
+                            IArtifactRepositoryManager.TYPE_SIMPLE_REPOSITORY,
+                            Collections.<String, String>emptyMap());
+            IMetadataRepository metadataRepository =
+                    metadataRepositoryManager.createRepository(
+                            repoURI,
+                            "Metadata Repository",
+                            IMetadataRepositoryManager.TYPE_SIMPLE_REPOSITORY,
+                            Collections.<String, String>emptyMap());
             PublisherInfo publisherInfo = new PublisherInfo();
             publisherInfo.setArtifactRepository(artifactRepository);
             publisherInfo.setMetadataRepository(metadataRepository);
             publisherInfo.setArtifactOptions(IPublisherInfo.A_PUBLISH | IPublisherInfo.A_INDEX);
             Publisher publisher = new Publisher(publisherInfo);
-            IStatus status = publisher.publish(
-                    new IPublisherAction[] { new BundlesAction(new File[] { new File("target/dependency/org.osgi.framework-1.10.0.jar") }) },
-                    new NullProgressMonitor());
+            IStatus status =
+                    publisher.publish(
+                            new IPublisherAction[] {
+                                new BundlesAction(
+                                        new File[] {
+                                            new File(
+                                                    "target/dependency/org.osgi.framework-1.10.0.jar")
+                                        })
+                            },
+                            new NullProgressMonitor());
             assertThat(status.isOK()).isTrue();
         } finally {
             agent.stop();
         }
-        assertThat(new File("target/p2-repository/plugins/org.osgi.framework_1.10.0.202007221806.jar").exists()).isTrue();
+        assertThat(
+                        new File(
+                                        "target/p2-repository/plugins/org.osgi.framework_1.10.0.202007221806.jar")
+                                .exists())
+                .isTrue();
     }
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,11 +27,13 @@ import org.eclipse.osgi.service.debug.DebugOptions;
 import org.eclipse.osgi.service.debug.DebugTrace;
 import org.osgi.service.component.annotations.Component;
 
-@Component(service={DebugOptions.class}, xmlns="http://www.osgi.org/xmlns/scr/v1.1.0")
+@Component(
+        service = {DebugOptions.class},
+        xmlns = "http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class DebugOptionsImpl implements DebugOptions {
-    private final Map<String,String> options = new HashMap<String,String>();
+    private final Map<String, String> options = new HashMap<String, String>();
     private boolean debugEnabled;
-    
+
     @Override
     public boolean getBooleanOption(String option, boolean defaultValue) {
         String value = getOption(option);
@@ -57,9 +59,9 @@ public final class DebugOptionsImpl implements DebugOptions {
     }
 
     @Override
-    public Map<String,String> getOptions() {
+    public Map<String, String> getOptions() {
         synchronized (options) {
-            return new HashMap<String,String>(options);
+            return new HashMap<String, String>(options);
         }
     }
 
@@ -71,7 +73,7 @@ public final class DebugOptionsImpl implements DebugOptions {
     }
 
     @Override
-    public void setOptions(Map<String,String> options) {
+    public void setOptions(Map<String, String> options) {
         // TODO
         throw new UnsupportedOperationException();
     }
