@@ -22,7 +22,12 @@ package com.github.veithen.cosmos.osgi.runtime;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -40,6 +45,7 @@ import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.Attributes.Name;
 import java.util.jar.JarInputStream;
+import java.util.regex.Pattern;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleEvent;
@@ -100,18 +106,37 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
                 @Override
                 Set<String> initialize() {
                     Set<String> entries = new HashSet<>();
-                    try (JarInputStream in = new JarInputStream(locationUrl.openStream())) {
-                        JarEntry entry;
-                        while ((entry = in.getNextJarEntry()) != null) {
-                            entries.add(entry.getName());
+                    Path path;
+                    if (locationUrl.getProtocol().equals("file")) {
+                        URI uri;
+                        try {
+                            uri = locationUrl.toURI();
+                        } catch (URISyntaxException ex) {
+                            uri = null;
                         }
-                        return entries;
+                        path = uri == null ? null : Paths.get(uri);
+                    } else {
+                        path = null;
+                    }
+                    try {
+                        if (path != null && Files.isDirectory(path)) {
+                            Files.walk(path)
+                                    .map(p -> path.relativize(p).toString())
+                                    .forEach(entries::add);
+                        } else {
+                            try (JarInputStream in = new JarInputStream(locationUrl.openStream())) {
+                                JarEntry entry;
+                                while ((entry = in.getNextJarEntry()) != null) {
+                                    entries.add(entry.getName());
+                                }
+                            }
+                        }
                     } catch (IOException ex) {
                         logger.warn(
                                 String.format("Failed to read entries for bundle %s", symbolicName),
                                 ex);
-                        return Collections.emptySet();
                     }
+                    return entries;
                 }
             };
 
@@ -407,18 +432,35 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
     }
 
     public Enumeration<URL> findEntries(String path, String filePattern, boolean recurse) {
+        Vector<URL> matchingEntries = new Vector<URL>();
         if (!recurse && filePattern.indexOf('*') == -1 && filePattern.indexOf('?') == -1) {
-            Vector<URL> entries = new Vector<URL>();
             URL entry = getEntry(path + "/" + filePattern);
             if (entry != null) {
-                entries.add(entry);
+                matchingEntries.add(entry);
             }
-            return entries.elements();
         } else {
-            // TODO
-            return new Vector<URL>().elements();
-            //            throw new UnsupportedOperationException();
+            StringBuilder buffer = new StringBuilder("^\\Q");
+            buffer.append(path, path.startsWith("/") ? 1 : 0, path.length());
+            if (!path.endsWith("/")) {
+                buffer.append("/");
+            }
+            if (recurse) {
+                buffer.append("\\E(.*/)?\\Q");
+            }
+            buffer.append(filePattern.replace("*", "\\E[^/]*\\Q").replace("?", "\\E[^/]\\Q"));
+            buffer.append("\\E$");
+            Pattern pattern = Pattern.compile(buffer.toString());
+            for (String entry : entries.get()) {
+                if (pattern.matcher(entry).matches()) {
+                    try {
+                        matchingEntries.add(new URL(rootUrl, entry));
+                    } catch (MalformedURLException ex) {
+                        // Ignore
+                    }
+                }
+            }
         }
+        return matchingEntries.elements();
     }
 
     public URL getLocationUrl() {
