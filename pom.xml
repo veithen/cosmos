@@ -158,7 +158,7 @@
             <dependency>
                 <groupId>org.eclipse.platform</groupId>
                 <artifactId>org.eclipse.core.jobs</artifactId>
-                <version>3.10.1000</version>
+                <version>3.10.1100</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.platform</groupId>
@@ -208,7 +208,7 @@
             <dependency>
                 <groupId>org.eclipse.platform</groupId>
                 <artifactId>org.eclipse.equinox.p2.publisher</artifactId>
-                <version>1.5.400</version>
+                <version>1.5.500</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.platform</groupId>
