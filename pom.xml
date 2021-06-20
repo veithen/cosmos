@@ -61,6 +61,7 @@
     <properties>
         <github.repository>cosmos</github.repository>
         <javaVersion>1.8</javaVersion>
+        <slf4j.version>1.7.31</slf4j.version>
     </properties>
 
     <dependencyManagement>
@@ -113,12 +114,12 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.31</version>
+                <version>${slf4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
-                <version>1.7.30</version>
+                <version>${slf4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.platform</groupId>
