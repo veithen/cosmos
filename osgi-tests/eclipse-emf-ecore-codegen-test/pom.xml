@@ -147,7 +147,7 @@
         <dependency>
             <groupId>org.eclipse.pde</groupId>
             <artifactId>org.eclipse.pde.core</artifactId>
-            <version>3.13.400</version>
+            <version>3.14.300</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
