@@ -11,6 +11,8 @@ updates:
         versions: ">= 3.14.0"
       - dependency-name: "org.eclipse.platform:org.eclipse.core.resources"
         versions: ">= 3.15.0"
+      - dependency-name: "org.eclipse.platform:org.eclipse.core.variables"
+        versions: ">= 3.5.0"
       - dependency-name: "org.eclipse.platform:org.eclipse.debug.core"
         versions: ">= 3.17.0"
       - dependency-name: "org.eclipse.platform:org.eclipse.equinox.p2.artifact.repository"
@@ -29,4 +31,6 @@ updates:
         versions: ">= 2.5.0"
       - dependency-name: "org.eclipse.platform:org.eclipse.equinox.p2.transport.ecf"
         versions: ">= 1.3.0"
+      - dependency-name: "org.eclipse.platform:org.eclipse.text"
+        versions: ">= 3.12.0"
     open-pull-requests-limit: 10
