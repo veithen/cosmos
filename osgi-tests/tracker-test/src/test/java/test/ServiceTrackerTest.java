@@ -21,6 +21,8 @@ package test;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import java.util.Hashtable;
+
 import javax.inject.Inject;
 
 import org.junit.Test;
@@ -36,7 +38,7 @@ public class ServiceTrackerTest {
     @Inject private BundleContext bundleContext;
 
     @Test
-    public void test() throws Exception {
+    public void testRegisterUnregisterService() throws Exception {
         ServiceTracker<MyService, MyService> tracker =
                 new ServiceTracker<>(bundleContext, MyService.class, null);
         tracker.open();
@@ -47,5 +49,26 @@ public class ServiceTrackerTest {
         assertThat(tracker.getService()).isSameInstanceAs(service);
         registration.unregister();
         assertThat(tracker.getService()).isNull();
+    }
+
+    @Test
+    public void testServicePropertyChange() throws Exception {
+        MyServiceImpl service = new MyServiceImpl();
+        ServiceRegistration<MyService> registration =
+                bundleContext.registerService(MyService.class, service, null);
+        ServiceTracker<MyService, MyService> tracker =
+                new ServiceTracker<>(
+                        bundleContext,
+                        bundleContext.createFilter(
+                                String.format(
+                                        "(&(objectClass=%s)(myproperty=foobar))",
+                                        MyService.class.getName())),
+                        null);
+        tracker.open();
+        assertThat(tracker.getService()).isNull();
+        Hashtable<String, String> newProperties = new Hashtable<>();
+        newProperties.put("myproperty", "foobar");
+        registration.setProperties(newProperties);
+        assertThat(tracker.getService()).isSameInstanceAs(service);
     }
 }
