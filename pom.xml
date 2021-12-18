@@ -24,7 +24,7 @@
     <parent>
         <groupId>com.github.veithen</groupId>
         <artifactId>parent</artifactId>
-        <version>36</version>
+        <version>37-SNAPSHOT</version>
     </parent>
 
     <groupId>com.github.veithen.cosmos</groupId>
@@ -61,6 +61,7 @@
     <properties>
         <github.repository>cosmos</github.repository>
         <javaVersion>1.8</javaVersion>
+        <project.build.outputTimestamp>2021-12-18T17:25:00Z</project.build.outputTimestamp>
         <slf4j.version>1.7.32</slf4j.version>
     </properties>
 
