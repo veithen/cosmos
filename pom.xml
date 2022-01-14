@@ -62,7 +62,7 @@
         <github.repository>cosmos</github.repository>
         <javaVersion>1.8</javaVersion>
         <project.build.outputTimestamp>2021-12-18T17:25:00Z</project.build.outputTimestamp>
-        <slf4j.version>1.7.32</slf4j.version>
+        <slf4j.version>1.7.33</slf4j.version>
     </properties>
 
     <dependencyManagement>
