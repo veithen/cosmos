@@ -27,6 +27,13 @@
 
     <artifactId>eclipse-p2-test</artifactId>
 
+    <scm>
+        <url>https://github.com/veithen/cosmos/tree/master</url>
+        <connection>scm:git:http://github.com/veithen/cosmos.git</connection>
+        <developerConnection>scm:git:https://github.com/veithen/cosmos.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>com.github.veithen.cosmos</groupId>
