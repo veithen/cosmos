@@ -67,49 +67,60 @@ final class BundleContextImpl implements InternalBundleContext {
         this.activator = activator;
     }
 
+    @Override
     public String getProperty(String key) {
         return runtime.getProperty(key);
     }
 
+    @Override
     public Bundle getBundle() {
         return bundle;
     }
 
+    @Override
     public Bundle installBundle(String location, InputStream input) throws BundleException {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Bundle installBundle(String location) throws BundleException {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Bundle getBundle(long id) {
         return bundleManager.getBundle(id);
     }
 
+    @Override
     public Bundle[] getBundles() {
         return bundleManager.getBundles();
     }
 
+    @Override
     public void addServiceListener(ServiceListener listener, String filter)
             throws InvalidSyntaxException {
         serviceRegistry.addServiceListener(bundle, listener, FrameworkUtil.createFilter(filter));
     }
 
+    @Override
     public void addServiceListener(ServiceListener listener) {
         serviceRegistry.addServiceListener(bundle, listener, null);
     }
 
+    @Override
     public void removeServiceListener(ServiceListener listener) {
         serviceRegistry.removeServiceListener(listener);
     }
 
+    @Override
     public void addBundleListener(BundleListener listener) {
         synchronized (bundleListeners) {
             bundleListeners.add(listener);
         }
     }
 
+    @Override
     public void removeBundleListener(BundleListener listener) {
         synchronized (bundleListeners) {
             bundleListeners.remove(listener);
@@ -127,14 +138,17 @@ final class BundleContextImpl implements InternalBundleContext {
         }
     }
 
+    @Override
     public void addFrameworkListener(FrameworkListener listener) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void removeFrameworkListener(FrameworkListener listener) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public ServiceRegistration<?> registerService(
             String[] clazzes, Object service, Dictionary<String, ?> properties) {
         if (service instanceof ServiceFactory<?>) {
@@ -146,11 +160,13 @@ final class BundleContextImpl implements InternalBundleContext {
         }
     }
 
+    @Override
     public ServiceRegistration<?> registerService(
             String clazz, Object service, Dictionary<String, ?> properties) {
         return registerService(new String[] {clazz}, service, properties);
     }
 
+    @Override
     public <S> ServiceRegistration<S> registerService(
             Class<S> clazz, S service, Dictionary<String, ?> properties) {
         return serviceRegistry.registerService(
@@ -167,14 +183,17 @@ final class BundleContextImpl implements InternalBundleContext {
                 bundle, new String[] {clazz.getName()}, factory, properties);
     }
 
+    @Override
     public ServiceReference<?> getServiceReference(String clazz) {
         return serviceRegistry.getServiceReference(clazz, null, Object.class);
     }
 
+    @Override
     public <S> ServiceReference<S> getServiceReference(Class<S> clazz) {
         return serviceRegistry.getServiceReference(clazz.getName(), null, clazz);
     }
 
+    @Override
     public ServiceReference<?>[] getServiceReferences(String clazz, String filter)
             throws InvalidSyntaxException {
         List<ServiceReference<Object>> references =
@@ -187,12 +206,14 @@ final class BundleContextImpl implements InternalBundleContext {
                 : references.toArray(new ServiceReference<?>[references.size()]);
     }
 
+    @Override
     public <S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz, String filter)
             throws InvalidSyntaxException {
         return serviceRegistry.getServiceReferences(
                 clazz.getName(), filter == null ? null : FrameworkUtil.createFilter(filter), clazz);
     }
 
+    @Override
     public ServiceReference<?>[] getAllServiceReferences(String clazz, String filter)
             throws InvalidSyntaxException {
         // Since we don't have per bundle class loaders, getAllServiceReferences is the same as
@@ -200,6 +221,7 @@ final class BundleContextImpl implements InternalBundleContext {
         return getServiceReferences(clazz, filter);
     }
 
+    @Override
     public <S> S getService(ServiceReference<S> reference) {
         return ((ServiceReferenceImpl<S>) reference).getService(bundle);
     }
@@ -209,19 +231,23 @@ final class BundleContextImpl implements InternalBundleContext {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean ungetService(ServiceReference<?> reference) {
         //        throw new UnsupportedOperationException();
         return true;
     }
 
+    @Override
     public File getDataFile(String filename) {
         return bundle.getDataFile(filename);
     }
 
+    @Override
     public Filter createFilter(String filter) throws InvalidSyntaxException {
         return FrameworkUtil.createFilter(filter);
     }
 
+    @Override
     public Bundle getBundle(String location) {
         if (Constants.SYSTEM_BUNDLE_LOCATION.equals(location)) {
             return getBundle(Constants.SYSTEM_BUNDLE_ID);

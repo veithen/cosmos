@@ -45,60 +45,74 @@ abstract class AbstractBundle implements InternalBundle, BundleReference {
 
     abstract String getHeaderValue(String name) throws BundleException;
 
+    @Override
     public final BundleContext getBundleContext() {
         return context;
     }
 
+    @Override
     public final int compareTo(Bundle o) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public final void update(InputStream input) throws BundleException {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public final void update() throws BundleException {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public final void uninstall() throws BundleException {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public final Enumeration<String> getEntryPaths(String path) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public final ServiceReference<?>[] getRegisteredServices() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public final ServiceReference<?>[] getServicesInUse() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public final boolean hasPermission(Object permission) {
         return true;
     }
 
+    @Override
     public final URL getResource(String name) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public final Enumeration<URL> getResources(String name) throws IOException {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public final long getLastModified() {
         // We never modify bundles, so we may as well return 0 here
         return 0;
     }
 
+    @Override
     public final Map<X509Certificate, List<X509Certificate>> getSignerCertificates(
             int signersType) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public <A> A adapt(Class<A> type) {
         if (type.isInstance(this)) {
             return type.cast(this);
@@ -107,11 +121,13 @@ abstract class AbstractBundle implements InternalBundle, BundleReference {
         }
     }
 
+    @Override
     public final File getDataFile(String filename) {
         // We don't have filesystem support.
         return null;
     }
 
+    @Override
     public final Class<?> loadClass(String name) throws ClassNotFoundException {
         try {
             beforeLoadClass(name);

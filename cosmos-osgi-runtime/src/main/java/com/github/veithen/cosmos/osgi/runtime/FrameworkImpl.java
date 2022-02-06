@@ -53,10 +53,12 @@ final class FrameworkImpl extends AbstractBundle implements Framework, Framework
         context = bundleContextFactory.createBundleContext(this);
     }
 
+    @Override
     public long getBundleId() {
         return 0L;
     }
 
+    @Override
     public String getSymbolicName() {
         return Constants.SYSTEM_BUNDLE_SYMBOLICNAME;
     }

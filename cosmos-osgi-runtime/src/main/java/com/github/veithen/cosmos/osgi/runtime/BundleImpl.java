@@ -205,6 +205,7 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
                                 identityAttributes)));
     }
 
+    @Override
     void initialize(BundleContextFactory bundleContextFactory) throws BundleException {
         this.bundleContextFactory = bundleContextFactory;
         if ("lazy".equals(getHeaderValue("Bundle-ActivationPolicy"))
@@ -243,22 +244,27 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
         }
     }
 
+    @Override
     public long getBundleId() {
         return id;
     }
 
+    @Override
     public String getSymbolicName() {
         return symbolicName;
     }
 
+    @Override
     public Version getVersion() {
         return version;
     }
 
+    @Override
     public int getState() {
         return state.getOsgiState();
     }
 
+    @Override
     public Dictionary<String, String> getHeaders() {
         Hashtable<String, String> headers = new Hashtable<String, String>();
         for (Map.Entry<Object, Object> entry : attrs.entrySet()) {
@@ -267,11 +273,13 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
         return headers;
     }
 
+    @Override
     public Dictionary<String, String> getHeaders(String locale) {
         // TODO
         return getHeaders();
     }
 
+    @Override
     public void start(int options) throws BundleException {
         // TODO: check if this is correct
         start();
@@ -348,6 +356,7 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
         }
     }
 
+    @Override
     public void start() throws BundleException {
         if (state == BundleState.ACTIVE) {
             return;
@@ -390,10 +399,12 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
         bundleManager.fireBundleEvent(this, BundleEvent.STARTED);
     }
 
+    @Override
     public void stop(int options) throws BundleException {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void stop() throws BundleException {
         if (state == BundleState.LOADED || state == BundleState.READY) {
             return;
@@ -417,6 +428,7 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
         logger.debug("Bundle {} stopped", symbolicName);
     }
 
+    @Override
     public URL getEntry(String path) {
         if (path.equals("/")) {
             return rootUrl;
@@ -431,6 +443,7 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
         }
     }
 
+    @Override
     public Enumeration<URL> findEntries(String path, String filePattern, boolean recurse) {
         Vector<URL> matchingEntries = new Vector<URL>();
         if (!recurse && filePattern.indexOf('*') == -1 && filePattern.indexOf('?') == -1) {
@@ -467,6 +480,7 @@ final class BundleImpl extends AbstractBundle implements BundleRevision, BundleS
         return locationUrl;
     }
 
+    @Override
     public String getLocation() {
         return locationUrl.toString();
     }

@@ -117,6 +117,7 @@ final class Service<S> implements ServiceRegistration<S> {
         return bundle;
     }
 
+    @Override
     public ServiceReference<S> getReference() {
         return reference;
     }
@@ -130,6 +131,7 @@ final class Service<S> implements ServiceRegistration<S> {
         };
     }
 
+    @Override
     public void setProperties(Dictionary<String, ?> newProperties) {
         synchronized (properties) {
             for (Enumeration<String> keys = newProperties.keys(); keys.hasMoreElements(); ) {
@@ -148,6 +150,7 @@ final class Service<S> implements ServiceRegistration<S> {
         serviceRegistry.fireServiceChangedEvent(ServiceEvent.MODIFIED, this);
     }
 
+    @Override
     public void unregister() {
         serviceRegistry.unregisterService(this);
     }
