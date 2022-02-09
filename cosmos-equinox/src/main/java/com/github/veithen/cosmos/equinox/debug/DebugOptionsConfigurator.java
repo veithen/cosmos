@@ -39,12 +39,12 @@ public final class DebugOptionsConfigurator {
     private DebugOptions debugOptions;
 
     @Reference
-    private void setDebugOptions(DebugOptions debugOptions) {
+    void setDebugOptions(DebugOptions debugOptions) {
         this.debugOptions = debugOptions;
     }
 
     @Activate
-    private void activate() {
+    void activate() {
         if (logger.isDebugEnabled()) {
             debugOptions.setDebugEnabled(true);
             Properties props = new Properties();

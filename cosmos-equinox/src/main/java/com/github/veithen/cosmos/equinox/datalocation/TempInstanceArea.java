@@ -69,7 +69,7 @@ public final class TempInstanceArea extends AbstractLocation {
     }
 
     @Deactivate
-    private void deactivate() {
+    void deactivate() {
         if (defaultDirectory != null) {
             delete();
             Runtime.getRuntime().removeShutdownHook(shutdownHook);
