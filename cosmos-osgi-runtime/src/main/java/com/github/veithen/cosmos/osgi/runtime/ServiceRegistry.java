@@ -56,14 +56,12 @@ final class ServiceRegistry {
                             ? ((SingletonServiceFactory<S>) serviceFactory).getService().getClass()
                             : serviceFactory.getClass();
             logger.debug(
-                    "Registering service "
-                            + clazz.getName()
-                            + " with types "
-                            + Arrays.asList(classes)
-                            + " and properties "
-                            + properties
-                            + "; id is "
-                            + serviceId);
+                    "Bundle {} is registering service {} with types {} and properties {}; id is {}",
+                    bundle.getSymbolicName(),
+                    clazz.getName(),
+                    Arrays.asList(classes),
+                    properties,
+                    serviceId);
         }
         Hashtable<String, Object> actualProperties = new Hashtable<String, Object>();
         if (properties != null) {
