@@ -61,6 +61,7 @@
         <javaVersion>1.8</javaVersion>
         <project.build.outputTimestamp>2022-06-20T23:55:54Z</project.build.outputTimestamp>
         <slf4j.version>1.7.36</slf4j.version>
+        <org.osgi.service.component.version>1.5.0</org.osgi.service.component.version>
     </properties>
 
     <dependencyManagement>
@@ -87,8 +88,13 @@
             </dependency>
             <dependency>
                 <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.service.component</artifactId>
+                <version>${org.osgi.service.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.osgi</groupId>
                 <artifactId>org.osgi.service.component.annotations</artifactId>
-                <version>1.5.0</version>
+                <version>${org.osgi.service.component.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.osgi</groupId>
