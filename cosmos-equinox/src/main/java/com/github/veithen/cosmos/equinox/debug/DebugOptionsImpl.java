@@ -22,17 +22,33 @@ package com.github.veithen.cosmos.equinox.debug;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.osgi.service.debug.DebugOptions;
 import org.eclipse.osgi.service.debug.DebugTrace;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component(
         service = {DebugOptions.class},
         xmlns = "http://www.osgi.org/xmlns/scr/v1.1.0")
 public final class DebugOptionsImpl implements DebugOptions {
-    private final Map<String, String> options = new HashMap<String, String>();
+    private static final Logger logger = LoggerFactory.getLogger(DebugOptionsImpl.class);
+
+    private final Map<String, String> options = new HashMap<>();
+    private final Set<String> unsetOptions = new TreeSet<>();
     private boolean debugEnabled;
+
+    @Deactivate
+    synchronized void deactivate() {
+        if (!unsetOptions.isEmpty()) {
+            logger.debug(
+                    "The following debug options were requested, but not set: {}", unsetOptions);
+        }
+    }
 
     @Override
     public boolean getBooleanOption(String option, boolean defaultValue) {
@@ -46,9 +62,14 @@ public final class DebugOptionsImpl implements DebugOptions {
     }
 
     @Override
-    public String getOption(String option, String defaultValue) {
-        synchronized (options) {
-            return options.containsKey(option) ? options.get(option) : defaultValue;
+    public synchronized String getOption(String option, String defaultValue) {
+        if (options.containsKey(option)) {
+            return options.get(option);
+        } else {
+            if (debugEnabled) {
+                unsetOptions.add(option);
+            }
+            return defaultValue;
         }
     }
 
@@ -59,17 +80,13 @@ public final class DebugOptionsImpl implements DebugOptions {
     }
 
     @Override
-    public Map<String, String> getOptions() {
-        synchronized (options) {
-            return new HashMap<String, String>(options);
-        }
+    public synchronized Map<String, String> getOptions() {
+        return new HashMap<String, String>(options);
     }
 
     @Override
-    public void setOption(String option, String value) {
-        synchronized (options) {
-            options.put(option, value);
-        }
+    public synchronized void setOption(String option, String value) {
+        options.put(option, value);
     }
 
     @Override
