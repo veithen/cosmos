@@ -110,15 +110,13 @@ final class Service<S> implements ServiceRegistration<S> {
 
     Object getProperty(String key) {
         synchronized (properties) {
-            return properties == null ? null : properties.get(key);
+            return properties.get(key);
         }
     }
 
     String[] getPropertyKeys() {
         synchronized (properties) {
-            return properties == null
-                    ? new String[0]
-                    : properties.keySet().toArray(new String[properties.size()]);
+            return properties.keySet().toArray(new String[properties.size()]);
         }
     }
 
