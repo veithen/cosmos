@@ -38,7 +38,7 @@ abstract class ServiceReferenceImpl<S> implements ServiceReference<S> {
 
     @Override
     public final String[] getPropertyKeys() {
-        throw new UnsupportedOperationException();
+        return service.getPropertyKeys();
     }
 
     @Override

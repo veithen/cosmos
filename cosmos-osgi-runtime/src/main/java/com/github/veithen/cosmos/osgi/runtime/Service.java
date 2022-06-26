@@ -114,6 +114,14 @@ final class Service<S> implements ServiceRegistration<S> {
         }
     }
 
+    String[] getPropertyKeys() {
+        synchronized (properties) {
+            return properties == null
+                    ? new String[0]
+                    : properties.keySet().toArray(new String[properties.size()]);
+        }
+    }
+
     Bundle getBundle() {
         return bundle;
     }
