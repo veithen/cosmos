@@ -30,6 +30,7 @@ import java.util.Set;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
@@ -52,7 +53,7 @@ final class Service<S> implements ServiceRegistration<S> {
     private final AbstractBundle bundle;
     private final String[] classes;
     private final ServiceFactory<S> serviceFactory;
-    private final Dictionary<String, Object> properties;
+    private final Map<String, Object> properties;
     private final Map<AbstractBundle, ServiceContext<S>> contexts = new HashMap<>();
     private final ServiceReference<S> reference;
 
@@ -61,7 +62,7 @@ final class Service<S> implements ServiceRegistration<S> {
             AbstractBundle bundle,
             String[] classes,
             ServiceFactory<S> serviceFactory,
-            Dictionary<String, Object> properties) {
+            Map<String, Object> properties) {
         this.serviceRegistry = serviceRegistry;
         this.bundle = bundle;
         this.classes = classes;
@@ -90,7 +91,7 @@ final class Service<S> implements ServiceRegistration<S> {
                     return false;
                 }
             }
-            return filter == null || filter.matchCase(properties);
+            return filter == null || filter.matchCase(FrameworkUtil.asDictionary(properties));
         }
     }
 

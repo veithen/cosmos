@@ -23,10 +23,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -63,7 +64,7 @@ final class ServiceRegistry {
                     properties,
                     serviceId);
         }
-        Hashtable<String, Object> actualProperties = new Hashtable<String, Object>();
+        Map<String, Object> actualProperties = new HashMap<>();
         if (properties != null) {
             for (Enumeration<String> keys = properties.keys(); keys.hasMoreElements(); ) {
                 String key = keys.nextElement();
