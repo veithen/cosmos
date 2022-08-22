@@ -60,7 +60,7 @@
         <github.repository>cosmos</github.repository>
         <javaVersion>1.8</javaVersion>
         <project.build.outputTimestamp>2022-06-23T20:30:12Z</project.build.outputTimestamp>
-        <slf4j.version>1.7.36</slf4j.version>
+        <slf4j.version>2.0.0</slf4j.version>
         <org.osgi.service.component.version>1.5.0</org.osgi.service.component.version>
     </properties>
 
