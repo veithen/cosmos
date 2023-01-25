@@ -61,7 +61,7 @@
         <javaVersion>1.8</javaVersion>
         <project.build.outputTimestamp>2022-06-23T20:30:12Z</project.build.outputTimestamp>
         <slf4j.version>2.0.6</slf4j.version>
-        <org.osgi.service.component.version>1.5.0</org.osgi.service.component.version>
+        <org.osgi.service.component.version>1.5.1</org.osgi.service.component.version>
     </properties>
 
     <dependencyManagement>
