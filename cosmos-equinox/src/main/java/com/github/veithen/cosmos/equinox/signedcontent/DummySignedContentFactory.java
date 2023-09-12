@@ -34,15 +34,23 @@ import org.osgi.framework.Bundle;
 public final class DummySignedContentFactory implements SignedContentFactory {
     @Override
     public SignedContent getSignedContent(File content)
-            throws IOException, InvalidKeyException, SignatureException, CertificateException,
-                    NoSuchAlgorithmException, NoSuchProviderException {
+            throws IOException,
+                    InvalidKeyException,
+                    SignatureException,
+                    CertificateException,
+                    NoSuchAlgorithmException,
+                    NoSuchProviderException {
         return new DummySignedContent();
     }
 
     @Override
     public SignedContent getSignedContent(Bundle bundle)
-            throws IOException, InvalidKeyException, SignatureException, CertificateException,
-                    NoSuchAlgorithmException, NoSuchProviderException {
+            throws IOException,
+                    InvalidKeyException,
+                    SignatureException,
+                    CertificateException,
+                    NoSuchAlgorithmException,
+                    NoSuchProviderException {
         throw new UnsupportedOperationException();
     }
 }
