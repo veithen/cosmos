@@ -19,6 +19,8 @@
  */
 package test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +32,6 @@ import org.junit.runner.RunWith;
 import org.osgi.framework.BundleContext;
 
 import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
-import com.google.common.truth.Truth;
 
 @RunWith(CosmosRunner.class)
 public class EntriesTest {
@@ -40,6 +41,6 @@ public class EntriesTest {
     public void testFindEntries() {
         List<URL> urls =
                 Collections.list(bundleContext.getBundle().findEntries("/entries", "*.dat", false));
-        Truth.assertThat(urls).hasSize(2);
+        assertThat(urls).hasSize(2);
     }
 }

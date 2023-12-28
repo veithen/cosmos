@@ -19,7 +19,7 @@
  */
 package test;
 
-import static com.google.common.truth.Truth.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Method;
 
@@ -45,6 +45,6 @@ public class GetActivatorTest {
                         getActivatorMethod.invoke(
                                 new InitLegacyPreferences(), "eclipse-core-runtime-test");
         assertThat(plugin).isNotNull();
-        assertThat(plugin).isSameInstanceAs(TestPlugin.getInstance());
+        assertThat(plugin).isSameAs(TestPlugin.getInstance());
     }
 }

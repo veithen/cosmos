@@ -19,7 +19,7 @@
  */
 package test;
 
-import static com.google.common.truth.Truth.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Hashtable;
 
@@ -46,7 +46,7 @@ public class ServiceTrackerTest {
         MyServiceImpl service = new MyServiceImpl();
         ServiceRegistration<MyService> registration =
                 bundleContext.registerService(MyService.class, service, null);
-        assertThat(tracker.getService()).isSameInstanceAs(service);
+        assertThat(tracker.getService()).isSameAs(service);
         registration.unregister();
         assertThat(tracker.getService()).isNull();
     }
@@ -69,6 +69,6 @@ public class ServiceTrackerTest {
         Hashtable<String, String> newProperties = new Hashtable<>();
         newProperties.put("myproperty", "foobar");
         registration.setProperties(newProperties);
-        assertThat(tracker.getService()).isSameInstanceAs(service);
+        assertThat(tracker.getService()).isSameAs(service);
     }
 }

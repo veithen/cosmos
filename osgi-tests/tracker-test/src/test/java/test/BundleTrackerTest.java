@@ -19,7 +19,7 @@
  */
 package test;
 
-import static com.google.common.truth.Truth.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +28,13 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.objectweb.asm.ClassReader;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
+import org.slf4j.Logger;
 
 import com.github.veithen.cosmos.osgi.testing.CosmosRunner;
 
@@ -45,14 +45,14 @@ public class BundleTrackerTest {
     @Test
     public void testBasic() throws Exception {
         // Use a random bundle for the test.
-        Bundle bundle = FrameworkUtil.getBundle(ClassReader.class);
+        Bundle bundle = FrameworkUtil.getBundle(Logger.class);
         BundleTracker<Bundle> tracker = new BundleTracker<>(bundleContext, Bundle.ACTIVE, null);
         tracker.open();
-        assertThat(tracker.getBundles()).asList().doesNotContain(bundle);
+        assertThat(tracker.getBundles()).doesNotContain(bundle);
         bundle.start();
-        assertThat(tracker.getBundles()).asList().contains(bundle);
+        assertThat(tracker.getBundles()).contains(bundle);
         bundle.stop();
-        assertThat(tracker.getBundles()).asList().doesNotContain(bundle);
+        assertThat(tracker.getBundles()).doesNotContain(bundle);
     }
 
     @Test
