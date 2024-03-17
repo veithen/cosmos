@@ -25,8 +25,10 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -62,7 +64,7 @@ public class Activator implements BundleActivator {
                 }
             };
 
-    private Path instanceArea;
+    private List<Path> tempPaths;
     private Thread shutdownHook;
 
     @Override
@@ -71,42 +73,52 @@ public class Activator implements BundleActivator {
             context.registerService(
                     SignedContentFactory.class, new DummySignedContentFactory(), null);
         }
-        if ("true".equals(context.getProperty("cosmos.equinox.createTempInstanceArea"))) {
-            try {
-                instanceArea = Files.createTempDirectory("osgi.instance");
-                shutdownHook =
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                deleteInstanceArea();
-                            }
-                        };
-                Runtime.getRuntime().addShutdownHook(shutdownHook);
-                LocationImpl location = new LocationImpl(null, null, false);
-                URL url = instanceArea.toUri().toURL();
-                location.set(url, false);
-                Dictionary<String, Object> properties = new Hashtable<>();
-                properties.put(Location.SERVICE_PROPERTY_TYPE, Location.INSTANCE_AREA_TYPE);
-                properties.put(Location.SERVICE_PROPERTY_URL, url.toExternalForm());
-                context.registerService(Location.class, location, properties);
-            } catch (IOException ex) {
-                throw new RuntimeException(
-                        "Unable to create temporary directory for instance data", ex);
+        String tempLocations = context.getProperty("cosmos.equinox.createTempLocations");
+        if (tempLocations != null) {
+            tempPaths = new ArrayList<>();
+            for (String type : tempLocations.split(",")) {
+                try {
+                    Path path = Files.createTempDirectory("osgi.instance");
+                    tempPaths.add(path);
+                    LocationImpl location = new LocationImpl(null, null, false);
+                    URL url = path.toUri().toURL();
+                    location.set(url, false);
+                    Dictionary<String, Object> properties = new Hashtable<>();
+                    properties.put(Location.SERVICE_PROPERTY_TYPE, type);
+                    properties.put(Location.SERVICE_PROPERTY_URL, url.toExternalForm());
+                    context.registerService(Location.class, location, properties);
+                } catch (IOException ex) {
+                    throw new RuntimeException(
+                            String.format(
+                                    "Unable to create temporary directory for location type %s",
+                                    type),
+                            ex);
+                }
             }
+            shutdownHook =
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            deleteInstanceArea();
+                        }
+                    };
+            Runtime.getRuntime().addShutdownHook(shutdownHook);
         }
     }
 
     private void deleteInstanceArea() {
-        try {
-            Files.walkFileTree(instanceArea, deletingFileVisitor);
-        } catch (IOException ex) {
-            logger.error(String.format("Failed to delete directory %s", instanceArea), ex);
+        for (Path path : tempPaths) {
+            try {
+                Files.walkFileTree(path, deletingFileVisitor);
+            } catch (IOException ex) {
+                logger.error(String.format("Failed to delete directory %s", path), ex);
+            }
         }
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        if (instanceArea != null) {
+        if (tempPaths != null) {
             deleteInstanceArea();
             Runtime.getRuntime().removeShutdownHook(shutdownHook);
         }
