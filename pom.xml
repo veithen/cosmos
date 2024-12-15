@@ -260,7 +260,6 @@
                 <artifactId>license-maven-plugin</artifactId>
                 <configuration>
                     <projectName>Cosmos</projectName>
-                    <licenseName>apache_v2</licenseName>
                     <extraExtensions>
                         <ecore>xml</ecore>
                         <genmodel>xml</genmodel>
