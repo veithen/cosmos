@@ -172,26 +172,6 @@
                 <version>1.5.500</version>
             </dependency>
             <dependency>
-                <groupId>org.eclipse.ecf</groupId>
-                <artifactId>org.eclipse.ecf</artifactId>
-                <version>3.11.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.ecf</groupId>
-                <artifactId>org.eclipse.ecf.identity</artifactId>
-                <version>3.10.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.ecf</groupId>
-                <artifactId>org.eclipse.ecf.filetransfer</artifactId>
-                <version>5.1.103</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.ecf</groupId>
-                <artifactId>org.eclipse.ecf.provider.filetransfer</artifactId>
-                <version>3.3.0</version>
-            </dependency>
-            <dependency>
                 <groupId>org.eclipse.platform</groupId>
                 <artifactId>org.eclipse.equinox.p2.artifact.repository</artifactId>
                 <version>1.5.500</version>
