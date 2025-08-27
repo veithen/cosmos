@@ -27,6 +27,7 @@
 
     <artifactId>cosmos-testing</artifactId>
 
+    <name>Cosmos Testing</name>
     <url>https://github.com/veithen/cosmos</url>
 
     <scm>

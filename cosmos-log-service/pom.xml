@@ -28,6 +28,7 @@
     <artifactId>cosmos-log-service</artifactId>
     <packaging>bundle</packaging>
 
+    <name>Cosmos LogService</name>
     <url>https://github.com/veithen/cosmos</url>
 
     <scm>
