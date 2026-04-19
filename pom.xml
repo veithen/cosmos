@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.github.veithen</groupId>
         <artifactId>parent</artifactId>
-        <version>56</version>
+        <version>57</version>
     </parent>
 
     <groupId>com.github.veithen.cosmos</groupId>
@@ -58,7 +58,7 @@
 
     <properties>
         <github.repository>cosmos</github.repository>
-        <javaVersion>1.8</javaVersion>
+        <javaVersion>11</javaVersion>
         <project.build.outputTimestamp>2024-03-17T18:31:54Z</project.build.outputTimestamp>
         <slf4j.version>2.0.17</slf4j.version>
         <org.osgi.service.component.version>1.5.1</org.osgi.service.component.version>
